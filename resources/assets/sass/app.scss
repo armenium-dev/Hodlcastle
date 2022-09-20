@@ -213,4 +213,6 @@ input[type="checkbox"], input[type="radio"] {
   table td .btn-group .btn + .btn {float: none !important;}
 }
 
-.d-flex {display: flex;}
+.user-panel {display: flex; flex-flow: column nowrap; align-items: center;}
+.user-panel > .info {position: initial; left: auto; line-height: normal; padding: 5px; width: 100%;}
+

@@ -482,7 +482,17 @@ input[type=radio] {
   }
 }
 
-.d-flex {
+.user-panel {
   display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.user-panel > .info {
+  position: initial;
+  left: auto;
+  line-height: normal;
+  padding: 5px;
+  width: 100%;
 }
 

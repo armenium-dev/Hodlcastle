@@ -1,7 +1,6 @@
 <table class="table table-responsive" id="companies-table">
     <thead>
         <tr>
-            <th>Logo</th>
             <th>Name</th>
             <th>Expiration date</th>
             <th>Active</th>
@@ -17,7 +16,6 @@
     <tbody>
     @foreach($companies as $company)
         <tr>
-            <td>{!! $company->logo !!}</td>
             <td>{!! $company->name !!}</td>
             <td>{!! \Carbon\Carbon::parse($company->expires_at)->toDateString() !!}</td>
             <td>{!! $company->active ? 'yes' : 'no' !!}</td>
