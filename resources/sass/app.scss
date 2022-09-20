@@ -1,0 +1,74 @@
+$break-medium: 768px;
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.content-wrapper {
+  padding-top: 5px;
+}
+.repeater-row, .domain-repeater-row {
+  width: 100%;
+  clear: both;
+  margin-bottom: 10px;
+}
+.repeater-row .form-control, .repeater-delete-row {
+  float: left;
+  width: 16%;
+  display: inline-block;
+}
+.repeater-delete-row {
+  padding: 10px 10px;
+}
+.domain-repeater-row .form-control {
+  float: left;
+  width: 70%;
+  display: inline-block;
+}
+.icon-delete {
+  cursor: pointer;
+  color: red;
+}
+.main-sidebar.visible {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.bg-inactive {
+  background: #ccc;
+}
+.ql-container {
+  min-height: 150px;
+}
+input[type="checkbox"], input[type="radio"] {
+  margin: 10px 0 11px;
+}
+.sidebar-toggle {
+  @media screen and (min-width: $break-medium) {
+    display: none;
+  }
+}
+.time, .mins, .meridian {
+  width: 25%;
+  float: left;
+  margin: 0 4%;
+  font-size: 20px;
+  color: #2d2e2e;
+  font-family: arial;
+  font-weight: 700;
+}
+#mapid { height: 350px; }
+.my-leaflet-map-container img {
+  max-height: none;
+}
+

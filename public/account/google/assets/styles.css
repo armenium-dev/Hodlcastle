@@ -1,0 +1,199 @@
+* {
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./fonts/Roboto-Medium.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Roboto', 'Noto Sans Myanmar UI', arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.4286;
+}
+
+.google {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+}
+
+.google__box {
+    height: auto;
+    min-height: 500px;
+    max-width: 450px;
+    overflow-y: auto;
+    transition: .2s;
+    padding: 48px 40px 36px;
+    overflow: hidden;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.google__header {
+    text-align: center;
+}
+
+.google__header>svg {
+    margin-bottom: 10px;
+}
+
+.google__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 130%;
+    margin-bottom: 10px;
+}
+
+.google__subtitle {
+    color: #202124;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+    line-height: 1.5;
+}
+
+.google__link {
+    border-radius: 4px;
+    color: #1a73e8;
+    display: inline-block;
+    font-weight: 500;
+    letter-spacing: .25px;
+    outline: 0;
+    position: relative;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    border: 0;
+    margin-bottom: 10px;
+}
+
+.google__input>input:focus {
+    border-bottom-color: #1a73e8 !important;
+}
+
+.filled-in:checked+span:after {
+    border: 2px solid #1a73e8 !important;
+    background-color: #1a73e8 !important;
+}
+
+.filled-in+span {
+    color: #202124 !important;
+}
+
+.google__checkbox-wrap {
+    margin-bottom: 20px;
+}
+
+.google__checkbox-wrap>span>span {
+    display: block;
+    transform: translateY(-3px) !important;
+}
+
+.google__guest {
+    margin: 20px 0;
+    color: #5f6368;
+    font-size: 14px;
+}
+
+.google__btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.google__next-btn {
+    background-color: #1a73e8 !important;
+    text-transform: none !important;
+    border-radius: 5px !important;
+    width: 80px !important;
+    font-weight: 500 !important;
+}
+
+.google__account-btn {
+    display: block;
+    cursor: pointer;
+    color: #1a73e8;
+    width: 120px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-13px) !important;
+    font-weight: 500 !important;
+    border-radius: 5px !important;
+    transition: all .1s ease;
+}
+
+.google__account-btn:hover {
+    background-color: #1a73e810;
+    transition: all .1s ease;
+}
+
+.google-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+}
+
+.google-footer__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.google-footer__link {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-right: 30px;
+    color: #757575;
+}
+
+.google-footer__list>li:last-child>.google-footer__link {
+    margin-right: 0;
+}
+
+.google-footer__select-wrap {
+    color: rgb(32, 33, 36);
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.google-footer__arrow {
+    border-color: currentColor transparent transparent transparent;
+    border-style: solid;
+    border-width: 4px 4px 0 4px;
+    height: 0;
+    width: 0;
+    display: block;
+    margin-left: 5px;
+}
+
+@media screen and (max-width: 520px) {
+    .google__box {
+        padding: 15px;
+    }
+    .google-footer__link {
+        margin-right: 10px;
+    }
+}
+
+#error_span {
+    color: red;
+}

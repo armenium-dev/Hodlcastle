@@ -1,0 +1,11 @@
+body {
+    color: #000;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+a {color: #3366CC;}
+a:active {color: #3366CC;}
+a:visited {color: #CC6699;}
+
+td.bg {background: url(images/footerbg.gif) repeat-x;}

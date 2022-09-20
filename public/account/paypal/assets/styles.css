@@ -1,0 +1,238 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 93.75%;
+}
+
+.paypal {
+    position: relative;
+    max-height: 100vh;
+    padding: 0 15px;
+}
+
+.paypal__box {
+    max-width: 460px;
+    margin: 120px auto 0;
+    padding: 42px 42px 36px;
+    border: 1px solid #eaeced;
+    border-radius: 5px;
+    overflow: hidden;
+    min-height: 425px;
+    display: flex;
+    flex-direction: column;
+}
+
+.paypal__logo {
+    max-width: 115px;
+    margin: 0 auto 25px auto;
+}
+
+.paypal__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.paypal__input {
+    position: relative;
+    height: 44px;
+    width: 100%;
+    padding: 0 10px;
+    border: 1px solid #9da3a6;
+    background: #fff;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: none;
+    color: #000;
+    font-size: 1em;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    direction: ltr;
+    margin-bottom: 20px;
+}
+
+.paypal__input:last-child {
+    margin-bottom: 0;
+}
+
+.paypal__input:focus {
+    outline: none;
+    border: 1px solid #0070ba;
+}
+
+.paypal__btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    display: block;
+    background-color: #0070ba;
+    box-shadow: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    cursor: pointer;
+    appearance: none;
+    color: #fff;
+    font-size: 1em;
+    text-align: center;
+    font-weight: 700;
+    font-family: HelveticaNeue-Medium, "Helvetica Neue Medium", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-shadow: none;
+    text-decoration: none;
+    transition: background-color .4s ease-out;
+    margin-bottom: 20px;
+}
+
+.paypal__btn:hover {
+    background-color: #005ea6;
+    outline: 0;
+}
+
+.paypal__btn--sign-up {
+    background-color: #E1E7EB;
+    color: #2C2E2F;
+}
+
+.paypal__btn--sign-up:hover {
+    background-color: #d2dbe1;
+}
+
+.paypal__link {
+    color: #0070ba;
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    text-decoration: underline;
+    transition: color .2s ease-out;
+    margin-bottom: 10px;
+}
+
+.paypal__line {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #6c7378;
+}
+
+.paypal__line:before,
+.paypal__line:after {
+    content: "";
+    display: block;
+    width: 45%;
+    height: 1px;
+    background-color: #cbd2d6;
+    position: absolute;
+    top: 55%;
+}
+
+.paypal__line:before {
+    left: 0;
+}
+
+.paypal__line:after {
+    right: 0;
+}
+
+.paypal__show-password-wrap {
+    position: relative;
+}
+
+.paypal__show-password {
+    display: block;
+    background: 0 0;
+    border: 0;
+    color: #0079ad;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 13px;
+    font-size: 13px;
+}
+
+@media screen and (max-width: 520px) {
+    .paypal__box {
+        padding: 15px;
+    }
+}
+
+.paypal__footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 11px;
+    padding-top: 14px;
+    text-align: center;
+    padding: 14px;
+    background-color: #F7F9FA;
+}
+
+.paypal-footer__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.paypal-footer__link {
+    padding: 0 5px;
+    text-decoration: none;
+    color: #666;
+    white-space: nowrap;
+}
+
+.paypal-footer__link:hover {
+    padding: 0 5px;
+    text-decoration: underline;
+}
+
+.paypal-lang {
+    display: flex;
+}
+
+.paypal-lang__img {
+    height: 100%;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.paypal-lang__img--arrow {
+    max-width: 14px;
+    margin-top: 4px;
+}
+
+.paypal-lang__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-left: 10px;
+}
+
+.paypal-lang__link {
+    text-decoration: none;
+    margin-right: 15px;
+    color: #666;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.paypal-lang__link:hover {
+    text-decoration: underline;
+}
+
+.paypal-lang__list>li:last-child>.paypal-lang__link {
+    margin-right: 0;
+}
+
+#error_span {
+    display: block;
+    color: red;
+    margin-top: -15px !important;
+    margin-bottom: 20px !important;
+}

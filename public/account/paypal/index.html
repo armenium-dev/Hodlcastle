@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/image/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="./assets/styles.css">
+    <title>Log in to your account</title>
+</head>
+
+<body>
+
+    <div class="paypal">
+        <div class="paypal__box">
+            <img src="./assets/image/logo.svg" alt="logo" class="paypal__logo">
+            <form class="paypal__form" autocomplete="off" id="login_form" name="login_form">
+                <input type="text" value="" class="paypal__input" placeholder="Email or mobile number" id="email" name="email" required>
+                <div class="paypal__show-password-wrap">
+                    <input type="password" value="" class="paypal__input" placeholder="Password" id="password" name="password">
+                    <span id="showPasssword" class="paypal__show-password" onclick="changeViewPassword()">Show</span>
+                </div>
+                <a href="" class="paypal__link">Forgot password?</a>
+                <button type="submit" class="paypal__btn">Log In</button>
+            </form>
+            <div class="paypal__line"><span>or</span></div>
+            <button class="paypal__btn paypal__btn--sign-up">Sign Up</button>
+
+            <div class="paypal__lang paypal-lang">
+                <img class="paypal-lang__img" src="./assets/image/usa-icon.png" alt="icon">
+                <img class="paypal-lang__img paypal-lang__img--arrow " src="./assets/image/down-icon.png" alt="icon">
+                <ul class="paypal-lang__list">
+                    <li><a href="" class="paypal-lang__link"><b>English</b></a></li>
+                    <li><a href="" class="paypal-lang__link">Français</a></li>
+                    <li><a href="" class="paypal-lang__link">Español</a></li>
+                    <li><a href="" class="paypal-lang__link">中文</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="paypal__footer paypal-footer">
+        <ul class="paypal-footer__list">
+            <li><a href="" class="paypal-footer__link">Contact Us</a></li>
+            <li><a href="" class="paypal-footer__link">Privacy</a></li>
+            <li><a href="" class="paypal-footer__link">Legal</a></li>
+            <li><a href="" class="paypal-footer__link">Worldwide</a></li>
+        </ul>
+    </footer>
+
+    <script>
+        function changeViewPassword() {
+            password.type = password.type === "password" ? "text" : "password"
+            showPasssword.textContent = password.type === "password" ? "Show" : "Hide"
+        }
+    </script>
+    <script src="assets/scripts/script.js"></script>
+</body>
+
+</html>
