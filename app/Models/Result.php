@@ -138,6 +138,21 @@ class Result extends Model
         return $q->where('type_id', $type_id);
     }
 
+    public static function sTypeLabels()
+    {
+        $out = [
+            self::TYPE_SENT => 'Sent',
+            self::TYPE_OPEN => 'Open',
+            self::TYPE_CLICK => 'Click',
+            self::TYPE_ATTACH => 'Attachment',
+            self::TYPE_FAKE_AUTH => 'Data entry',
+            self::TYPE_SMISH => 'Smish',
+            self::TYPE_REPORT => 'Report',
+        ];
+
+        return $out;
+    }
+
     public static function sTypeTitles()
     {
         $out = [

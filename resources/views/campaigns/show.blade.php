@@ -30,7 +30,7 @@
                             ></canvas>-->
                             <div class="chart">
                                 <canvas id="barChart" style="height:230px"
-                                        data-labels="{{ implode(',', \App\Models\Result::sTypeTitles()) }}"
+                                        data-labels="{{ implode(',', \App\Models\Result::sTypeLabels()) }}"
                                         data-data="{{ json_encode($campaign->resultsDataChart) }}"
                                 ></canvas>
                             </div>

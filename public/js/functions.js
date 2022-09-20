@@ -540,7 +540,7 @@ function initChartHome() {
                 data : data_attachments
             },
             {
-                label : "Fake Auth",
+                label : "Data entry",
                 fillColor : "rgba(255,193,7,0.2)",
                 strokeColor : "rgba(255,193,7,1)",
                 pointColor : "rgba(255,193,7,1)",
