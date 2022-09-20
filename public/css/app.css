@@ -427,7 +427,9 @@ table.scenario-params label {
   min-height: 150px;
 }
 
-.btn-custom-group {display: flex; justify-content: flex-end;}
+.btn-custom-group {
+  display: flex;
+}
 
 .btn-custom {
   border-radius: 0px;
@@ -478,5 +480,9 @@ input[type=radio] {
   table td .btn-group .btn + .btn {
     float: none !important;
   }
+}
+
+.d-flex {
+  display: flex;
 }
 

@@ -4,20 +4,18 @@
     <section class="sidebar">
 
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(40, 40, true) : '/public/img/logo.png' }}" class="img-circle"
-                     alt="User Image"/>
-            </div>
-            <div class="pull-left info">
+        <div class="d-flex">
+            <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(100, 100, true) : '/public/img/logo.png' }}"
+                 class="logo"
+                 alt="User Image"/>
+            <div class="info">
                 @if (Auth::guest())
-                <p>Guest</p>
+                    Guest
                 @else
-                    <p>{{ Auth::user()->name}}
-                        @if(Auth::user()->company)
-                            <br> {{ Auth::user()->company->name }}
-                        @endif
-                    </p>
+                    {{ Auth::user()->name}}
+                    @if(Auth::user()->company)
+                        <br> {{ Auth::user()->company->name }}
+                    @endif
                 @endif
                 <!-- Status 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
