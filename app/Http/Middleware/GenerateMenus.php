@@ -26,7 +26,7 @@ class GenerateMenus{
 				$menu->add('Documentation', ['route' => 'documentation.index'])->data('permission', 'documentation.index')->data('icon', 'fa-book');
                 $menu->add('Trainings', ['route' => 'trainings.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
                 $menu->add('Training Statistics', ['route' => 'trainingStatistics.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
-				$menu->add('Smishing', ['route' => 'campaigns.smishing'])->data('permission', 'campaigns.index')->data('icon', 'fa-calendar');
+				$menu->add('Smishing', ['route' => 'campaigns.smishing'])->data('permission', 'campaigns.index')->data('icon', 'fa-phone');
 
 				$menu->divide();
 
@@ -42,6 +42,7 @@ class GenerateMenus{
 				$menu->add('Landings', ['route' => 'landings.index'])->data('permission', 'landings.index')->data('icon', 'fa-plane');
                 $menu->add('Modules', ['route'  => 'modules.index'])->data('permission', 'modules.index')->data('icon', 'fa-graduation-cap');
                 $menu->add('Courses', ['route'  => 'courses.index'])->data('permission', 'courses.index')->data('icon', 'fa-graduation-cap');
+                $menu->add('Languages', ['route'  => 'languages.index'])->data('permission', 'modules.index')->data('icon', 'fa-language');
 				$menu->add('SMS Templates', ['route' => 'smsTemplates.index'])->data('permission', 'smsTemplates.index')->data('icon', 'fa-phone');
             })->filter(function($item){
 					if(Auth::user()->can($item->data('permission'))){

@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 	    Route::resource('scenarios', 'ScenarioController');
         Route::resource('companies', 'CompanyController');
         Route::resource('landings', 'LandingController');
+        Route::resource('languages', 'LanguagesController');
         Route::resource('users', 'UserController');
         Route::resource('roles', 'RoleController');
         Route::resource('permissions','PermissionController');
