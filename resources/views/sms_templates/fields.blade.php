@@ -6,10 +6,11 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-            @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
-                {!! Form::checkbox('is_public', 1, isset($smsTemplate) ? $smsTemplate->is_public : false, ['id' => 'is_public']) !!}
-                {!! Form::label('is_public', 'Public template') !!}
+            {!! Form::label('image', 'Template Image:') !!}
+            @if(isset($smsTemplate) && $smsTemplate->image)
+                <img src="{{ $smsTemplate->image->crop(100, 100, true) }}" alt="" class="d-block" />
             @endif
+            {!! Form::file('image', ['class' => 'form-control']) !!}
         </div>
 
         <div class="form-group">
@@ -32,6 +33,13 @@
             @if(Auth::check() && Auth::user()->can('sms_template.see_lang_tags_image'))
                 {!! Form::label('language_id', 'Lang:') !!}
                 {!! Form::select('language_id', $languages, $defult_language_id, ['class' => 'form-control']) !!}
+            @endif
+        </div>
+
+        <div class="form-group">
+            @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
+                {!! Form::checkbox('is_public', 1, isset($smsTemplate) ? $smsTemplate->is_public : false, ['id' => 'is_public']) !!}
+                {!! Form::label('is_public', 'Public template') !!}
             @endif
         </div>
     </div>

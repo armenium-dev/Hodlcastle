@@ -63,6 +63,10 @@ class SmsTemplate extends Model{
 		'content' => 'required',
 	];
 
+	public function image(){
+		return $this->morphOne('App\Models\Image', 'imageable')->latest();
+	}
+
 	public function company(){
 		return $this->belongsTo('App\Models\Company');
 	}

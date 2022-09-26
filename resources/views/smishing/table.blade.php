@@ -14,8 +14,8 @@ use Carbon\Carbon;
         @if($item->language->code == $language['code'])
         <tr>
             <td class="image-col">
-                @if($item->company->logo)
-                <img src="{!! $item->company->logo->crop(100, 100, true) !!}" />
+                @if($item->image)
+                <img src="{!! $item->image->crop(100, 100, true) !!}" />
                 @else
                 <img src="/img/thumbnail-phishmanager.png" />
                 @endif

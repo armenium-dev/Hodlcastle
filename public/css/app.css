@@ -514,3 +514,7 @@ table {
   white-space: nowrap;
 }
 
+.d-block {
+  display: block;
+}
+

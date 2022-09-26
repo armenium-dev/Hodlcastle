@@ -10,7 +10,7 @@
         <div class="box box-primary">
 
             <div class="box-body">
-                {!! Form::open(['route' => 'smsTemplates.store', 'files' => false]) !!}
+                {!! Form::open(['route' => 'smsTemplates.store', 'files' => true]) !!}
                 @include('sms_templates.fields')
                 {!! Form::close() !!}
             </div>

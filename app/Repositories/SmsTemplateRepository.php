@@ -35,38 +35,57 @@ class SmsTemplateRepository extends ParentRepository{
 	}
 
 	public function createRequest($request){
-		if(!$request->has('language_id')){
-			$request->merge(['language_id' => 1]);
+		try{
+			if(!$request->has('language_id')){
+				$request->merge(['language_id' => 1]);
+			}
+
+			if(Auth::user()->can('email_template.set_public')){
+				$input = $request->all();
+			}else{
+				$input = $request->except('is_public');
+			}
+
+			if(!Auth::user()->can('email_template.set_company') && Auth::user()->company){
+				$input['company_id'] = Auth::user()->company->id;
+			}
+			$input['content'] = $this->fixingURLs($input['content'], 0);
+
+			$model = parent::create($input);
+
+			$this->saveImage($request, $model->id, 'image');
+
+			return $model;
+
+		}catch(\Exception $e){
+			Flash::error($e->getMessage());
 		}
 
-		if(Auth::user()->can('email_template.set_public')){
-			$input = $request->all();
-		}else{
-			$input = $request->except('is_public');
-		}
-
-		if(!Auth::user()->can('email_template.set_company') && Auth::user()->company){
-			$input['company_id'] = Auth::user()->company->id;
-		}
-		$input['content'] = $this->fixingURLs($input['content'], 0);
-
-		$model = parent::create($input);
 	}
 
 	public function updateRequest($request, $id){
-		if(!$request->has('is_public')){
-			$request->merge(['is_public' => 0]);
+		try{
+			if(!$request->has('is_public')){
+				$request->merge(['is_public' => 0]);
+			}
+
+			if(Auth::user()->can('email_template.set_public')){
+				$input = $request->all();
+			}else{
+				$input = $request->except('is_public');
+			}
+
+			$input['content'] = $this->fixingURLs($input['content'], $id);
+
+			$model = parent::update($input, $id);
+
+			$this->saveImage($request, $model->id, 'image');
+
+			return $model;
+
+		}catch(\Exception $e){
+			Flash::error($e->getMessage());
 		}
-
-		if(Auth::user()->can('email_template.set_public')){
-			$input = $request->all();
-		}else{
-			$input = $request->except('is_public');
-		}
-
-		$input['content'] = $this->fixingURLs($input['content'], $id);
-
-		parent::update($input, $id);
 	}
 
 	public function copy($id, $company_id = null){

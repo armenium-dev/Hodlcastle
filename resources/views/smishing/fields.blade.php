@@ -11,8 +11,8 @@
 			<tbody>
 				<tr>
 					<td width="130">
-						@if($sms_template->company->logo)
-							<img src="{{ $sms_template->company->logo->crop(100, 100, true) }}" />
+						@if($sms_template->image)
+							<img src="{{ $sms_template->image->crop(100, 100, true) }}" />
 						@else
 							<img src="/img/thumbnail-phishmanager.png" />
 						@endif

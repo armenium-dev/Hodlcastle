@@ -9,7 +9,7 @@
         @include('adminlte-templates::common.errors')
         <div class="box box-primary">
             <div class="box-body">
-                {!! Form::model($smsTemplate, ['route' => ['smsTemplates.update', $smsTemplate->id], 'method' => 'patch', 'files' => false]) !!}
+                {!! Form::model($smsTemplate, ['route' => ['smsTemplates.update', $smsTemplate->id], 'method' => 'patch', 'files' => true]) !!}
                 @include('sms_templates.fields')
                 {!! Form::close() !!}
             </div>
