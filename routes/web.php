@@ -22,6 +22,9 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('trainingStatistic/getTable', 'TrainingStatisticController@table')->name('trainingStatistic.table');
 
 	Route::get('campaigns/smishing', 'CampaignController@smishing')->name('campaigns.smishing');
+	Route::get('smishing', 'SmishingController@index')->name('smishing');
+	Route::get('smishing/{id}/select', 'SmishingController@select')->name('smishing.select');
+	Route::post('smishing/{id}/finish', 'SmishingController@finish')->name('smishing.finish');
 
 	Route::resource('groups', 'GroupController');
     Route::resource('domains', 'DomainController');

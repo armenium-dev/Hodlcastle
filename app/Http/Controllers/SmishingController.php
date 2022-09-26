@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\CreateCampaignRequest;
+use App\Models\SmsTemplate;
+use App\Repositories\CampaignRepository;
+use App\Repositories\DomainRepository;
+use App\Repositories\EmailTemplateRepository;
+use App\Repositories\GroupRepository;
+use App\Repositories\LanguageRepository;
+use App\Repositories\ScenarioRepository;
+use Illuminate\Http\Request;
+use Flash;
+use Illuminate\Support\Facades\Auth;
+use Prettus\Repository\Criteria\RequestCriteria;
+use Response;
+use App\Helpers\PermissionHelper;
+use Yajra\Datatables\Datatables;
+use App\Repositories\SmsTemplateRepository;
+
+class SmishingController extends AppBaseController {
+
+	private $groupRepository;
+	private $languageRepository;
+	private $domainRepository;
+	private $campaignRepository;
+
+	public function __construct(
+		LanguageRepository $languageRepo,
+		DomainRepository $domainRepo,
+		GroupRepository $groupRepo,
+		CampaignRepository $campaignRepo
+	){
+		parent::__construct();
+
+		$this->languageRepository = $languageRepo;
+		$this->domainRepository = $domainRepo;
+		$this->groupRepository = $groupRepo;
+		$this->campaignRepository = $campaignRepo;
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(){
+		$sms_templates = SmsTemplate::all()->where('is_public', 1);
+
+		$languages = [];
+		$id = 0;
+		foreach($sms_templates as $template){
+			$id++;
+			$languages[$template->language['code']] = [
+				'id' => $id,
+				'name' => $template->language['name'],
+				'code' => $template->language['code'],
+				'class' => '',
+			];
+		}
+		reset($languages);
+		$languages[key($languages)]['class'] = 'active';
+
+		#dd($languages);
+		#dd($sms_templates);
+
+		return view('smishing.index', compact('sms_templates', 'languages'));
+	}
+
+	public function select($id){
+		$sms_template = SmsTemplate::findOrFail($id);
+		$groups = $this->groupRepository->listForCompany();
+		#dd($sms_template->company->logo);
+
+		return view('smishing.select', compact('sms_template', 'groups'));
+	}
+
+
+}
