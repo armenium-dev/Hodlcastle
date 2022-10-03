@@ -518,3 +518,19 @@ table {
   display: block;
 }
 
+.custom-table-data .toolbar {
+  display: flex;
+  flex-flow: row-reverse;
+  justify-content: space-between;
+}
+
+.dataTables_year {
+  float: left;
+  margin-left: 20px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  width: auto;
+  background-image: none;
+}
+
