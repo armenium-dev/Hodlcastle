@@ -9,7 +9,7 @@
     </thead>
     <tbody>
     @foreach($trainings as $training)
-        @if($training->user->company_id == $company_id)
+        @if($training->user && $training->user->company_id == $company_id)
         <tr>
             <td>{!! $training->module->name !!}</td>
             <td>{!! $training->user_id ? $training->user->name : '' !!}</td>

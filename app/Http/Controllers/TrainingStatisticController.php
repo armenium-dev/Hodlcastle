@@ -34,9 +34,11 @@ class TrainingStatisticController extends AppBaseController{
 	public function table(Request $request){
 		if($request->ajax()){
 
-			$this->trainingStatisticRepository->pushCriteria(new BelongsToCompanyCriteria(true));
+			$this->trainingStatisticRepository->pushCriteria(BelongsToCompanyCriteria::class);
 			$trainingStatistic = $this->trainingStatisticRepository->all();
-			$trainingStatistic->where(DB::raw('EXTRACT(YEAR FROM start_training)'), $request->post('columns')[3]['search']['value']);
+			if(!is_null($request->post('columns')[3]['search']['value'])){
+				$trainingStatistic->where(DB::raw('EXTRACT(YEAR FROM start_training)'), $request->post('columns')[3]['search']['value']);
+			}
 			#dd($request->post('columns')[3]['search']['value']);
 
 			return Datatables::of($trainingStatistic)
