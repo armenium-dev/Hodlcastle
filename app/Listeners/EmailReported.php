@@ -23,6 +23,6 @@ class EmailReported extends EmailBaseListener
         $geo_info = geoInfo();
 
         if (!$result_check->count())
-            $resultModel = $this->createResult($eventModel, Result::TYPE_REPORT, $geo_info);
+            $this->createResult($eventModel, Result::TYPE_REPORT, $geo_info);
     }
 }

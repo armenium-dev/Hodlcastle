@@ -10,6 +10,7 @@ Homestead.yaml
 /temp
 *.log
 /db-dumps
+/database/dumps
 /public/.htaccess
 package-lock.json
 composer.phar
@@ -22,4 +23,5 @@ twilio.txt
 *.zip
 *.bak
 *.bak2
+*.csv
 

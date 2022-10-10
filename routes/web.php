@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
+
+	Route::get('leaderboard/sort/{field}/{order}', 'LeaderboardController@sort')->name('leaderboard.sort');
+	Route::get('leaderboard/ajax_sort', 'LeaderboardController@ajaxSort')->name('leaderboard.ajaxsort');
 	Route::get('leaderboard', 'LeaderboardController@index')->name('leaderboard');
 
     Route::get('emailTemplates/getPublicTable', 'EmailTemplateController@table')->name('emailTemplates.table');

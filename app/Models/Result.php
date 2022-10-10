@@ -131,6 +131,11 @@ class Result extends Model
         return $this->belongsTo('App\Models\Recipient');
     }
 
+    public function events()
+    {
+        return $this->belongsTo('App\Models\Event');
+    }
+
     public function scopeType($q, $type)
     {
         $type_id = self::getTypeIdByTitle($type);

@@ -103,11 +103,20 @@ function initDatepicker() {
                 singleDate = false;
             }
 
+            var min = moment();
+
+            if(pickerEljq.data('min') !== undefined){
+                min = pickerEljq.data('min');
+            }
+
+            //console.log(min);
+
             var picker = new Lightpick({
                 field: this,
                 singleDate: singleDate,
-                minDate: moment(),
+                minDate: min,
             });
+
             if (false == singleDate) {
                 picker.setDateRange(pickerEljq.data('start'), pickerEljq.data('end'));
             } else {

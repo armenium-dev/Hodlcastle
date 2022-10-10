@@ -32,7 +32,7 @@ class UserController extends AppBaseController{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		$users = User::latest()->paginate();
+		$users = User::all();
 		
 		return view('users.index', compact('users'));
 	}

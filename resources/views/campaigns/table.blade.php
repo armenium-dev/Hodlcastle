@@ -37,9 +37,9 @@
                     {{--<td>{{ $campaign->schedule && $campaign->schedule->schedule_end ? $campaign->schedule->schedule_end->format('j F, Y') : '-' }}</td>--}}
                 @endif
                 <td>
-                    <div class="btn-custom-group">
+                    <div class="btn-group flex">
                         {!! Form::open(['route' => ['campaigns.destroy', $campaign->id], 'method' => 'delete']) !!}
-                        <div class='btn-group'>
+                        <div class='btn-group flex'>
                             <a href="{!! route('campaigns.show', [$campaign->id]) !!}" class='btn btn-default'><i class="fa fa-eye"></i></a>
                             @if($campaign_status === $campaign->getStatusCalcAttribute())
                                 <a href="{!! route('campaigns.edit', [$campaign->id, 'type' => $type]) !!}" class='btn btn-default'><i class="fa fa-edit"></i></a>
