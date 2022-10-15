@@ -16,10 +16,12 @@
                                            data-min="2019-01-01" data-start="" data-end="" data-val="">
                                 </div>
                                 <div class="me-10">
-                                    <label>Start time</label>
-                                    <input type="text" name="start_time" class="time_start form-control">
+                                    <label>End date</label>
+                                    <input type="text" name="end_date" class="datepicker form-control"
+                                           data-min="2019-01-01" data-start="" data-end="" data-val="">
                                 </div>
-                                <input type="submit" class="btn btn-success" value="Filter">
+                                <input type="submit" class="btn btn-success me-10" value="Filter">
+                                <input type="reset" class="btn btn-default" value="Reset" id="js_form_reset">
                             </div>
                         </form>
                         <a id="js_export" class="btn btn-warning" href="#">Export to CSV</a>

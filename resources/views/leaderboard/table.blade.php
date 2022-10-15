@@ -5,6 +5,8 @@
 			<tr>
 				<th>#</th>
 				<th class="js_sorting sort-desc" data-field="send_date" sorted="1" order="desc">Send date</th>
+				<th class="js_sorting sort-reset" data-field="first_name" sorted="0" order="">First Name</th>
+				<th class="js_sorting sort-reset" data-field="last_name" sorted="0" order="">Last Name</th>
 				<th class="js_sorting sort-reset" data-field="email" sorted="0" order="">Email</th>
 				<th class="js_sorting sort-reset" data-field="phone" sorted="0" order="">Phone number</th>
 				<th class="js_sorting sort-reset text-right" data-field="mails_sent" sorted="0" order="">Mails sent</th>
@@ -110,9 +112,15 @@
 			}).click();
 		};
 
+		const resetForm = function(e){
+			$('#js_search_form').find('input[type="text"]').val('');
+			doSorting(e);
+		};
+
 		$(document)
 				.on('submit', '#js_search_form', doSorting)
 				.on('click', '.js_sorting', doSorting)
+				.on('click', '#js_form_reset', resetForm)
 				.on('click', '#js_export', doSorting);
 	});
 </script>

@@ -5,6 +5,8 @@
         data-recipient="{!! $item->recipient_id !!}">
         <td>{!! ($k+1) !!}</td>
         <td>{!! $item->send_date !!}</td>
+        <td>{!! $item->first_name !!}</td>
+        <td>{!! $item->last_name !!}</td>
         <td>{!! $item->email !!}</td>
         <td>{!! $item->phone !!}</td>
         <td class="text-right">{!! $item->mails_sent !!}</td>

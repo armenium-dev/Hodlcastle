@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\Leaderboard;
 use App\Repositories\CampaignRepository;
 use App\Repositories\DomainRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -82,9 +83,16 @@ class LeaderboardController extends AppBaseController{
 				$form_data = [];
 				parse_str($params['form_data'], $form_data);
 
-				if(!empty($form_data['start_date']) && !empty($form_data['start_time'])){
-					$date = date('Y-m-d H:i:s', strtotime($form_data['start_date'].' '.$form_data['start_time'].':00'));
-					$query->where('send_date', '>=', $date);
+				if(!empty($form_data['start_date']) && empty($form_data['end_date'])){
+					$start_date = Carbon::parse(str_replace('/', '.', $form_data['start_date']))->format('Y-m-d');
+					$query->where('send_date', '>=', $start_date);
+				}elseif(empty($form_data['start_date']) && !empty($form_data['end_date'])){
+					$end_date = Carbon::parse(str_replace('/', '.', $form_data['end_date']))->format('Y-m-d');
+					$query->where('send_date', '<=', $end_date);
+				}elseif(!empty($form_data['start_date']) && !empty($form_data['end_date'])){
+					$start_date = Carbon::parse(str_replace('/', '.', $form_data['start_date']))->format('Y-m-d');
+					$end_date = Carbon::parse(str_replace('/', '.', $form_data['end_date']))->format('Y-m-d');
+					$query->whereBetween('send_date', [$start_date, $end_date]);
 				}
 			}
 
@@ -108,6 +116,9 @@ class LeaderboardController extends AppBaseController{
 		$csv_file_name = date('Y-m-d-H-i-s').'-leaderboard.csv';
 
 		$headers = [
+			'Send date',
+			'First Name',
+			'Last Name',
 			'Email',
 			'Phone number',
 			'Mails sent',
@@ -120,7 +131,6 @@ class LeaderboardController extends AppBaseController{
 			'Smish rate',
 			'Department',
 			'Location',
-			'Send date',
 		];
 
 		$fp = fopen($csv_path.'/'.$csv_file_name, 'w');
@@ -135,7 +145,9 @@ class LeaderboardController extends AppBaseController{
 				$data['smish_rate'] = 0;
 			}
 
-			#$data['phone'] = '"'.$data['phone'].'"';
+			if(!empty($data['phone'])){
+				$data['phone'] = '"'.$data['phone'].'"';
+			}
 			$data['phish_rate'] .= '%';
 			$data['reporting_rate'] .= '%';
 			$data['smish_rate'] .= '%';
@@ -150,6 +162,7 @@ class LeaderboardController extends AppBaseController{
 		return $save_file_url;
 	}
 
+	/** OLD, TO BE REMOVED **/
 	public function _index(Request $request){
 		$this->campaignRepository->pushCriteria(new RequestCriteria($request));
 

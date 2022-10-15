@@ -2,6 +2,9 @@
 CREATE VIEW leaderboard AS
     SELECT cm.company_id,
            r.campaign_id,
+           r.send_date,
+           rs.first_name,
+           rs.last_name,
            IF(r.email != '', r.email, rs.email) AS email,
            IF(r.phone != '', r.phone, rs.mobile) AS phone,
            r.recipient_id,
@@ -14,8 +17,7 @@ CREATE VIEW leaderboard AS
            COUNT(r6.type_id) AS smished,
            ROUND(COUNT(r6.type_id) * 100 / COUNT(r11.type_id), 0) AS smish_rate,
            rs.department,
-           rs.location,
-           r.send_date
+           rs.location
     FROM results r
         LEFT JOIN recipients rs ON rs.id = r.recipient_id
         LEFT JOIN campaigns cm ON r.campaign_id = cm.id
