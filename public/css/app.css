@@ -107,6 +107,18 @@ body {
   align-items: flex-end !important;
 }
 
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.max-w-300 {
+  max-width: 300px;
+}
+
 .main-footer {
   height: 50px;
   text-align: center;
@@ -617,5 +629,15 @@ table {
 
 .leaderboard.table tbody tr td:last-child {
   border-right: 0;
+}
+
+.chart-result {
+  width: 700px;
+  height: auto;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 
