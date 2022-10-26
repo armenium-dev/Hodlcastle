@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 	Route::get('generatereport', 'ReportController@index')->name('generatereport');
 	Route::post('generatereport/ajax_get_chart_content', 'ReportController@ajaxGetChartContent')->name('generatereport.ajaxGetChartContent');
 	Route::post('generatereport/ajax_generate_pdf', 'ReportController@ajaxGeneratePDF')->name('generatereport.ajaxGeneratePDF');
+	Route::post('generatereport/ajax_generate_pdf2', 'ReportController@ajaxGeneratePDF2')->name('generatereport.ajaxGeneratePDF2');
 
     Route::get('emailTemplates/getPublicTable', 'EmailTemplateController@table')->name('emailTemplates.table');
     Route::get('smsTemplates/getPublicTable', 'SmsTemplateController@table')->name('smsTemplates.table');

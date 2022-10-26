@@ -215,7 +215,7 @@
 					if(response.error == 0){
 						$js_result
 								.text(response.filename)
-								//.attr('download', response.filename)
+								.attr('download', response.filename)
 								.attr('href', response.link);
 						openInNewTab(response.link, response.filename);
 					}
@@ -231,8 +231,43 @@
 					target: '_blank',
 					rel: 'noopener noreferrer',
 					href: url,
-					//download: filename,
+					download: filename,
 				}).click();
+			};
+
+			/*--------------------------------------------------*/
+
+			const doSubmit2 = function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				let $this = $(this);
+				let url = '{!! route('generatereport.ajaxGeneratePDF2') !!}';
+				let $js_loader = $('#js_loader');
+				let $js_result = $('#js_chart_result');
+				let $js_form = $('#js_generate_pdf_form');
+
+				$.ajax({
+					type: "POST",
+					url: url,
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					data: $js_form.serialize(),
+					dataType: "json",
+					beforeSend: function(xhr){
+						$js_loader.addClass('show');
+					}
+				}).done(function(response){
+					if(response.error == 0){
+						//openInNewTab(response.link, '');
+						$js_result.html(response.content);
+						generated = false;
+						initChart();
+					}
+					$js_loader.removeClass('show');
+				}).fail(function(response){
+					$js_loader.removeClass('show');
+					console.log(response.error);
+				});
 			};
 
 			$(document).on('submit', '#js_generate_pdf_form', doSubmit);

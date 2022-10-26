@@ -111,7 +111,7 @@ class ReportController extends AppBaseController{
 			#dd($campaigns->count());
 
 			if($campaigns->count() > 6){
-				$campaigns_for_table = $campaigns->take(6);
+				$campaigns_for_table = $campaigns->take(10);
 			}else{
 				$campaigns_for_table = $campaigns;
 			}
@@ -181,14 +181,46 @@ class ReportController extends AppBaseController{
 		$file = sprintf('%s-%s.pdf', $date, 'report');
 		$pdf_file_path_part = sprintf('%s%s%s', 'downloads', DIRECTORY_SEPARATOR, $file);
 
-		$dompdf = PDF::loadView('report.pdf', compact('data'));
-		#PDF::setOptions(['dpi' => 300, 'defaultFont' => 'Helvetica', 'font_height_ratio' => 1]);
-		#sleep(10);
+		$dompdf = PDF::loadView('report.test', compact('data'));
 		$dompdf->save(public_path($pdf_file_path_part));
-
-		#return $dompdf->download($file);
 
 		return url($pdf_file_path_part);
 	}
+
+	#==================================================================
+
+	/**
+	 * FOR TESTS
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function ajaxGeneratePDF2(Request $request){
+		#include_once(app_path("Helpers/charts4php/config.php"));
+		include_once(app_path("Helpers/charts4php/lib/inc/chartphp.php"));
+		include(app_path("Helpers/charts4php/example_data.php"));
+
+		$res = ['error' => 1, 'filename' => '', 'link' => ''];
+
+		// Vertical
+		$p = new \chartphp();
+
+		$p->data = $bar_grouped_chart_data;
+		$p->chart_type = "bar-grouped";
+
+		// Common Options
+		$p->title = "Grouped Bar Chart";
+		$p->xlabel = "Vehicles";
+		$p->ylabel = "Frequency";
+		$p->series_label = array('Quarter 1','Quarter 2','Quarter 3','Quarter 4');
+
+		$data = $p->render('c1');
+
+		$res['link'] = $this->createPDF($data);
+		$res['filename'] = basename($res['link']);
+		$res['error'] = 0;
+
+		return response()->json($res);
+	}
+
 
 }
