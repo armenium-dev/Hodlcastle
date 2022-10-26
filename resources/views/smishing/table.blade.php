@@ -17,7 +17,7 @@ use Carbon\Carbon;
                 @if($item->image)
                 <img src="{!! $item->image->crop(100, 100, true) !!}" />
                 @else
-                <img src="/img/thumbnail-phishmanager.png" />
+                <img src="/img/sms-phishmanager.png" />
                 @endif
             </td>
             <td class="content-col">
