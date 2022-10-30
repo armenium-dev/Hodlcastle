@@ -28,6 +28,8 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('emailTemplates/getPublicTable', 'EmailTemplateController@table')->name('emailTemplates.table');
     Route::get('smsTemplates/getPublicTable', 'SmsTemplateController@table')->name('smsTemplates.table');
     Route::get('trainingStatistic/getTable', 'TrainingStatisticController@table')->name('trainingStatistic.table');
+    Route::get('trainingStatistics/export', 'TrainingStatisticController@exportIndex')->name('trainingStatistic.export');
+	Route::get('trainingStatistics/ajax_sort', 'TrainingStatisticController@ajaxSort')->name('trainingStatistics.ajaxsort');
 
 	Route::get('campaigns/smishing', 'CampaignController@smishing')->name('campaigns.smishing');
 	Route::get('smishing', 'SmishingController@index')->name('smishing');

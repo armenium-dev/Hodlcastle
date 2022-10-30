@@ -4,25 +4,17 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th class="js_sorting sort-desc" data-field="send_date" sorted="1" order="desc">Send date</th>
-				<th class="js_sorting sort-reset" data-field="first_name" sorted="0" order="">First Name</th>
-				<th class="js_sorting sort-reset" data-field="last_name" sorted="0" order="">Last Name</th>
+				<th class="js_sorting sort-reset" data-field="m_id" sorted="0" order="">Module</th>
+				<th class="js_sorting sort-reset" data-field="first_name" sorted="0" order="">Recipient</th>
 				<th class="js_sorting sort-reset" data-field="email" sorted="0" order="">Email</th>
-				<th class="js_sorting sort-reset" data-field="phone" sorted="0" order="">Phone number</th>
-				<th class="js_sorting sort-reset text-right" data-field="mails_sent" sorted="0" order="">Mails sent</th>
-				<th class="js_sorting sort-reset text-right" data-field="reported_phishes" sorted="0" order="">Reported phishes</th>
-				<th class="js_sorting sort-reset text-right" data-field="phished" sorted="0" order="">Phished</th>
-				<th class="js_sorting sort-reset text-right" data-field="phish_rate" sorted="0" order="">Phish rate</th>
-				<th class="js_sorting sort-reset text-right" data-field="reporting_rate" sorted="0" order="">Reporting rate</th>
-				<th class="js_sorting sort-reset text-right" data-field="sms_sent" sorted="0" order="">SMS sent</th>
-				<th class="js_sorting sort-reset text-right" data-field="smished" sorted="0" order="">Smished</th>
-				<th class="js_sorting sort-reset text-right" data-field="smish_rate" sorted="0" order="">Smish rate</th>
-				<th>Department</th>
-				<th>Location</th>
+				<th class="js_sorting sort-reset" data-field="company_id" sorted="0" order="">Company</th>
+				<th class="js_sorting sort-desc" data-field="start_training" sorted="1" order="desc">Start</th>
+				<th class="js_sorting sort-reset" data-field="finish_training" sorted="0" order="">Finish</th>
+				<th class="js_sorting sort-reset" data-field="timespend" sorted="0" order="">Time spent</th>
 			</tr>
 		</thead>
 		<tbody>
-			@include('leaderboard.table-rows')
+			@include('training_statistics.export-table-rows')
 		</tbody>
 	</table>
 </div>
@@ -35,7 +27,7 @@
 
 			let $this = $(this);
 			let tag_name = $this.prop('tagName');
-			let url = '{!! route('leaderboard.ajaxsort') !!}';
+			let url = '{!! route('trainingStatistics.ajaxsort') !!}';
 			let $js_loader = $('#js_loader');
 			let $js_table = $('#js_table');
 			let $js_search_form = $('#js_search_form');
@@ -113,7 +105,10 @@
 		};
 
 		const resetForm = function(e){
-			$('#js_search_form').find('input[type="text"]').val('');
+			$('#js_search_form')
+					.find('input[type="text"]').val('')
+					.end()
+					.find('select').val("-1");
 			doSorting(e);
 		};
 

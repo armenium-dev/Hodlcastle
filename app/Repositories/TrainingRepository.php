@@ -86,7 +86,11 @@ class TrainingRepository extends ParentRepository{
 
 		$trainingWithPivot = $recipient->trainings()->find($training->id);
 		//        $href = '<mytag mylink="{main_domain}/' . $trainingWithPivot->pivot->code . '">Training link</mytag>';
-		$href = env('APP_URL').'/tng/'.$trainingWithPivot->pivot->code;
+		$domain = env('APP_URL');
+		if(empty($domain)){
+			$domain = 'https://phishmanager.net';
+		}
+		$href = $domain.'/tng/'.$trainingWithPivot->pivot->code;
 
 		return $href;
 	}
