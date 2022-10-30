@@ -29,7 +29,7 @@
                     You have successfully completed the course: <b>{{ $course->name }}</b>
                 </div>
 
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12 d-none">
                     <a class="btn btn-sm btn-success" href="{!! route('tng.get', ['code' => $code, 'course' => $course, 'page' => 'finish']) !!}">
                         Download Certificate <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                     </a>
