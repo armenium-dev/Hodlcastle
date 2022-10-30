@@ -181,7 +181,7 @@ class ReportController extends AppBaseController{
 		$file = sprintf('%s-%s.pdf', $date, 'report');
 		$pdf_file_path_part = sprintf('%s%s%s', 'downloads', DIRECTORY_SEPARATOR, $file);
 
-		$dompdf = PDF::loadView('report.test', compact('data'));
+		$dompdf = PDF::loadView('report.pdf', compact('data'));
 		$dompdf->save(public_path($pdf_file_path_part));
 
 		return url($pdf_file_path_part);

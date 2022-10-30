@@ -12,6 +12,8 @@
         .bold {font-weight: bold;}
         .w-full {width: 100%;}
         h2 {margin: 30px 0;}
+        .chart {width: 100%;}
+        .chart img {max-width: 100%; height: auto;}
     </style>
 </head>
 <body>
