@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -175,6 +176,16 @@ class Campaign extends Model{
 		return $this->results()->type($param)->count();
 	}
 
+    public function countResultsNoResponse() {
+	    if ($this->results()->count() == 1){
+	        $res = $this->results()
+                ->select('recipient_id', DB::raw("COUNT(*)"))
+                ->groupBy('recipient_id')
+                ->count();
+        }
+        return $res ?? 0;
+    }
+
 	public function clicks(){
 		$collections = $this->results()->type('click')->get()->groupBy(function($date){
 				return Carbon::parse($date->created_at)->format('w');
@@ -242,14 +253,14 @@ class Campaign extends Model{
 
 		return $from;
 	}
-	
-	
+
+
 	public function sendToAllRecipientsByCron(){
-		
+
 		foreach($this->groups as $group){
 			$recipients = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'))->get();
 			#Log::stack(['custom'])->debug($recipient);
-			
+
 			foreach($recipients as $recipient){
 				if($recipient){
 					if($this->schedule->email_template_id){
@@ -259,22 +270,22 @@ class Campaign extends Model{
 						$this->setRecipendCode($recipient, $this->id);
 						$this->schedule->smsTemplate->send($recipient, $this);
 					}
-					
+
 					$recipient->setIsSentToCampaign($this);
-					
+
 					return true;
 				}else{
 					// if no recipient to send - proceed to next group
 					Log::stack(['custom'])->debug('no recipient to send - proceed to next group');
-					
+
 					return false;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * OLD
 	 * Not in use.
@@ -285,7 +296,7 @@ class Campaign extends Model{
 		foreach($this->groups as $group){
 			$recipient = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'))->first();
 			#Log::stack(['custom'])->debug($recipient);
-			
+
 			if($recipient){
 				if($this->schedule->email_template_id){
 					$this->schedule->emailTemplate->send($recipient, $this);
@@ -294,7 +305,7 @@ class Campaign extends Model{
 					$this->setRecipendCode($recipient, $this->id);
 					$this->schedule->smsTemplate->send($recipient, $this);
 				}
-				
+
 				$recipient->setIsSentToCampaign($this);
 
 				return true;
@@ -349,7 +360,7 @@ class Campaign extends Model{
 		}
 		#dd($this->company->id, $this->company->is_trial, $this->user->id, Auth::user());
 	}
-	
+
 	/**
 	 * For captain
 	 */
@@ -359,7 +370,7 @@ class Campaign extends Model{
 
 		foreach($this->groups as $group){
 			$recipients = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'))->get();
-			
+
 			foreach($recipients as $recipient){
 				$recipient->attachToCampaign($this);
 				$this->setRecipendCode($recipient, $this->id);
@@ -370,12 +381,12 @@ class Campaign extends Model{
 
 		return $tmp;
 	}
-	
+
 	public function sendToCapitanAboutSmishingCampaign($create = true){
 		if(env('APP_ENV') == 'local') return;
 
 		$campaign = $this;
-		
+
 		#if(Auth::check() && Auth::user()->hasRole('customer')){
 
 			$subject = $create ? 'New smishing campaign' : 'Smishing campaign has been removed';
@@ -394,23 +405,23 @@ class Campaign extends Model{
 				$content[] = 'Link: <a href="'.URL::to('/campaigns/'.$campaign->id).'">View</a>';
 			}
 			$content = implode('<br>', $content);
-			
+
 			Mail::send('emails.send', ['title' => 'title', 'content' => $content], function($message) use ($campaign, $subject){
 				if($campaign && $campaign->email){
 					$from = $campaign->email;
 				}else{
 					$from = config('mail.email_noreply');
 				}
-				
+
 				$message->from($from, $from);
 				$message->to(env('EMAIl_SERVICEDESK'));
 				$message->subject($subject);
-				
+
 				$message->getHeaders()->addTextHeader('X-No-Track', Str::random(10));
 			});
 		#}
 	}
-	
+
 	public function setShort($status){
 		self::$short_link = $status;
 	}
