@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class RunTrainingReminder extends Command{
+
 	/**
 	 * The name and signature of the console command.
 	 * @var string
@@ -40,27 +41,27 @@ class RunTrainingReminder extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		Log::stack(['cron'])->debug(__CLASS__.'::'.__FUNCTION__.' - RUN');
+		Log::stack(['cron'])->debug(__CLASS__);
 
+		$NOYIFY_FATER_DAYS = env('NEXT_NOYIFY_FATER_DAYS', 3);
 		$statistics = $this->getTrainingStatisticsData();
 
-		#$recipient = Recipient::
+		if($statistics->count()){
+			$statistics->each(function($statistic) use ($NOYIFY_FATER_DAYS){
+				Log::stack(['cron'])->debug('Statistic ID = '.$statistic->id.', Notify date = '.$statistic->notify_training);
+				$recipient = $this->getRecipient($statistic);
+				$training = $this->getTraining($statistic);
+				$this->send($recipient, $training);
+				$statistic->notify_training = Carbon::now()->addDays($NOYIFY_FATER_DAYS);
+				$statistic->save();
+			});
+		}
 
-
-		#Log::stack(['cron'])->debug('Companies Count = '.$companies_count);
-
-		$statistics->each(function($statistic){
-			Log::stack(['cron'])->debug('Statistic ID = '.$statistic->id.', '.$statistic->notify_training);
-			$recipient = $this->getRecipient($statistic);
-			$training = $this->getTraining($statistic);
-			$this->send($recipient, $training);
-		});
-		
 		Log::stack(['cron'])->debug('------------------------------------------------------------');
 	}
 
 	private function getTrainingStatisticsData(){
-		Log::stack(['cron'])->debug(__FUNCTION__);
+		#Log::stack(['cron'])->debug(__FUNCTION__);
 
 		$query = TrainingStatistic::query();
 
@@ -70,32 +71,32 @@ class RunTrainingReminder extends Command{
 
 		$statistics = $query->get();
 
-		Log::stack(['cron'])->debug($statistics->toArray());
+		#Log::stack(['cron'])->debug($statistics->toArray());
 
 		return $statistics;
 	}
 
 	private function getRecipient($statistic){
-		Log::stack(['cron'])->debug(__FUNCTION__);
+		#Log::stack(['cron'])->debug(__FUNCTION__);
 
 		$recipient = Recipient::whereHas('trainings', function($q) use ($statistic){
 			$q->where('recipient_id', $statistic->recipient_id);
 			$q->where('code', $statistic->code);
 		})->first();
 
-		Log::stack(['cron'])->debug($recipient->toArray());
+		#Log::stack(['cron'])->debug($recipient->toArray());
 
 		return $recipient;
 	}
 
 	private function getTraining($statistic){
-		Log::stack(['cron'])->debug(__FUNCTION__);
+		#Log::stack(['cron'])->debug(__FUNCTION__);
 
 		$training = Training::whereHas('recipients', function($q) use ($statistic){
 			$q->where('code', $statistic->code);
 		})->first();
 
-		Log::stack(['cron'])->debug($training->toArray());
+		#Log::stack(['cron'])->debug($training->toArray());
 
 		return $training;
 	}
@@ -121,6 +122,7 @@ class RunTrainingReminder extends Command{
 		$objDemo->recipient = $recipient;
 		$objDemo->url = $this->makeTrainingUrl($recipient, $training);
 		$objDemo->template = $training->getTemplateByType('remind');
+		#Log::stack(['cron'])->debug($objDemo->template->content);
 
 		Mail::to($recipient->email)->send(new TrainingSending($objDemo));
 	}

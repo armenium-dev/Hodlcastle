@@ -81,20 +81,26 @@ class Training extends Model{
 		switch($type){
 			case "start":
 				$id = $this->start_template_id;
+				$type_id = TrainingNotifyTemplate::TYPE_START;
 				break;
 			case "finish":
 				$id = $this->finish_template_id;
+				$type_id = TrainingNotifyTemplate::TYPE_END;
 				break;
 			case "remind":
 				$id = $this->notify_template_id;
+				$type_id = TrainingNotifyTemplate::TYPE_REMIND;
 				break;
 			default:
 				$id = 0;
+				$type_id = 0;
 				break;
 		}
 
 		if($id > 0){
 			$template = TrainingNotifyTemplate::whereId($id)->first();
+		}else{
+			$template = TrainingNotifyTemplate::where(['is_public' => 1, 'type_id' => $type_id])->first();
 		}
 
 		return $template;
