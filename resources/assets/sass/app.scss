@@ -109,7 +109,7 @@ table.scenario-params label {font-weight: normal;}
 .btn-group.flex .btn:not(:first-child) {border-left-width: 1px !important;}
 .btn-group.flex .btn + .btn {margin: 0;}
 
-.lang-flag {}
+.custom-table .lang-flag {margin-right: 5px;}
 
 .mce-notification-warning {display: none;}
 
@@ -258,3 +258,4 @@ table {margin-bottom: 0;}
 
 .chart-result {width: 700px; height: auto; position: absolute; z-index: -1; left: 0; top: 0; opacity: 0;}
 
+.highlight {border: #ff0088 1px solid;}

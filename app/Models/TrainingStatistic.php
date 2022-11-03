@@ -16,7 +16,8 @@ class TrainingStatistic extends Model{
 	public $fillable = [
 		'recipient_id',
 		'company_id',
-		'code'
+		'code',
+		'notify_training'
 	];
 
 	/**

@@ -350,6 +350,10 @@ table.scenario-params label {
   margin: 0;
 }
 
+.custom-table .lang-flag {
+  margin-right: 5px;
+}
+
 .mce-notification-warning {
   display: none;
 }
@@ -639,5 +643,9 @@ table {
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.highlight {
+  border: #ff0088 1px solid;
 }
 
