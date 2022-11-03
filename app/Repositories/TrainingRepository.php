@@ -63,7 +63,7 @@ class TrainingRepository extends ParentRepository{
 				$this->setRicipentCode($recipient, $model->id);
 				$this->send($recipient, $model);
 				$recipient->setIsSentToTraining($model);
-				$this->setInitialTraningStatistic($recipient);
+				$this->setInitialTrainingStatistic($recipient);
 			}
 		}
 	}
@@ -103,7 +103,7 @@ class TrainingRepository extends ParentRepository{
 		return $href;
 	}
 
-	public function setInitialTraningStatistic($recipient){
+	public function setInitialTrainingStatistic($recipient){
 		$FIRST_NOYIFY_FATER_DAYS = env('FIRST_NOYIFY_FATER_DAYS', 3);
 
 		$temp = [];

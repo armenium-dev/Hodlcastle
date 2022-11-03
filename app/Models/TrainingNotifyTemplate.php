@@ -12,12 +12,12 @@ use App\DynamicMail\Facades\DynamicMail;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class TraningNotifyTemplate
+ * Class TrainingNotifyTemplate
  * @package App\Models
  * @property string lang
  * @property string tags
  */
-class TraningNotifyTemplate extends Model{
+class TrainingNotifyTemplate extends Model{
 	
 	use SoftDeletes;
 	

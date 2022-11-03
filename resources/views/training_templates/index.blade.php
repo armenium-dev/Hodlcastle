@@ -3,7 +3,7 @@
 @section('content')
     <section class="content-header">
         <div class="pull-right">
-           <a class="btn btn-success" href="{!! route('traningNotifyTemplates.create') !!}"><i class="fa fa-plus"></i> Add New</a>
+           <a class="btn btn-success" href="{!! route('trainingNotifyTemplates.create') !!}"><i class="fa fa-plus"></i> Add New</a>
         </div>
         <h1>Training Notify Templates</h1>
     </section>

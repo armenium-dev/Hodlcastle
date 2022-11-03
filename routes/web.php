@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 
     Route::get('emailTemplates/getPublicTable', 'EmailTemplateController@table')->name('emailTemplates.table');
     Route::get('smsTemplates/getPublicTable', 'SmsTemplateController@table')->name('smsTemplates.table');
-    Route::get('trainingTemplates/getPublicTable', 'TraningNotifyTemplateController@table')->name('trainingTemplates.table');
+    Route::get('trainingTemplates/getPublicTable', 'TrainingNotifyTemplateController@table')->name('trainingTemplates.table');
     Route::get('trainingStatistic/getTable', 'TrainingStatisticController@table')->name('trainingStatistic.table');
     Route::get('trainingStatistics/export', 'TrainingStatisticController@exportIndex')->name('trainingStatistic.export');
 	Route::get('trainingStatistics/ajax_sort', 'TrainingStatisticController@ajaxSort')->name('trainingStatistics.ajaxsort');
@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::resource('emailTemplates', 'EmailTemplateController');
     Route::resource('smsTemplates', 'SmsTemplateController');
     Route::resource('trainingStatistics', 'TrainingStatisticController');
-    Route::resource('traningNotifyTemplates', 'TraningNotifyTemplateController');
+    Route::resource('trainingNotifyTemplates', 'TrainingNotifyTemplateController');
     Route::resource('campaigns', 'CampaignController');
     Route::resource('trainings', 'TrainingController');
 
@@ -97,8 +97,8 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('smsTemplates/{id}/preview', 'SmsTemplateController@preview')->name('smsTemplates.preview');
     Route::get('smsTemplates/{id}/copy', 'SmsTemplateController@copy')->name('smsTemplates.copy');
 
-	Route::get('traningNotifyTemplates/{id}/preview', 'TraningNotifyTemplateController@preview')->name('traningNotifyTemplates.preview');
-	Route::get('traningNotifyTemplates/{id}/copy', 'TraningNotifyTemplateController@copy')->name('traningNotifyTemplates.copy');
+	Route::get('trainingNotifyTemplates/{id}/preview', 'TrainingNotifyTemplateController@preview')->name('trainingNotifyTemplates.preview');
+	Route::get('trainingNotifyTemplates/{id}/copy', 'TrainingNotifyTemplateController@copy')->name('trainingNotifyTemplates.copy');
 
 	Route::post('campaigns/test', 'CampaignController@test')->name('campaigns.test');
     Route::post('campaigns/end', 'CampaignController@end')->name('campaigns.end');

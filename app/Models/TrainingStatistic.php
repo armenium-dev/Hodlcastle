@@ -28,7 +28,7 @@ class TrainingStatistic extends Model{
 	protected $casts = [
 		'recipient_id' => 'integer',
 		'company_id' => 'integer',
-		'code' => 'integer'
+		'code' => 'string'
 	];
 
 	/**

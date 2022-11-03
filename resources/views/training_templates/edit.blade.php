@@ -10,7 +10,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::model($template, ['route' => ['traningNotifyTemplates.update', $template->id], 'method' => 'patch', 'files' => true]) !!}
+                    {!! Form::model($template, ['route' => ['trainingNotifyTemplates.update', $template->id], 'method' => 'patch', 'files' => true]) !!}
 
                     @include('training_templates.fields', ['mode' => 'edit'])
 

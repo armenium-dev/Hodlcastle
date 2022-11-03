@@ -3,20 +3,20 @@
 namespace App\Repositories;
 
 use App\Criteria\BelongsToCompanyCriteria;
-use App\Models\TraningNotifyTemplate;
+use App\Models\TrainingNotifyTemplate;
 use Illuminate\Support\Facades\Auth;
 use InfyOm\Generator\Common\BaseRepository;
 
 /**
- * Class TraningNotifyTemplateRepository
+ * Class TrainingNotifyTemplateRepository
  * @package App\Repositories
  * @version June 27, 2018, 11:46 am UTC
  *
- * @method TraningNotifyTemplate findWithoutFail($id, $columns = ['*'])
- * @method TraningNotifyTemplate find($id, $columns = ['*'])
- * @method TraningNotifyTemplate first($columns = ['*'])
+ * @method TrainingNotifyTemplate findWithoutFail($id, $columns = ['*'])
+ * @method TrainingNotifyTemplate find($id, $columns = ['*'])
+ * @method TrainingNotifyTemplate first($columns = ['*'])
  */
-class TraningNotifyTemplateRepository extends ParentRepository{
+class TrainingNotifyTemplateRepository extends ParentRepository{
 	/**
 	 * @var array
 	 */
@@ -35,7 +35,7 @@ class TraningNotifyTemplateRepository extends ParentRepository{
 	 * Configure the Model
 	 **/
 	public function model(){
-		return TraningNotifyTemplate::class;
+		return TrainingNotifyTemplate::class;
 	}
 
 	public function createRequest($request){
@@ -75,7 +75,7 @@ class TraningNotifyTemplateRepository extends ParentRepository{
 	}
 
 	public function copy($id, $company_id = null){
-		$model = TraningNotifyTemplate::find($id);
+		$model = TrainingNotifyTemplate::find($id);
 		$newModel = $model->replicate();
 		$model->is_public = 0;
 		if($company_id)
@@ -88,10 +88,10 @@ class TraningNotifyTemplateRepository extends ParentRepository{
 	 * @param string $handle
 	 * @param string $language
 	 * @param string|null $fallbackLanguage
-	 * @return TraningNotifyTemplate
+	 * @return TrainingNotifyTemplate
 	 */
-	public function findByHandle(string $handle, string $language, string $fallbackLanguage = null, $ownerId = null): TraningNotifyTemplate{
-		$query = TraningNotifyTemplate::where('handle', $handle)
+	public function findByHandle(string $handle, string $language, string $fallbackLanguage = null, $ownerId = null): TrainingNotifyTemplate{
+		$query = TrainingNotifyTemplate::where('handle', $handle)
 			->where('lang', $language);
 
 		if(!empty($fallbackLanguage)){

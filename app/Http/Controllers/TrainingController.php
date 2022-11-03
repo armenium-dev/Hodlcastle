@@ -7,12 +7,12 @@ use App\Http\Requests\CreateTrainingRequest;
 use App\Http\Requests\UpdateTrainingRequest;
 use App\Models\Training;
 use App\Models\Recipient;
-use App\Models\TraningNotifyTemplate;
+use App\Models\TrainingNotifyTemplate;
 use App\Repositories\TrainingRepository;
 use App\Repositories\ModuleRepository;
 use App\Repositories\GroupRepository;
 use App\Repositories\RecipientRepository;
-use App\Repositories\TraningNotifyTemplateRepository;
+use App\Repositories\TrainingNotifyTemplateRepository;
 use Illuminate\Http\Request;
 use Flash;
 use Exception;
@@ -28,11 +28,11 @@ class TrainingController extends AppBaseController{
 	private $moduleRepository;
 	private $groupRepository;
 	private $recipientRepository;
-	/** @var  TraningNotifyTemplateRepository */
+	/** @var  TrainingNotifyTemplateRepository */
 	private $trainingNotifyTemplateRepository;
 
 	public function __construct(
-		TraningNotifyTemplateRepository $trainingNotifyTemplateRepo,
+		TrainingNotifyTemplateRepository $trainingNotifyTemplateRepo,
 		TrainingRepository  $trainingRepo,
 		ModuleRepository    $moduleRepo,
 		GroupRepository     $groupRepo,
@@ -115,7 +115,7 @@ class TrainingController extends AppBaseController{
 
 	private function getNotifyTemplates(){
 		$res = [];
-		$query = TraningNotifyTemplate::query();
+		$query = TrainingNotifyTemplate::query();
 
 		if(Auth::check() && (Auth::user()->hasRole('customer') || Auth::user()->hasRole('maintainer')) && Auth::user()->company){
 			$query->where(['is_public' => 1]);

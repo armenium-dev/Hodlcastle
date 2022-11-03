@@ -24,11 +24,11 @@
                 <td>{!! $template->type() !!}</td>
                 <td>{!! $template->updated_at !!}</td>
                 <td>
-                    {!! Form::open(['route' => ['traningNotifyTemplates.destroy', $template->id], 'method' => 'delete']) !!}
+                    {!! Form::open(['route' => ['trainingNotifyTemplates.destroy', $template->id], 'method' => 'delete']) !!}
                     <div class="btn-group flex">
-                        <a href="{!! route('traningNotifyTemplates.show', [$template->id]) !!}" class='btn btn-info'><i class="fa fa-eye"></i></a>
-                        <a href="{!! route('traningNotifyTemplates.edit', [$template->id]) !!}" class='btn btn-warning'><i class="fa fa-edit"></i></a>
-                        <a href="{!! route('traningNotifyTemplates.copy', [$template->id]) !!}" class='btn btn-success'><i class="fa fa-copy"></i></a>
+                        <a href="{!! route('trainingNotifyTemplates.show', [$template->id]) !!}" class='btn btn-info'><i class="fa fa-eye"></i></a>
+                        <a href="{!! route('trainingNotifyTemplates.edit', [$template->id]) !!}" class='btn btn-warning'><i class="fa fa-edit"></i></a>
+                        <a href="{!! route('trainingNotifyTemplates.copy', [$template->id]) !!}" class='btn btn-success'><i class="fa fa-copy"></i></a>
                         {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]) !!}
                     </div>
                     {!! Form::close() !!}

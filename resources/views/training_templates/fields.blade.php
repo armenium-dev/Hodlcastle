@@ -138,7 +138,7 @@
 
 <div class="form-group col-sm-12">
     <div class="btn-group">
-        <a href="{!! route('traningNotifyTemplates.index') !!}" class="btn btn-default"><i class="fa fa-caret-left"></i> Cancel</a>
+        <a href="{!! route('trainingNotifyTemplates.index') !!}" class="btn btn-default"><i class="fa fa-caret-left"></i> Cancel</a>
         {!! Form::button('<i class="fa fa-save"></i> Save', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
     </div>
 </div>

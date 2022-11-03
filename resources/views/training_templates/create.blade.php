@@ -10,7 +10,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::open(['route' => 'traningNotifyTemplates.store', 'files' => true]) !!}
+                    {!! Form::open(['route' => 'trainingNotifyTemplates.store', 'files' => true]) !!}
 
                     @include('training_templates.fields', ['mode' => 'create'])
 

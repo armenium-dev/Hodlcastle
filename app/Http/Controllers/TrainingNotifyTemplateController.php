@@ -7,9 +7,9 @@ use App\Http\Requests\CreateEmailTemplateRequest;
 use App\Http\Requests\UpdateEmailTemplateRequest;
 use App\Models\Campaign;
 use App\Models\Recipient;
-use App\Models\TraningNotifyTemplate;
+use App\Models\TrainingNotifyTemplate;
 use App\Repositories\ModuleRepository;
-use App\Repositories\TraningNotifyTemplateRepository;
+use App\Repositories\TrainingNotifyTemplateRepository;
 use App\Repositories\LanguageRepository;
 use App\Repositories\CompanyRepository;
 use App\Http\Controllers\AppBaseController;
@@ -28,16 +28,16 @@ use RuntimeException;
 use Yajra\Datatables\Datatables;
 use Form;
 
-class TraningNotifyTemplateController extends AppBaseController{
+class TrainingNotifyTemplateController extends AppBaseController{
 
-	/** @var  TraningNotifyTemplateRepository */
+	/** @var  TrainingNotifyTemplateRepository */
 	private $trainingNotifyTemplateRepository;
 	private $companyRepository;
 	private $languageRepository;
 	private $moduleRepository;
 
 	public function __construct(
-		TraningNotifyTemplateRepository $trainingNotifyTemplateRepo,
+		TrainingNotifyTemplateRepository $trainingNotifyTemplateRepo,
 		CompanyRepository $companyRepo,
 		LanguageRepository $languageRepo,
 		ModuleRepository $moduleRepo
@@ -51,7 +51,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 	}
 	
 	/**
-	 * Display a listing of the TraningNotifyTemplate.
+	 * Display a listing of the TrainingNotifyTemplate.
 	 *
 	 * @param Request $request
 	 *
@@ -92,13 +92,13 @@ class TraningNotifyTemplateController extends AppBaseController{
 				})->addIndexColumn()->addColumn('type', function($row){
 					return $row->type();
 				})->addIndexColumn()->addColumn('action', function($row){
-					$str[] = Form::open(['route' => ['traningNotifyTemplates.destroy', $row->id], 'method' => 'delete']);
+					$str[] = Form::open(['route' => ['trainingNotifyTemplates.destroy', $row->id], 'method' => 'delete']);
 					$str[] = '<div class="btn-group flex text-nowrap">';
-					$str[] = '<a href="'.route('traningNotifyTemplates.show', [$row->id]).'" class="btn btn-info"><i class="fa fa-eye"></i></a>';
+					$str[] = '<a href="'.route('trainingNotifyTemplates.show', [$row->id]).'" class="btn btn-info"><i class="fa fa-eye"></i></a>';
 					if(Auth::user()->can('email_template.edit_public')){
-						$str[] = '<a href="'.route('traningNotifyTemplates.edit', [$row->id]).'" class="btn btn-warning"><i class="fa fa-edit"></i></a>';
+						$str[] = '<a href="'.route('trainingNotifyTemplates.edit', [$row->id]).'" class="btn btn-warning"><i class="fa fa-edit"></i></a>';
 					}
-					$str[] = '<a href="'.route('traningNotifyTemplates.copy', [$row->id]).'" class="btn btn-success"><i class="fa fa-copy"></i></a>';
+					$str[] = '<a href="'.route('trainingNotifyTemplates.copy', [$row->id]).'" class="btn btn-success"><i class="fa fa-copy"></i></a>';
 					$str[] = Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]);
 					$str[] = '</div>';
 					$str[] = Form::close();
@@ -111,7 +111,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 	}
 	
 	/**
-	 * Show the form for creating a new TraningNotifyTemplate.
+	 * Show the form for creating a new TrainingNotifyTemplate.
 	 * @return Response
 	 */
 	public function create(Request $request){
@@ -142,7 +142,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 	}
 	
 	/**
-	 * Store a newly created TraningNotifyTemplate in storage.
+	 * Store a newly created TrainingNotifyTemplate in storage.
 	 *
 	 * @param CreateEmailTemplateRequest $request
 	 *
@@ -152,18 +152,18 @@ class TraningNotifyTemplateController extends AppBaseController{
 		if(!$this->checkCorrectURL($request)){
 			Flash::error('Template includes incorrect URL');
 			
-			return redirect(route('traningNotifyTemplates.create'));
+			return redirect(route('trainingNotifyTemplates.create'));
 		}
 		
 		$this->trainingNotifyTemplateRepository->createRequest($request);
 		
-		Flash::success('Traning Notification Template saved successfully.');
+		Flash::success('Training Notification Template saved successfully.');
 		
-		return redirect(route('traningNotifyTemplates.index'));
+		return redirect(route('trainingNotifyTemplates.index'));
 	}
 
 	/**
-	 * Show the form for editing the specified TraningNotifyTemplate.
+	 * Show the form for editing the specified TrainingNotifyTemplate.
 	 *
 	 * @param int $id
 	 *
@@ -173,7 +173,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$template = $this->trainingNotifyTemplateRepository->findWithoutFail($id);
 		
 		if(!is_null($template->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		if(empty($template) || !PermissionHelper::authUserEditEmailTemplate($template)){
@@ -209,7 +209,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 	}
 	
 	/**
-	 * Update the specified TraningNotifyTemplate in storage.
+	 * Update the specified TrainingNotifyTemplate in storage.
 	 *
 	 * @param int $id
 	 * @param UpdateEmailTemplateRequest $request
@@ -220,7 +220,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$template = $this->trainingNotifyTemplateRepository->findWithoutFail($id);
 		
 		if(!is_null($template->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		if(empty($template) || !PermissionHelper::authUserEditEmailTemplate($template)){
@@ -230,18 +230,18 @@ class TraningNotifyTemplateController extends AppBaseController{
 		if(!$this->checkCorrectURL($request)){
 			Flash::error('Template includes incorrect URL');
 			
-			return redirect(route('traningNotifyTemplates.edit', $id));
+			return redirect(route('trainingNotifyTemplates.edit', $id));
 		}
 		
 		$template = $this->trainingNotifyTemplateRepository->updateRequest($request, $id);
 		
-		Flash::success('Traning Notification Template updated successfully.');
+		Flash::success('Training Notification Template updated successfully.');
 		
-		return redirect(route('traningNotifyTemplates.index'));
+		return redirect(route('trainingNotifyTemplates.index'));
 	}
 	
 	/**
-	 * Remove the specified TraningNotifyTemplate from storage.
+	 * Remove the specified TrainingNotifyTemplate from storage.
 	 *
 	 * @param int $id
 	 *
@@ -251,24 +251,24 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$template = $this->trainingNotifyTemplateRepository->findWithoutFail($id);
 		
 		if(!is_null($template->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		if(empty($template)){
-			Flash::error('Traning Notification Template not found');
+			Flash::error('Training Notification Template not found');
 			
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		$this->trainingNotifyTemplateRepository->delete($id);
 		
-		Flash::success('Traning Notification Template deleted successfully.');
+		Flash::success('Training Notification Template deleted successfully.');
 		
-		return redirect(route('traningNotifyTemplates.index'));
+		return redirect(route('trainingNotifyTemplates.index'));
 	}
 
 	/**
-	 * Display the specified TraningNotifyTemplate.
+	 * Display the specified TrainingNotifyTemplate.
 	 *
 	 * @param int $id
 	 *
@@ -278,7 +278,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$template = $this->trainingNotifyTemplateRepository->findWithoutFail($id);
 
 		if(!is_null($template->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 
 		if(empty($template) || !PermissionHelper::authUserViewEmailTemplate($template)){
@@ -292,7 +292,7 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$template = $this->trainingNotifyTemplateRepository->findWithoutFail($id);
 		
 		if(!is_null($template->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		if(empty($template) || !PermissionHelper::authUserCopyEmailTemplate($template)){
@@ -336,9 +336,9 @@ class TraningNotifyTemplateController extends AppBaseController{
 		$files = array_diff(scandir($path), ['.', '..']);
 
 		$a = [
-			'start' => TraningNotifyTemplate::TYPE_START,
-			'end' => TraningNotifyTemplate::TYPE_END,
-			'remind' => TraningNotifyTemplate::TYPE_REMIND,
+			'start' => TrainingNotifyTemplate::TYPE_START,
+			'end' => TrainingNotifyTemplate::TYPE_END,
+			'remind' => TrainingNotifyTemplate::TYPE_REMIND,
 		];
 
 		if(!empty($files)){
@@ -422,10 +422,10 @@ class TraningNotifyTemplateController extends AppBaseController{
 	}
 	
 	public function preview($id){
-		$model = TraningNotifyTemplate::findOrFail($id);
+		$model = TrainingNotifyTemplate::findOrFail($id);
 		
 		if(!is_null($model->deleted_at)){
-			return redirect(route('traningNotifyTemplates.index'));
+			return redirect(route('trainingNotifyTemplates.index'));
 		}
 		
 		return $model->content;

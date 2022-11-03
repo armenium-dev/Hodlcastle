@@ -64,7 +64,7 @@ class Training extends Model{
 	}
 
 	public function template(){
-		return $this->belongsTo('App\Models\TraningNotifyTemplate');
+		return $this->belongsTo('App\Models\TrainingNotifyTemplate');
 	}
 
 	public function user(){
@@ -76,7 +76,7 @@ class Training extends Model{
 	}
 
 	public function getTemplateByType($type){
-		$template = new TraningNotifyTemplate();
+		$template = new TrainingNotifyTemplate();
 
 		switch($type){
 			case "start":
@@ -85,7 +85,7 @@ class Training extends Model{
 			case "finish":
 				$id = $this->finish_template_id;
 				break;
-			case "notify":
+			case "remind":
 				$id = $this->notify_template_id;
 				break;
 			default:
@@ -94,7 +94,7 @@ class Training extends Model{
 		}
 
 		if($id > 0){
-			$template = TraningNotifyTemplate::whereId($id)->first();
+			$template = TrainingNotifyTemplate::whereId($id)->first();
 		}
 
 		return $template;
