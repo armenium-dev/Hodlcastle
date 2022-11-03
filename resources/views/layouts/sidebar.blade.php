@@ -8,6 +8,7 @@
             <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(100, 100, true) : '/public/img/logo.png' }}"
                  class="logo"
                  alt="User Image"/>
+
             <div class="info">
                 @if (Auth::guest())
                     Guest
@@ -17,12 +18,12 @@
                         <br> {{ Auth::user()->company->name }}
                     @endif
                 @endif
-                <!-- Status 
+                <!-- Status
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
             </div>
         </div>
 
-        <!-- search form (Optional) --> 
+        <!-- search form (Optional) -->
 <!--        <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
