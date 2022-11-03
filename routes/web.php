@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 	Route::post('generatereport/ajax_generate_pdf', 'ReportController@ajaxGeneratePDF')->name('generatereport.ajaxGeneratePDF');
 	Route::post('generatereport/ajax_generate_pdf2', 'ReportController@ajaxGeneratePDF2')->name('generatereport.ajaxGeneratePDF2');
 
+    Route::get('statistics', 'StatisticController@index')->name('statistics');
+
+
     Route::get('emailTemplates/getPublicTable', 'EmailTemplateController@table')->name('emailTemplates.table');
     Route::get('smsTemplates/getPublicTable', 'SmsTemplateController@table')->name('smsTemplates.table');
     Route::get('trainingStatistic/getTable', 'TrainingStatisticController@table')->name('trainingStatistic.table');
@@ -84,14 +87,14 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::post('group/vue', 'GroupController@vue')->name('groups.vue');
     Route::post('company/checkDomain', 'CompanyController@checkDomain')->name('companies.checkDomain');
     Route::post('company/vue', 'CompanyController@vue')->name('companies.vue');
-    
+
     Route::get('emailTemplates/{id}/preview', 'EmailTemplateController@preview')->name('emailTemplates.preview');
     Route::get('emailTemplates/{id}/copy', 'EmailTemplateController@copy')->name('emailTemplates.copy');
     Route::post('emailTemplates/test', 'EmailTemplateController@test')->name('emailTemplates.test');
-    
+
     Route::get('smsTemplates/{id}/preview', 'SmsTemplateController@preview')->name('smsTemplates.preview');
     Route::get('smsTemplates/{id}/copy', 'SmsTemplateController@copy')->name('smsTemplates.copy');
-    
+
     Route::post('campaigns/test', 'CampaignController@test')->name('campaigns.test');
     Route::post('campaigns/end', 'CampaignController@end')->name('campaigns.end');
     Route::post('campaigns/kickoff', 'CampaignController@kickoff')->name('campaigns.kickoff');
