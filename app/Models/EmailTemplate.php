@@ -134,7 +134,9 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 	 */
 	public function send(Recipient $recipient, $campaign = null, $test = false, $training = null){
 		if($campaign){
-			URL::forceRootUrl('https://'.$campaign->schedule->domain->domain);
+			if($campaign->schedule->domain){
+				URL::forceRootUrl('https://'.$campaign->schedule->domain->domain);
+			}
 		}
 		
 		$mailTemplate = $this->buildMailTemplate($recipient, $campaign, $test, $training);
@@ -290,14 +292,16 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
 			$tracking_url = 'http://'.$tracking_url;
 		}
-		
-		$send_to_landing = $campaignWithPivot->schedule->send_to_landing;
-		$redirect_url    = $campaignWithPivot->schedule->redirect_url;
-		
-		if(intval($send_to_landing) == 0 && !empty($redirect_url)){
-			$tracking_url = $redirect_url;
+
+		if($campaignWithPivot->schedule){
+			$send_to_landing = $campaignWithPivot->schedule->send_to_landing;
+			$redirect_url = $campaignWithPivot->schedule->redirect_url;
+
+			if(intval($send_to_landing) == 0 && !empty($redirect_url)){
+				$tracking_url = $redirect_url;
+			}
 		}
-		
+
 		/*$user = Auth()->user();
 		if($user->send_to_landing == 0 && !empty($user->redirect_url)){
 			$tracking_url = $user->redirect_url;
