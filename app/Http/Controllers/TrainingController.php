@@ -118,7 +118,8 @@ class TrainingController extends AppBaseController{
 		$query = TraningNotifyTemplate::query();
 
 		if(Auth::check() && (Auth::user()->hasRole('customer') || Auth::user()->hasRole('maintainer')) && Auth::user()->company){
-			$query->where(['is_public' => 1, 'company_id' => Auth::user()->company->id]);
+			$query->where(['is_public' => 1]);
+			$query->orwhere(['is_public' => 0, 'company_id' => Auth::user()->company->id]);
 		}
 
 		$query

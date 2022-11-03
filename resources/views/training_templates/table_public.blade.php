@@ -7,12 +7,14 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th width="140"></th>
             </tr>
             <tr>
                 <th>Name</th>
                 <th>Subject</th>
                 <th>Language</th>
+                <th>Module</th>
                 <th>Type</th>
                 <th>Last Modified</th>
                 <th class="text-right">Action</th>
@@ -35,6 +37,7 @@
                 {data: 'name', name: 'name'},
                 {data: 'subject', name: 'subject'},
                 {data: 'language', name: 'language'},
+                {data: 'module', name: 'module'},
                 {data: 'type', name: 'type'},
                 {data: 'updated_at', name: 'updated_at'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},

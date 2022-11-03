@@ -6,6 +6,8 @@
                 <th>Subject</th>
                 <th>Language</th>
                 <th>Company</th>
+                <th>Module</th>
+                <th>Type</th>
                 <th>Last Modified</th>
                 <th width="140">Action</th>
             </tr>
@@ -18,6 +20,8 @@
                 <td>{!! $template->subject !!}</td>
                 <td><img src="/img/pmflags/{!! $template->language->code !!}.png" class="lang-flag">{!! $template->language->name !!}</td>
                 <td>{!! $template->company ? $template->company->name : '' !!}</td>
+                <td>{!! $template->module->name !!}</td>
+                <td>{!! $template->type() !!}</td>
                 <td>{!! $template->updated_at !!}</td>
                 <td>
                     {!! Form::open(['route' => ['traningNotifyTemplates.destroy', $template->id], 'method' => 'delete']) !!}

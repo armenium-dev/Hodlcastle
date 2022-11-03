@@ -87,6 +87,8 @@ class TraningNotifyTemplateController extends AppBaseController{
 					}
 				])->addIndexColumn()->addColumn('language', function($row){
 					return $row->language ? $row->language->name : '';
+				})->addIndexColumn()->addColumn('module', function($row){
+					return $row->module->name;
 				})->addIndexColumn()->addColumn('type', function($row){
 					return $row->type();
 				})->addIndexColumn()->addColumn('action', function($row){
