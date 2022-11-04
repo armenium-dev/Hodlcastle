@@ -138,9 +138,12 @@ class TngController extends Controller{
 	public function send($recipient, $training){
 		$objDemo = new \stdClass();
 
+		$objDemo->first_name = $recipient->first_name;
+		$objDemo->last_name = $recipient->last_name;
+		$objDemo->subject = 'Result Security Awareness Training E-mail';
+		$objDemo->view = 'emails.training_result.sending';
+
 		$objDemo->recipient = $recipient;
-		#$objDemo->first_name = $recipient->first_name;
-		#$objDemo->last_name = $recipient->last_name;
 		$objDemo->url = $this->makeTrainingUrl($recipient, $training);
 		$objDemo->template = $training->getTemplateByType('finish');
 

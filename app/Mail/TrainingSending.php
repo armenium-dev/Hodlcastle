@@ -34,13 +34,17 @@ class TrainingSending extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		$this
-			->subject($this->data->template->subject)
-			->from(config('mail.email_noreply'))
-			->html($this->buildMailContent())
-			#->markdown('emails.training.sending')
-		;
-
+		if(empty($this->data->template->content)){
+			$this
+				->subject($this->data->subject)
+				->from(config('mail.email_noreply'))
+				->markdown($this->data->view);
+		}else{
+			$this
+				->subject($this->data->template->subject)
+				->from(config('mail.email_noreply'))
+				->html($this->buildMailContent());
+		}
 		$this->withSwiftMessage(function($message){
 			$message->getHeaders()->addTextHeader('X-No-Track', Str::random(10));
 		});

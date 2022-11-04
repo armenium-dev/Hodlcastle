@@ -76,7 +76,7 @@ class Training extends Model{
 	}
 
 	public function getTemplateByType($type){
-		$template = new TrainingNotifyTemplate();
+		#$template = new TrainingNotifyTemplate();
 
 		switch($type){
 			case "start":

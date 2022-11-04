@@ -119,6 +119,11 @@ class RunTrainingReminder extends Command{
 	private function send($recipient, $training){
 		$objDemo = new \stdClass();
 
+		$objDemo->first_name = $recipient->first_name;
+		$objDemo->last_name = $recipient->last_name;
+		$objDemo->subject = 'Remind about Security Awareness Training E-mail';
+		$objDemo->view = 'emails.training.sending';
+
 		$objDemo->recipient = $recipient;
 		$objDemo->url = $this->makeTrainingUrl($recipient, $training);
 		$objDemo->template = $training->getTemplateByType('remind');

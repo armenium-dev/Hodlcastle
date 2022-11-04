@@ -293,7 +293,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 			$tracking_url = 'http://'.$tracking_url;
 		}
 
-		if($campaignWithPivot->schedule){
+		if($campaignWithPivot){
 			$send_to_landing = $campaignWithPivot->schedule->send_to_landing;
 			$redirect_url = $campaignWithPivot->schedule->redirect_url;
 
