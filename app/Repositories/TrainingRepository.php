@@ -78,10 +78,12 @@ class TrainingRepository extends ParentRepository{
 	public function send($recipient, $training){
 		$objDemo = new \stdClass();
 
+		# default params
 		$objDemo->first_name = $recipient->first_name;
 		$objDemo->last_name = $recipient->last_name;
 		$objDemo->subject = 'Security Awareness Training E-mail';
 		$objDemo->view = 'emails.training.sending';
+		# end
 
 		$objDemo->recipient = $recipient;
 		$objDemo->url = $this->makeTrainingUrl($recipient, $training);

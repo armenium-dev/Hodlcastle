@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -63,7 +64,7 @@ class Recipient extends Model{
 	}
 	
 	public function trainings(){
-		return $this->belongsToMany('App\Models\Training')->withPivot('code', 'is_sent');
+		return $this->belongsToMany('App\Models\Training')->withPivot('code', 'is_sent', 'phase', 'created_at');
 	}
 	
 	public function results(){
@@ -83,7 +84,11 @@ class Recipient extends Model{
 	}
 	
 	public function attachToTraining($training){
-		$this->trainings()->attach($training, ['code' => hash2IntsTime($training->id, $this->id)]);
+		$this->trainings()->attach($training, [
+			'code' => hash2IntsTime($training->id, $this->id),
+			'created_at' => Carbon::now(),
+			'updated_at' => Carbon::now(),
+		]);
 	}
 	
 	public function setIsSentToCampaign($campaign){
@@ -92,5 +97,9 @@ class Recipient extends Model{
 	
 	public function setIsSentToTraining($training){
 		$this->trainings()->sync([$training->id => ['is_sent' => 1]], false);
+	}
+
+	public function setPhaseToTraining($training, $phase = 1){
+		$this->trainings()->sync([$training->id => ['phase' => $phase]], false);
 	}
 }

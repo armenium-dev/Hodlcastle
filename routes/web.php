@@ -132,6 +132,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('filebased/l/{url}/{hash}', 'MailAttachTrackerController@getF');
     Route::get('sms/l/{url}/{hash}', 'SmsTrackerController@getS');
     Route::get('tng/{code}/{course?}/{page?}', 'TngController@pages')->name('tng.get');
+    Route::post('tng/{code}/{course?}/{page?}', 'TngController@ajaxSaveResults')->name('tng.post');
 
     $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
     $this->post('login', 'Auth\LoginController@login');

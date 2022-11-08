@@ -12,7 +12,7 @@
     </div>
 
     <div class="inner cover">
-        <div class="well">
+        <div class="well finish">
             <div class="clearfix"></div>
 
             @include('flash::message')
@@ -22,11 +22,22 @@
             <div class="row">
 
                 <div class="form-group col-sm-12">
-                    <h4>Course completion</h4>
+                    <h4 class="text-center">Course completion</h4>
                 </div>
 
-                <div class="form-group col-sm-12">
-                    You have successfully completed the course: <b>{{ $course->name }}</b>
+                <div class="form-group col-sm-12 text-center">
+                    @if($calc_data['user_score'] < $passing_score)
+                        <div class="text">You have almost completed the course <b>{{ $course->name }}</b>!<br>Please try again :)</div>
+                        <i class="glyphicon glyphicon-thumbs-down icon fail"></i>
+                    @else
+                        <div class="text">You have successfully completed the course <b>{{ $course->name }}</b></div>
+                        <i class="glyphicon glyphicon-thumbs-up icon ok"></i>
+                    @endif
+                    <div class="score-value">{!! $calc_data['user_score'] !!}%</div>
+                    <div class="score-text">Your score</div>
+                    @if(!empty($new_training_link))
+                        <a href="{!! $new_training_link !!}" class="btn btn-sm btn-primary mt-30">Try again</a>
+                    @endif
                 </div>
 
                 <div class="form-group col-sm-12 d-none">

@@ -17,7 +17,12 @@ class TrainingStatistic extends Model{
 		'recipient_id',
 		'company_id',
 		'code',
-		'notify_training'
+		'notify_training',
+		'total_answers',
+		'correct_answers',
+		'wrong_answers',
+		'user_score',
+		'answers_data',
 	];
 
 	/**
@@ -28,7 +33,12 @@ class TrainingStatistic extends Model{
 	protected $casts = [
 		'recipient_id' => 'integer',
 		'company_id' => 'integer',
-		'code' => 'string'
+		'code' => 'string',
+		'total_questions' => 'integer',
+		'correct_answers' => 'integer',
+		'wrong_answers' => 'integer',
+		'user_score' => 'integer',
+		'answers_data' => 'json',
 	];
 
 	/**
