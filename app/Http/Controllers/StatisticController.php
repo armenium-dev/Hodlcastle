@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Criteria\BelongsToCompanyCriteria;
+use App\Models\Result;
 use App\Repositories\CampaignRepository;
 use App\Repositories\CompanyRepository;
 use App\Repositories\DomainRepository;
@@ -52,10 +53,14 @@ class StatisticController extends AppBaseController
         if (!Auth::user() || empty(Auth::user()->company)) {
             abort(403);
         }
-        $query = $this->campaignRepository
-            ->where(['company_id' => Auth::user()->company->id]);
 
-        $campaigns = $query->get()->sortByDesc('created_at');
+        $campaigns = $this->campaignRepository
+            ->with(['recipients', 'results'])
+            ->where(['company_id' => Auth::user()->company->id])
+            ->withCount('results')
+            ->withCount('recipients')
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         $campaigns->each(function ($campaign) {
             $sent = $campaign->countResults('sent');
@@ -65,34 +70,16 @@ class StatisticController extends AppBaseController
             $report = $campaign->countResults('report');
             $attachment = $campaign->countResults('attachment');
             $smish = $campaign->countResults('smish');
-            $noResponse = $campaign->countResultsNoResponse();
 
             if ($sent) {
-                $campaign->noResponseCount = $noResponse;
+                $campaign->sentsCount = $sent;
                 $campaign->opensCount = $open;
                 $campaign->fakeAuthCount = $fakeAuth;
                 $campaign->clicksCount = $click;
                 $campaign->reportsCount = $report;
                 $campaign->attachmentsCount = $attachment;
                 $campaign->smishsCount = $smish;
-
-                $campaign->noResponsePercent = $noResponse * 100 / $sent;
-                $campaign->opensPercent = $open * 100 / $sent;
-                $campaign->fakeAuthPercent = $fakeAuth * 100 / $sent;
-                $campaign->clicksPercent = $click * 100 / $sent;
-                $campaign->reportsPercent = $report * 100 / $sent;
-                $campaign->attachmentsPercent = $attachment * 100 / $sent;
-                $campaign->smishsPercent = $smish * 100 / $sent;
             } else {
-                $campaign->sentsCount = 0;
-                $campaign->opensPercent = 0;
-                $campaign->fakeAuthPercent = 0;
-                $campaign->clicksPercent = 0;
-                $campaign->reportsPercent = 0;
-                $campaign->attachmentsPercent = 0;
-                $campaign->smishsPercent = 0;
-                $campaign->noResponsePercent = 0;
-
                 $campaign->noResponseCount = 0;
                 $campaign->opensCount = 0;
                 $campaign->fakeAuth = 0;

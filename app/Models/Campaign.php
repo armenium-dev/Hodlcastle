@@ -177,7 +177,7 @@ class Campaign extends Model{
 	}
 
     public function countResultsNoResponse() {
-	    if ($this->results()->count() == 1){
+	    if ($this->results()->count() == 1) {
 	        $res = $this->results()
                 ->select('recipient_id', DB::raw("COUNT(*)"))
                 ->groupBy('recipient_id')

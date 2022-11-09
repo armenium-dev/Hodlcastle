@@ -2,7 +2,7 @@ const Statistic = {
     init: function () {
         this.initReportingRateChart();
         this.initAttachmentChart();
-        this.initNoResponseChart();
+        // this.initNoResponseChart();
         this.initSmishRateChart();
         this.renderPieChart();
         this.renderPieChartSmish();
@@ -253,14 +253,21 @@ const Statistic = {
             let openCount = ctx.data('open-count');
             let noResponseCount = ctx.data('no-response-count');
             let reportCount = ctx.data('report-count');
+            let recipientsCount = ctx.data('recipients-count');
+
+            let clickCountPercent = clickCount * 100 / recipientsCount;
+            let openCountPercent = openCount * 100 / recipientsCount;
+            let reportCountPercent = reportCount * 100 / recipientsCount;
+
 
             const chart1 = new Chart(ctx, {
                 type: 'pie',
+                cutout: 100,
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'My First Dataset',
-                        data: [clickCount, openCount, noResponseCount, reportCount],
+                        data: [clickCountPercent, openCountPercent, noResponseCount, reportCountPercent],
                         backgroundColor: [
                             '#DD4B39',
                             '#292ca5',
