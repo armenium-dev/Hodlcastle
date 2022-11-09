@@ -286,7 +286,7 @@ const Statistic = {
     },
     renderPieChartSmish: function () {
         const elems = $('.chart-campaign-smish');
-        let labels = ['Unread/No response', 'Stashed'];
+        let labels = ['Unread/No response', 'Smished'];
 
         for (let i = 0; i < elems.length; i++) {
             let ctx = $(elems[i]);

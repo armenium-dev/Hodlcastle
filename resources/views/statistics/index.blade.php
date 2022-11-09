@@ -29,7 +29,7 @@
                             <section class="d-flex" style="margin-top: 30px; width: 30%; flex-wrap: wrap">
                                 <div class="desc" style="width: 50%">
                                     <h3 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h3>
-                                    <p style="margin: 0">{{$campaign->clicksCount}} of {{$campaign->recipients->count()}} found Susceptible to Publishing</p>
+                                    <p style="margin: 0">{{$campaign->clicksCount}} of {{$campaign->recipients->count()}} found Susceptible</p>
                                     <p style="margin: 0">Unique Recipients: {{$campaign->recipients->count()}}</p>
                                     <p style="margin: 0">Clicked Link: {{$campaign->clicksCount}}</p>
                                     <p style="margin: 0">Reported Only Link: {{$campaign->reportsCount}}</p>
@@ -60,7 +60,7 @@
                             <section class="d-flex" style="margin-top: 30px; width: 30%; flex-wrap: wrap">
                                 <div class="desc" style="width: 60%">
                                     <h3 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h3>
-                                    <p style="margin: 0">{{$campaign->smishsCount}} of {{$campaign->recipients->count()}} found Susceptible to Publishing</p>
+                                    <p style="margin: 0">{{$campaign->smishsCount}} of {{$campaign->recipients->count()}} found Susceptible</p>
                                     <p style="margin: 0">Unique Recipients: {{$campaign->recipients->count()}}</p>
                                     <p style="margin: 0">Smished: {{$campaign->smishsCount}}</p>
                                 </div>
