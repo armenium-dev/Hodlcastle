@@ -2,7 +2,7 @@ const Statistic = {
     init: function () {
         this.initReportingRateChart();
         this.initAttachmentChart();
-        this.initNoResponseChart();
+        // this.initNoResponseChart();
         this.initSmishRateChart();
         this.renderPieChart();
         this.renderPieChartSmish();
@@ -12,7 +12,6 @@ const Statistic = {
         let dataClicks = ctx1.data('data-clicks');
         let dataReports = ctx1.data('data-reports');
         let labels = ctx1.data('short-labels');
-
         const chart1 = new Chart(ctx1, {
             type: 'bar',
             data: {
@@ -249,18 +248,29 @@ const Statistic = {
 
         for (let i = 0; i < elems.length; i++) {
             let ctx = $(elems[i]);
+            let sentsOnlyCount = ctx.data('sents-only-count');
+            let clicksOnlyCount = ctx.data('clicks-only-count');
+            let opensOnlyCount = ctx.data('opens-only-count');
+            let reportsOnlyCount = ctx.data('reports-only-count');
+
             let clickCount = ctx.data('clicks-count');
-            let openCount = ctx.data('open-count');
-            let noResponseCount = ctx.data('no-response-count');
-            let reportCount = ctx.data('report-count');
+            let recipientsCount = ctx.data('recipients-count');
+
+            let clickOnlyCountPercent = (clickCount * 100 / recipientsCount).toFixed(1);
+            let sentsOnlyPercent = (sentsOnlyCount * 100 / recipientsCount).toFixed(1);
+            let opensOnlyPercent = (opensOnlyCount * 100 / recipientsCount).toFixed(1);
+            let reportsOnlyPercent = (reportsOnlyCount * 100 / recipientsCount).toFixed(1);
+
+
 
             const chart1 = new Chart(ctx, {
                 type: 'pie',
+                cutout: 100,
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'My First Dataset',
-                        data: [clickCount, openCount, noResponseCount, reportCount],
+                        data: [clickOnlyCountPercent, opensOnlyPercent, sentsOnlyPercent, reportsOnlyPercent],
                         backgroundColor: [
                             '#DD4B39',
                             '#292ca5',
@@ -290,7 +300,7 @@ const Statistic = {
 
         for (let i = 0; i < elems.length; i++) {
             let ctx = $(elems[i]);
-            let noResponseCount = ctx.data('no-response-count');
+            let sentsCount = ctx.data('data-sents');
             let smishCount = ctx.data('data-smishs');
 
             const chart1 = new Chart(ctx, {
@@ -299,7 +309,7 @@ const Statistic = {
                     labels: labels,
                     datasets: [{
                         label: 'My First Dataset',
-                        data: [noResponseCount, smishCount],
+                        data: [sentsCount, smishCount],
                         backgroundColor: [
                             '#cbcedd',
                             '#DD4B39'
