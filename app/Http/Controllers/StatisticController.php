@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Criteria\BelongsToCompanyCriteria;
+use App\Criteria\CampaignsRunningCriteria;
+use App\Models\Result;
 use App\Repositories\CampaignRepository;
 use App\Repositories\CompanyRepository;
 use App\Repositories\DomainRepository;
@@ -52,10 +54,13 @@ class StatisticController extends AppBaseController
         if (!Auth::user() || empty(Auth::user()->company)) {
             abort(403);
         }
-        $query = $this->campaignRepository
-            ->where(['company_id' => Auth::user()->company->id]);
 
-        $campaigns = $query->get()->sortByDesc('created_at');
+        $campaigns = $this->campaignRepository
+            ->with('recipients')
+            ->where(['company_id' => Auth::user()->company->id])
+            ->withCount('recipients')
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         $campaigns->each(function ($campaign) {
             $sent = $campaign->countResults('sent');
@@ -64,25 +69,32 @@ class StatisticController extends AppBaseController
             $click = $campaign->countResults('click');
             $report = $campaign->countResults('report');
             $attachment = $campaign->countResults('attachment');
-            $smish = $campaign->countResults('smish');
-            $noResponse = $campaign->countResultsNoResponse();
+
+            $sentOnly = $campaign->countResultsOnly('sent');
+            $clickOnly = $campaign->countResultsOnly('click');
+            $openOnly = $campaign->countResultsOnly('open');
+            $reportOnly = $campaign->countResultsOnly('report');
+            $smishOnly = $campaign->countResultsOnly('smish');
 
             if ($sent) {
-                $campaign->noResponseCount = $noResponse;
-                $campaign->opensCount = $open;
-                $campaign->fakeAuthCount = $fakeAuth;
-                $campaign->clicksCount = $click;
-                $campaign->reportsCount = $report;
-                $campaign->attachmentsCount = $attachment;
-                $campaign->smishsCount = $smish;
-
-                $campaign->noResponsePercent = $noResponse * 100 / $sent;
+                $campaign->sentsCount = $sent;
                 $campaign->opensPercent = $open * 100 / $sent;
                 $campaign->fakeAuthPercent = $fakeAuth * 100 / $sent;
                 $campaign->clicksPercent = $click * 100 / $sent;
                 $campaign->reportsPercent = $report * 100 / $sent;
                 $campaign->attachmentsPercent = $attachment * 100 / $sent;
-                $campaign->smishsPercent = $smish * 100 / $sent;
+                $campaign->smishsPercent = $smishOnly * 100 / $sent;
+
+                $campaign->clicksCount = $click;
+                $campaign->reportsCount = $report;
+
+                $campaign->sentOnlyCount = $sentOnly;
+                $campaign->clicksOnlyCount = $clickOnly;
+                $campaign->openOnlyCount = $openOnly;
+                $campaign->reportOnlyCount = $reportOnly;
+
+                $campaign->sentsOnlyPercent = $sentOnly / $sent;
+
             } else {
                 $campaign->sentsCount = 0;
                 $campaign->opensPercent = 0;
@@ -91,20 +103,47 @@ class StatisticController extends AppBaseController
                 $campaign->reportsPercent = 0;
                 $campaign->attachmentsPercent = 0;
                 $campaign->smishsPercent = 0;
-                $campaign->noResponsePercent = 0;
-
-                $campaign->noResponseCount = 0;
-                $campaign->opensCount = 0;
-                $campaign->fakeAuth = 0;
                 $campaign->clicksCount = 0;
                 $campaign->reportsCount = 0;
-                $campaign->attachmentsCount = 0;
-                $campaign->smishsCount = 0;
+                $campaign->sentOnlyCount = 0;
+                $campaign->clicksOnlyCount = 0;
+                $campaign->openOnlyCount = 0;
+                $campaign->reportOnlyCount = 0;
+                $campaign->sentsOnlyPercent = 0;
+            }
+        });
+
+        $type = 'sms';
+
+        $smishingCampaigns = $this->campaignRepository
+            ->pushCriteria(new CampaignsRunningCriteria($type))
+            ->pushCriteria(BelongsToCompanyCriteria::class)
+            ->has('recipients')
+            ->all();
+
+
+        $smishingCampaigns->each(function ($smishingCampaign) {
+            $sent = $smishingCampaign->countResults('sent');
+            $smish = $smishingCampaign->countResults('smish');
+            $sentOnly = $smishingCampaign->countResultsOnly('sent');
+
+            if ($smishingCampaign->recipients_count) {
+                $smishingCampaign->sentsCount = $sent;
+                $smishingCampaign->smishsCount = $smish;
+                $smishingCampaign->smishsPercent = ($smish * 100) / $smishingCampaign->recipients_count;
+                $smishingCampaign->sentsOnlyPercent = $sentOnly / $smishingCampaign->recipients_count;
+            } else {
+                $smishingCampaign->sentsCount = 0;
+                $smishingCampaign->smishsCount = 0;
+                $smishingCampaign->smishsPercent = 0;
+                $smishingCampaign->sentsOnlyPercent = 0;
             }
         });
 
         $campaigns_for_table = $campaigns;
+        $smishing_campaigns_for_table = $smishingCampaigns;
         $labels = $campaigns_for_table->sortBy('created_at')->pluck('name');
+        $smishingLabels = $smishing_campaigns_for_table->sortBy('created_at')->pluck('name');
         $len = 15;
         foreach ($labels as $k => $label) {
             $label = str_replace(['(PUBLIC)', 'Scenario:'], '', $label);
@@ -114,11 +153,21 @@ class StatisticController extends AppBaseController
             }
             $labels[$k] = trim($label);
         }
+        foreach ($smishingLabels as $k => $label) {
+            $label = str_replace(['(PUBLIC)', 'Scenario:'], '', $label);
+            $label = trim($label);
+            if (strlen($label) > $len) {
+                $label = substr($label, 0, $len);
+            }
+            $smishingLabels[$k] = trim($label);
+        }
 
         return [
             'campaigns' => $campaigns,
             'campaigns_for_table' => $campaigns_for_table,
-            'labels' => $labels
+            'smishing_campaigns_for_table' => $smishing_campaigns_for_table,
+            'labels' => $labels,
+            'smishingLabels' => $smishingLabels
         ];
     }
 }

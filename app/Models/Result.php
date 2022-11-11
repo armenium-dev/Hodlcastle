@@ -142,6 +142,13 @@ class Result extends Model
 
         return $q->where('type_id', $type_id);
     }
+    public function scopeTypeOnly($q, $type)
+    {
+        $type_id = self::getTypeIdByTitle($type);
+        return $q->select('recipient_id')
+            ->groupBy('recipient_id')
+            ->havingRaw("MAX(type_id) = $type_id");
+    }
 
     public static function sTypeLabels()
     {
