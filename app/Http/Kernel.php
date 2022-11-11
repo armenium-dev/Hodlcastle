@@ -29,6 +29,7 @@ class Kernel extends HttpKernel
         #\App\Http\Middleware\EncryptCookies::class,
         #\Illuminate\Session\Middleware\StartSession::class,
 	    \Bepsvpt\SecureHeaders\SecureHeadersMiddleware::class,
+		\App\Http\Middleware\GenerateMenus::class, # added since 2022-11-10
     ];
 
     /**
@@ -39,7 +40,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\GenerateMenus::class,
+			#\App\Http\Middleware\GenerateMenus::class, # commented since 2022-11-10
         ],
 
         'api' => [

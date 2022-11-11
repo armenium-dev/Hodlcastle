@@ -13,6 +13,7 @@ use URL;
 use Config;
 use App\DynamicMail\Facades\DynamicMail;
 use Dotunj\LaraTwilio\Facades\LaraTwilio;
+use Armenium\LaraTwilioMulti\Facades\LaraTwilioMulti;
 use App\Models\SentSms;
 use Flash;
 use Event;
@@ -104,7 +105,7 @@ class SmsTemplate extends Model{
      */
 	public function send(Recipient $recipient, $campaign = null){
 		Log::stack(['custom'])->debug(__CLASS__.'::'.__METHOD__);
-        #dd($recipient);
+        #dd($recipient->mobile);
         #dd($this->content);
 
 		$sendSms = false;
@@ -116,6 +117,7 @@ class SmsTemplate extends Model{
 		
 		if(!empty($recipient->mobile)){
 			try{
+				#$sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
 				$sendSms = LaraTwilio::notify($recipient->mobile, $content);
 				Log::stack(['custom'])->debug($recipient->mobile.' sent');
 			}catch(\Exception $exception){

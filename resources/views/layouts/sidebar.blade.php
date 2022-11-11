@@ -36,7 +36,9 @@
         <!-- Sidebar Menu -->
 
         <ul class="sidebar-menu" data-widget="tree">
-            @include(config('laravel-menu.views.bootstrap-items'), ['items' => $MyNavBar->roots()])
+            @isset($MyNavBar)
+                @include(config('laravel-menu.views.bootstrap-items'), ['items' => $MyNavBar->roots()])
+            @endisset
         </ul>
 
     </section>

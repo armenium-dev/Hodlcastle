@@ -8,13 +8,15 @@
         <label for="start_template_id">Tranining Start Notification Template:</label>
         <select id="start_template_id" class="js_templates_dd form-control" name="start_template_id">
             <option value="0">Select template</option>
-            @foreach($templates[1] as $lang_name => $subtemplates)
-                <optgroup label="{!! $lang_name !!}">
-                    @foreach($subtemplates as $subtemplate_id => $item)
-                        <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
-                    @endforeach
-                </optgroup>
-            @endforeach
+            @isset($templates[1])
+                @foreach($templates[1] as $lang_name => $subtemplates)
+                    <optgroup label="{!! $lang_name !!}">
+                        @foreach($subtemplates as $subtemplate_id => $item)
+                            <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            @endisset
         </select>
     </div>
 
@@ -22,13 +24,15 @@
         <label for="finish_template_id">Tranining Finish Notification Template:</label>
         <select id="finish_template_id" class="js_templates_dd form-control" name="finish_template_id">
             <option value="0">Select template</option>
-            @foreach($templates[2] as $lang_name => $subtemplates)
-                <optgroup label="{!! $lang_name !!}">
-                    @foreach($subtemplates as $subtemplate_id => $item)
-                        <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
-                    @endforeach
-                </optgroup>
-            @endforeach
+            @isset($templates[2])
+                @foreach($templates[2] as $lang_name => $subtemplates)
+                    <optgroup label="{!! $lang_name !!}">
+                        @foreach($subtemplates as $subtemplate_id => $item)
+                            <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            @endisset
         </select>
     </div>
 
@@ -36,13 +40,15 @@
         <label for="notify_template_id">Tranining Reminder Notification Template:</label>
         <select id="notify_template_id" class="js_templates_dd form-control" name="notify_template_id">
             <option value="0">Select template</option>
-            @foreach($templates[3] as $lang_name => $subtemplates)
-                <optgroup label="{!! $lang_name !!}">
-                    @foreach($subtemplates as $subtemplate_id => $item)
-                        <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
-                    @endforeach
-                </optgroup>
-            @endforeach
+            @isset($templates[3])
+                @foreach($templates[3] as $lang_name => $subtemplates)
+                    <optgroup label="{!! $lang_name !!}">
+                        @foreach($subtemplates as $subtemplate_id => $item)
+                            <option value="{!! $subtemplate_id !!}" module="{!! $item['module_id'] !!}">{!! $item['name'] !!}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            @endisset
         </select>
     </div>
 </div>
