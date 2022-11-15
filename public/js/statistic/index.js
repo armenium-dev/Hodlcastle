@@ -19,12 +19,12 @@ const Statistic = {
                 datasets: [
                     {
                         label: "clicked",
-                        backgroundColor: "#DD4B39",
+                        backgroundColor: "rgba(221,75,57,1)",
                         data: dataClicks
                     },
                     {
                         label: "reported",
-                        backgroundColor: "#56a501",
+                        backgroundColor: "rgba(1,165,89,1)",
                         data: dataReports
                     }
                 ]
@@ -81,12 +81,14 @@ const Statistic = {
                 datasets: [
                     {
                         label: "attachments",
-                        backgroundColor: "#0800dd",
+                        backgroundColor : "rgba(97,8,130,1)",
+                        borderColor : "rgba(97,8,130,0.2)",
                         data: dataAttachments
                     },
                     {
                         label: "data entry",
-                        backgroundColor: "#FFC107",
+                        backgroundColor : "rgba(255,193,7,1)",
+                        borderColor : "rgba(255,193,7,0.2)",
                         data: dataFakeAuth
                     }
                 ]
@@ -244,7 +246,7 @@ const Statistic = {
     },
     renderPieChart: function () {
         const elems = $('.chart-campaign');
-        let labels = ['CLick Link', 'Opened email, only', 'Unread/No Response', 'Reported Only'];
+        let labels = ['Clicks', 'Opened email, only', 'Unread/No Response', 'Reported Only'];
 
         for (let i = 0; i < elems.length; i++) {
             let ctx = $(elems[i]);
@@ -272,10 +274,10 @@ const Statistic = {
                         label: 'My First Dataset',
                         data: [clickOnlyCountPercent, opensOnlyPercent, sentsOnlyPercent, reportsOnlyPercent],
                         backgroundColor: [
-                            '#DD4B39',
-                            '#292ca5',
-                            '#FFC107',
-                            '#56a501'
+                            'rgba(221,75,57,1)',
+                            'rgba(243,156,18,1)',
+                            '#cbcedd',
+                            'rgba(1,165,89,1)'
                         ]
                     }],
                     options: {

@@ -32,7 +32,7 @@
                                     <h4 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h4>
                                     <p style="margin: 0">{{$campaign->clicksCount}} of {{$campaign->recipients_count}} found Susceptible</p>
                                     <p style="margin: 0">Unique Recipients: {{$campaign->recipients_count}}</p>
-                                    <p style="margin: 0">Clicked Link: {{$campaign->clicksCount}}</p>
+                                    <p style="margin: 0">Clicks: {{$campaign->clicksCount}}</p>
                                     <p style="margin: 0">Reported Only Link: {{$campaign->reportOnlyCount}}</p>
                                 </div>
                                 <div class="chart" style="width: 50%; margin-left: -15px">
@@ -62,7 +62,7 @@
                     <h2 style="font-weight: bold;">Smishing results per campaign</h2>
                     <div class="pie-charts d-flex" style="flex-wrap: wrap">
                         @foreach($report['smishing_campaigns_for_table'] as $key => $campaign)
-                            @continue(!$campaign->recipients_count && !$campaign->smishsPercent)
+                            @continue(!$campaign->sentsOnlyPercent && !$campaign->smishsPercent)
                             <section class="d-flex" style="margin-top: 30px; width: 30%; flex-wrap: wrap">
                                 <div class="desc" style="width: 50%">
                                     <h4 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h4>
