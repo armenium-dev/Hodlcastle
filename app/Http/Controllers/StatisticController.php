@@ -119,7 +119,8 @@ class StatisticController extends AppBaseController
             ->pushCriteria(new CampaignsRunningCriteria($type))
             ->pushCriteria(BelongsToCompanyCriteria::class)
             ->has('recipients')
-            ->all();
+            ->has('results')
+            ->get();
 
 
         $smishingCampaigns->each(function ($smishingCampaign) {
@@ -130,8 +131,8 @@ class StatisticController extends AppBaseController
             if ($smishingCampaign->recipients_count) {
                 $smishingCampaign->sentsCount = $sent;
                 $smishingCampaign->smishsCount = $smish;
-                $smishingCampaign->smishsPercent = ($smish * 100) / $smishingCampaign->recipients_count;
-                $smishingCampaign->sentsOnlyPercent = $sentOnly / $smishingCampaign->recipients_count;
+                $smishingCampaign->smishsPercent = ($smish * 100) / ($sent != 0 ? $sent : 1);
+                $smishingCampaign->sentsOnlyPercent = ($sentOnly * 100) / ($sent != 0 ? $sent : 1);
             } else {
                 $smishingCampaign->sentsCount = 0;
                 $smishingCampaign->smishsCount = 0;
