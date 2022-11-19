@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('trainingStatistics/export', 'TrainingStatisticController@exportIndex')->name('trainingStatistic.export');
 	Route::get('trainingStatistics/ajax_sort', 'TrainingStatisticController@ajaxSort')->name('trainingStatistics.ajaxsort');
 
+    Route::get('landingTemplates/getPublicTable', 'LandingTemplateController@table')->name('trainingTemplates.table');
+
 	Route::get('campaigns/smishing', 'CampaignController@smishing')->name('campaigns.smishing');
 	Route::get('smishing', 'SmishingController@index')->name('smishing');
 	Route::get('smishing/{id}/select', 'SmishingController@select')->name('smishing.select');
@@ -47,6 +49,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::resource('smsTemplates', 'SmsTemplateController');
     Route::resource('trainingStatistics', 'TrainingStatisticController');
     Route::resource('trainingNotifyTemplates', 'TrainingNotifyTemplateController');
+    Route::resource('landingTemplates', 'LandingTemplateController');
     Route::resource('campaigns', 'CampaignController');
     Route::resource('trainings', 'TrainingController');
 
@@ -89,16 +92,19 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::post('group/vue', 'GroupController@vue')->name('groups.vue');
     Route::post('company/checkDomain', 'CompanyController@checkDomain')->name('companies.checkDomain');
     Route::post('company/vue', 'CompanyController@vue')->name('companies.vue');
-    
+
     Route::get('emailTemplates/{id}/preview', 'EmailTemplateController@preview')->name('emailTemplates.preview');
     Route::get('emailTemplates/{id}/copy', 'EmailTemplateController@copy')->name('emailTemplates.copy');
     Route::post('emailTemplates/test', 'EmailTemplateController@test')->name('emailTemplates.test');
-    
+
     Route::get('smsTemplates/{id}/preview', 'SmsTemplateController@preview')->name('smsTemplates.preview');
     Route::get('smsTemplates/{id}/copy', 'SmsTemplateController@copy')->name('smsTemplates.copy');
 
 	Route::get('trainingNotifyTemplates/{id}/preview', 'TrainingNotifyTemplateController@preview')->name('trainingNotifyTemplates.preview');
 	Route::get('trainingNotifyTemplates/{id}/copy', 'TrainingNotifyTemplateController@copy')->name('trainingNotifyTemplates.copy');
+
+    Route::get('landingTemplates/{id}/preview', 'LandingTemplateController@preview')->name('landingTemplates.preview');
+    Route::get('landingTemplates/{id}/copy', 'LandingTemplateController@copy')->name('landingTemplates.copy');
 
 	Route::post('campaigns/test', 'CampaignController@test')->name('campaigns.test');
     Route::post('campaigns/end', 'CampaignController@end')->name('campaigns.end');
@@ -175,6 +181,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/laravel-filemanager/delete', '\UniSharp\LaravelFilemanager\Controllers\DeleteController@getDelete');
 	Route::get('/laravel-filemanager/demo', '\UniSharp\LaravelFilemanager\Controllers\DemoController@index');
 });
+
+
+Route::get('/lp/{uri}', 'LandingTemplateController@redirect');
 
 /*Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
 	\UniSharp\LaravelFilemanager\Lfm::routes();
