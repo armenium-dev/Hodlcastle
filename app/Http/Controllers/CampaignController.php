@@ -9,6 +9,7 @@ use App\Models\Recipient;
 use App\Models\Schedule;
 use App\Repositories\CampaignRepository;
 use App\Repositories\EmailTemplateRepository;
+use App\Repositories\LandingTemplateRepository;
 use App\Repositories\SmsTemplateRepository;
 use App\Repositories\LandingRepository;
 use App\Repositories\DomainRepository;
@@ -36,6 +37,7 @@ class CampaignController extends AppBaseController{
 	private $domainRepository;
 	private $groupRepository;
 	private $recipientRepository;
+	private $landingTemplateRepository;
 
 	private $mail_drivers = ['default' => 'Default', 'mailgun' => 'Mailgun'];
 
@@ -46,7 +48,8 @@ class CampaignController extends AppBaseController{
 		LandingRepository $landingRepo,
 		DomainRepository $domainRepo,
 		GroupRepository $groupRepo,
-		RecipientRepository $recipientRepo
+		RecipientRepository $recipientRepo,
+		LandingTemplateRepository $landingTemplateRepository
 	){
 		parent::__construct();
 
@@ -57,7 +60,9 @@ class CampaignController extends AppBaseController{
 		$this->domainRepository        = $domainRepo;
 		$this->groupRepository         = $groupRepo;
 		$this->recipientRepository     = $recipientRepo;
-	}
+        $this->landingTemplateRepository = $landingTemplateRepository;
+
+    }
 
     /**
      * Display a listing of the Campaign.
@@ -116,8 +121,8 @@ class CampaignController extends AppBaseController{
 		$groups                        = $this->groupRepository->listForCompany();
 		$mail_drivers                  = $this->mail_drivers;
 		$smsTemplates                  = $this->smsTemplateRepository->listForCompany2();
+		$landingTemplates                  = $this->landingTemplateRepository->listForCompany();
 		$smishing = $user->company->smishing;
-		
 		if($user->hasRole('customer') && $user->company){
 			if($user->company->status == 0){
 				$smishing = false;
@@ -131,6 +136,7 @@ class CampaignController extends AppBaseController{
 			'emailTemplates',
 			'emailTemplatesWithAttachments',
 			'landings',
+			'landingTemplates',
 			'domains',
 			'groups',
 			'smishing',
@@ -208,7 +214,7 @@ class CampaignController extends AppBaseController{
 			$smsTemplate          = $this->smsTemplateRepository->findWithoutFail($input['schedule']['sms_template_id']);
 			$input['with_attach'] = 0;
 			#dd($emailTemplate);
-			
+
 			if(!is_null($smsTemplate->deleted_at)){
 				$errors++;
 				$error_mess[] = 'SMS template is deleted. Choose another template.';
