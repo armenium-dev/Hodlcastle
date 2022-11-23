@@ -25,8 +25,8 @@ class GenerateMenus{
 				$menu->add('Scenarios', ['route' => 'scenarios.index'])->data('permission', 'scenarios.index')->data('icon', 'fa-play');
 				$menu->add('Documentation', ['route' => 'documentation.index'])->data('permission', 'documentation.index')->data('icon', 'fa-book');
                 $menu->add('Trainings', ['route' => 'trainings.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
-                $menu->add('Training Statistics', ['route' => 'trainingStatistics.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
-                $menu->add('Training Notify Templates', ['route' => 'trainingNotifyTemplates.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
+//                $menu->add('Training Statistics', ['route' => 'trainingStatistics.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
+//                $menu->add('Training Notify Templates', ['route' => 'trainingNotifyTemplates.index'])->data('permission', 'trainings.index')->data('icon', 'fa-graduation-cap');
 				$menu->add('Smishing', ['route' => 'smishing'])->data('permission', 'campaigns.index')->data('icon', 'fa-phone');
                 $menu->add('Landing Templates', ['route' => 'landingTemplates.index'])->data('permission', 'emailTemplates.index')->data('icon', 'fa-code');
 
