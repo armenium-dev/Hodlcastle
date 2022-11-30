@@ -11,9 +11,7 @@
             <div class="box-body">
                 <div class="row">
                     {!! Form::model($template, ['route' => ['landingTemplates.update', $template->id], 'method' => 'patch', 'files' => true]) !!}
-
-                    @include('landing_templates.fields', ['mode' => 'edit'])
-
+                        @include('landing_templates.fields', ['mode' => 'edit'])
                     {!! Form::close() !!}
                 </div>
             </div>

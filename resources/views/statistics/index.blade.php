@@ -16,10 +16,7 @@
                             data-data-fake-auth="[{{ $report['campaigns_for_table']->sortBy('created_at')->pluck('fakeAuthPercent')->implode(",") }}]"
                             data-data-attachments="[{{ $report['campaigns_for_table']->sortBy('created_at')->pluck('attachmentsPercent')->implode(",") }}]">
                     </canvas>
-{{--                    <canvas id="chart3"--}}
-{{--                            data-short-labels="{{ $report['labels'] }}"--}}
-{{--                            data-data-no-response="[{{ $report['campaigns_for_table']->sortBy('created_at')->pluck('sentsOnlyPercent')->implode(",") }}]">--}}
-{{--                    </canvas>--}}
+                    {{--<canvas id="chart3" data-short-labels="{{ $report['labels'] }}" data-data-no-response="[{{ $report['campaigns_for_table']->sortBy('created_at')->pluck('sentsOnlyPercent')->implode(",") }}]"></canvas>--}}
                 </div>
                 <div class="chart-container" style="position: relative;">
                     <h2 style="font-weight: bold;">Publishing results per campaign</h2>

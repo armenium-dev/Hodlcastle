@@ -48,4 +48,3 @@ use Carbon\Carbon;
         </div>
     </div>
 </div>
-

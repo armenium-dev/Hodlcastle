@@ -24,6 +24,7 @@ use App\Helpers\PermissionHelper;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use RuntimeException;
 use Yajra\Datatables\Datatables;
+use Form;
 
 class EmailTemplateController extends AppBaseController{
 	/** @var  EmailTemplateRepository */
@@ -76,11 +77,19 @@ class EmailTemplateController extends AppBaseController{
 				])->addIndexColumn()->addColumn('language', function($row){
 					return $row->language ? $row->language->name : '';
 				})->addIndexColumn()->addColumn('action', function($row){
-					$str =
-						
-						\Form::open(['route' => ['emailTemplates.destroy', $row->id], 'method' => 'delete'])."<div class='btn-group text-nowrap'>"."<a href=\"".route('emailTemplates.show', [$row->id])."\" class='btn btn-info'><i class=\"fa fa-eye\"></i></a>".(Auth::user()->can('email_template.edit_public') ? "<a href=\"".route('emailTemplates.edit', [$row->id])."\" class='btn btn-warning'><i class=\"fa fa-edit\"></i></a>" : "")."<a href=\"".route('emailTemplates.copy', [$row->id])."\" class='btn btn-success'><i class=\"fa fa-copy\"></i></a>".\Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"])."</div>".\Form::close();
-					
-					return $str;
+					$str[] = Form::open(['route' => ['emailTemplates.destroy', $row->id], 'method' => 'delete']);
+					$str[] = '<div class="btn-group text-nowrap">';
+					$str[] = '<a href="'.route('emailTemplates.show', [$row->id]).'" class="btn btn-info"><i class="fa fa-eye"></i></a>';
+					if(Auth::user()->can('email_template.edit_public')){
+						$str[] = '<a href="'.route('emailTemplates.edit', [$row->id]).'" class="btn btn-warning"><i class="fa fa-edit"></i></a>';
+					}
+					$str[] = '<a href="'.route('emailTemplates.copy', [$row->id]).'" class="btn btn-success"><i class="fa fa-copy"></i></a>';
+					if(Auth::user()->hasRole('captain')){
+						$str[] = Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"])."</div>";
+					}
+					$str[] = Form::close();
+
+					return implode('', $str);
 				})->rawColumns(['language', 'action'])->make(true);
 		}
 		

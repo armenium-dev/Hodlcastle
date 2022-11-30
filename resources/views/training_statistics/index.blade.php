@@ -24,8 +24,6 @@
     </div>
 @endsection
 
-<style>
-    .training-statistics-title {
-        padding-bottom: 25px;
-    }
+<style type="text/css">
+    .training-statistics-title {padding-bottom: 25px;}
 </style>

@@ -16,61 +16,57 @@ use Config;
  * @property string lang
  * @property string tags
  */
-class LandingTemplate extends Model
-{
+class LandingTemplate extends Model {
 
-    use SoftDeletes;
+	use SoftDeletes;
 
-    public $table = 'landing_templates';
+	public $table = 'landing_templates';
 
-    protected $dates = ['deleted_at'];
+	protected $dates = ['deleted_at'];
 
-    /**
-     * The attributes that could be used in mass assignment.
-     * @var array
-     */
-    protected $fillable = [
-        'company_id',
-        'is_public',
-        'name',
-        'content',
-        'uuid',
-        'url',
-    ];
+	/**
+	 * The attributes that could be used in mass assignment.
+	 * @var array
+	 */
+	protected $fillable = [
+		'company_id',
+		'is_public',
+		'name',
+		'content',
+		'uuid',
+		'url',
+	];
 
-    /**
-     * The attributes that should be casted to native types.
-     * @var array
-     */
-    protected $casts = [
-        'company_id' => 'integer',
-        'is_public' => 'integer',
-        'name' => 'string',
-        'content' => 'string',
-        'uuid' => 'string',
-        'url' => 'string',
-    ];
+	/**
+	 * The attributes that should be casted to native types.
+	 * @var array
+	 */
+	protected $casts = [
+		'company_id' => 'integer',
+		'is_public' => 'integer',
+		'name' => 'string',
+		'content' => 'string',
+		'uuid' => 'string',
+		'url' => 'string',
+	];
 
-    /**
-     * Validation rules
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required',
-    ];
+	/**
+	 * Validation rules
+	 * @var array
+	 */
+	public static $rules = [
+		'name' => 'required',
+	];
 
-    public function image()
-    {
-        return $this->morphOne('App\Models\Image', 'imageable');
-    }
+	public function image(){
+		return $this->morphOne('App\Models\Image', 'imageable');
+	}
 
-    public function company()
-    {
-        return $this->belongsTo('App\Models\Company');
-    }
+	public function company(){
+		return $this->belongsTo('App\Models\Company');
+	}
 
-    public function campaigns()
-    {
-        return $this->hasMany('App\Models\Campaign');
-    }
+	public function campaigns(){
+		return $this->hasMany('App\Models\Campaign');
+	}
 }

@@ -523,4 +523,5 @@ class CampaignController extends AppBaseController{
 
 		return redirect(route('campaigns.index'));
 	}
+
 }

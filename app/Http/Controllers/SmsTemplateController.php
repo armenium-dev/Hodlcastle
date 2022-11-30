@@ -24,6 +24,7 @@ use App\Helpers\PermissionHelper;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use RuntimeException;
 use Yajra\Datatables\Datatables;
+use Form;
 
 class SmsTemplateController extends AppBaseController {
 
@@ -83,20 +84,20 @@ class SmsTemplateController extends AppBaseController {
 
 	            ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $str =
+                    $str[] = Form::open(['route' => ['smsTemplates.destroy', $row->id], 'method' => 'delete']);
+					$str[] ='<div class="btn-group text-nowrap">';
+					$str[] ='<a href="'.route('smsTemplates.show', [$row->id]).'" class="btn btn-info"><i class="fa fa-eye"></i></a>';
+                    if(Auth::user()->can('sms_template.edit_public')){
+						$str[] = '<a href="'.route('smsTemplates.edit', [$row->id]).'" class="btn btn-warning"><i class="fa fa-edit"></i></a>';
+					}
+					$str[] = '<a href="'.route('smsTemplates.copy', [$row->id]).'" class="btn btn-success"><i class="fa fa-copy"></i></a>';
+					if(Auth::user()->hasRole('captain')){
+						$str[] = Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]);
+					}
+					$str[] = '</div>';
+					$str[] = Form::close();
 
-                    \Form::open(['route' => ['smsTemplates.destroy', $row->id], 'method' => 'delete']) .
-                    "<div class='btn-group text-nowrap'>" .
-                    "<a href=\"" . route('smsTemplates.show', [$row->id]) . "\" class='btn btn-info'><i class=\"fa fa-eye\"></i></a>" .
-                    ( Auth::user()->can('sms_template.edit_public') ?
-                        "<a href=\"" . route('smsTemplates.edit', [$row->id]) . "\" class='btn btn-warning'><i class=\"fa fa-edit\"></i></a>" :
-                        "" ) .
-                    "<a href=\"" . route('smsTemplates.copy', [$row->id]) . "\" class='btn btn-success'><i class=\"fa fa-copy\"></i></a>" .
-                    \Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]) .
-                    "</div>" .
-                    \Form::close();
-
-                    return $str;
+					return implode('', $str);
                 })
                 ->rawColumns(['company', 'language', 'action'])
 

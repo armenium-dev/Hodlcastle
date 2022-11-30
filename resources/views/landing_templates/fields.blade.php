@@ -10,7 +10,6 @@
     </div>
 @endif
 
-
 <div class="form-group col-sm-12">
     <div class="text_type text_type-1">
         <div id="summary_tinymce">
@@ -21,7 +20,7 @@
     </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12 hidden">
     <div class="row">
         <div class="form-group col-sm-6">
             <table class="table">

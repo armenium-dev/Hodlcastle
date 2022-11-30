@@ -5,7 +5,7 @@
 <div class="form-group">
 	<div class="form-group">
         <input type="hidden" name="schedule[send_to_landing]" value="0">
-{{--		{!! Form::checkbox('schedule[send_to_landing]', 1, isset($model->schedule) ? $model->schedule->send_to_landing : true, ['class' => 'flat-green', 'id' => 'send_to_landing'.$checkbox_id_suffix]) !!} {!! Form::label('send_to_landing'.$checkbox_id_suffix, 'Send to default landing') !!}--}}
+		{{-- Form::checkbox('schedule[send_to_landing]', 1, isset($model->schedule) ? $model->schedule->send_to_landing : true, ['class' => 'flat-green', 'id' => 'send_to_landing'.$checkbox_id_suffix]) !!} {!! Form::label('send_to_landing'.$checkbox_id_suffix, 'Send to default landing') --}}
 	</div>
 	<div class="form-group">
         {!! Form::label('landing_template', 'Landing Template:') !!}

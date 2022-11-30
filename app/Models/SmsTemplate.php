@@ -104,7 +104,7 @@ class SmsTemplate extends Model{
      * @return bool
      */
 	public function send(Recipient $recipient, $campaign = null){
-		Log::stack(['custom'])->debug(__CLASS__.'::'.__METHOD__);
+		Log::stack(['custom'])->debug(__METHOD__);
         #dd($recipient->mobile);
         #dd($this->content);
 
@@ -117,8 +117,8 @@ class SmsTemplate extends Model{
 		
 		if(!empty($recipient->mobile)){
 			try{
-				#$sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
-				$sendSms = LaraTwilio::notify($recipient->mobile, $content);
+				$sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
+				//$sendSms = LaraTwilio::notify($recipient->mobile, $content);
 				Log::stack(['custom'])->debug($recipient->mobile.' sent');
 			}catch(\Exception $exception){
 				Log::stack(['custom'])->debug($exception->getMessage());

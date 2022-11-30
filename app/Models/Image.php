@@ -3,8 +3,8 @@
 use Matriphe\Imageupload\ImageuploadModel;
 use Intervention\Image\Image as InterventionImage;
 
-class Image extends ImageuploadModel
-{
+class Image extends ImageuploadModel {
+
     const PATH = '/uploads/images/';
 
     protected $table = 'images';

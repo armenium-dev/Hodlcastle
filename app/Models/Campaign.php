@@ -451,5 +451,4 @@ class Campaign extends Model{
 	public static function getRecipiendCode(){
 		return self::$recipiend_code;
 	}
-
 }

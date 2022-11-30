@@ -11,7 +11,6 @@
 */
 use Illuminate\Support\Facades\Route;
 
-
 Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');

@@ -31,8 +31,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property integer smish
  */
-class Result extends Model
-{
+class Result extends Model {
+
     use SoftDeletes;
 
     const TYPE_SENT = 1;

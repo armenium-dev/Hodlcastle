@@ -4,3 +4,4 @@
     <li class="{{ $active == 'training_statistics_export' ? 'active' : '' }}"><a href="{!! route('trainingStatistic.export') !!}"><i class="fa fa-bar-chart"></i> Training Statistics Data Export</a></li>
     <li class="{{ $active == 'training_notify_templates' ? 'active' : '' }}"><a href="{!! route('trainingNotifyTemplates.index') !!}"><i class="fa fa-envelope"></i> Training Notify Templates</a></li>
 </ul>
+

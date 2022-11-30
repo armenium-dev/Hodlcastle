@@ -11,9 +11,7 @@
             <div class="box-body">
                 <div class="row">
                     {!! Form::open(['route' => 'landingTemplates.store', 'files' => true]) !!}
-
-                    @include('landing_templates.fields', ['mode' => 'create'])
-
+                        @include('landing_templates.fields', ['mode' => 'create'])
                     {!! Form::close() !!}
                 </div>
             </div>

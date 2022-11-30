@@ -77,7 +77,9 @@ class LandingTemplateController extends AppBaseController
                         $str[] = '<a href="' . route('landingTemplates.edit', [$row->id]) . '" class="btn btn-warning"><i class="fa fa-edit"></i></a>';
                     }
                     $str[] = '<a href="' . route('landingTemplates.copy', [$row->id]) . '" class="btn btn-success"><i class="fa fa-copy"></i></a>';
-                    $str[] = Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]);
+					if(Auth::user()->hasRole('captain')){
+						$str[] = Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure?')"]);
+					}
                     $str[] = '</div>';
                     $str[] = Form::close();
 
@@ -279,7 +281,6 @@ class LandingTemplateController extends AppBaseController
             'template',
             'companies',
             'landing_variables',
-            'types',
             'default_is_public'
         ));
     }
