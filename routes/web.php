@@ -82,7 +82,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
         Route::resource('pagevideos', 'PageVideoController');
         Route::resource('pagequizs', 'PageQuizController');
         Route::resource('pagetexts', 'PageTextController');
-
+        Route::post('options/blacklisted_sms_terms/store', 'OptionsController@blacklistedSmsTermsStore')->name('options.blacklisted_sms_terms.store');
     });
 
 

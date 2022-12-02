@@ -6,6 +6,7 @@ use App\Criteria\BelongsToCompanyCriteria;
 use App\Http\Requests\CreateSmsTemplateRequest;
 use App\Http\Requests\UpdateSmsTemplateRequest;
 use App\Models\Campaign;
+use App\Models\Options;
 use App\Models\Recipient;
 use App\Repositories\SmsTemplateRepository;
 use App\Repositories\LanguageRepository;
@@ -55,7 +56,14 @@ class SmsTemplateController extends AppBaseController {
 
 		//Bugsnag::notifyException(new RuntimeException("Test error"));
 
-		return view('sms_templates.index')->with(compact('smsTemplates', 'smsTemplatesPublic'));
+		$opt = Options::where(['option_key' => 'blacklisted_sms_terms'])->first();
+
+		$blacklisted_sms_terms = [0 => ''];
+		if(!is_null($opt)){
+			$blacklisted_sms_terms = json_decode($opt->option_value, true);
+		}
+
+		return view('sms_templates.index')->with(compact('smsTemplates', 'smsTemplatesPublic', 'blacklisted_sms_terms'));
 	}
 
     public function table(Request $request){
@@ -114,12 +122,19 @@ class SmsTemplateController extends AppBaseController {
      */
 	public function create(Request $request){
 		$this->companyRepository->pushCriteria(new RequestCriteria($request));
-		$companies = $this->companyRepository->pluck('name', 'id');
+		$companies = [0 => 'for All companies (PUBLIC)'] + $this->companyRepository->pluck('name', 'id')->toArray();
 		$languages = $this->languageRepository->orderBy('name', 'ASC')->pluck('name', 'id');
 		$defult_language_id = 1;
 		$landing_variables = $this->getLoginVariables();
+		$default_is_public = Auth::user()->hasRole('captain') ? 1 : 0;
 
-		return view('sms_templates.create', compact('companies', 'languages', 'defult_language_id', 'landing_variables'));
+		return view('sms_templates.create', compact(
+			'companies',
+			'languages',
+			'defult_language_id',
+			'landing_variables',
+			'default_is_public',
+		));
 	}
 
     /**
@@ -132,6 +147,12 @@ class SmsTemplateController extends AppBaseController {
 	public function store(CreateSmsTemplateRequest $request){
 		if(!$this->checkCorrectURL($request)){
 			Flash::error('Template includes incorrect URL');
+
+			return redirect(route('smsTemplates.create'));
+		}
+
+		if(!$this->checkContent($request)){
+			Flash::error('Template content incorrect');
 
 			return redirect(route('smsTemplates.create'));
 		}
@@ -218,6 +239,12 @@ class SmsTemplateController extends AppBaseController {
 			return redirect(route('smsTemplates.edit', $id));
 		}
 
+		if(!$this->checkContent($request)){
+			Flash::error('Template content incorrect');
+
+			return redirect(route('smsTemplates.create'));
+		}
+
 		$smsTemplate = $this->smsTemplateRepository->updateRequest($request, $id);
 
 		Flash::success('SMS Template updated successfully.');
@@ -275,6 +302,34 @@ class SmsTemplateController extends AppBaseController {
 		$landing_variables = $this->getLoginVariables();
 
 		return view('sms_templates.copy')->with(compact('smsTemplate', 'companies', 'languages', 'defult_language_id', 'landing_variables'));
+	}
+
+	private function checkContent($request){
+		$res = true;
+
+		$input = $request->all();
+		$content = trim(strtolower(strip_tags(nl2br($input['content']))));
+
+		$opt = Options::where(['option_key' => 'blacklisted_sms_terms'])->first();
+
+		if(!is_null($opt)){
+			$blacklisted_sms_terms = json_decode($opt->option_value, true);
+			$found_blacklisted_terms = [];
+
+			if(!empty($blacklisted_sms_terms)){
+				foreach($blacklisted_sms_terms as $term){
+					if(str_contains($content, strtolower($term))){
+						$found_blacklisted_terms[] = $term;
+					}
+				}
+			}
+
+			if(!empty($found_blacklisted_terms)){
+				$res = false;
+			}
+		}
+
+		return $res;
 	}
 
 	public function getHtmlLangWithFlag($language){

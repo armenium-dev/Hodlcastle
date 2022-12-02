@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\BelongsToCompanyCriteria;
 use App\Http\Requests\CreateCampaignRequest;
 use App\Models\SmsTemplate;
 use App\Repositories\CampaignRepository;
@@ -25,12 +26,14 @@ class SmishingController extends AppBaseController {
 	private $languageRepository;
 	private $domainRepository;
 	private $campaignRepository;
+	private $smsTemplateRepository;
 
 	public function __construct(
 		LanguageRepository $languageRepo,
 		DomainRepository $domainRepo,
 		GroupRepository $groupRepo,
-		CampaignRepository $campaignRepo
+		CampaignRepository $campaignRepo,
+		SmsTemplateRepository $smsTemplateRepo
 	){
 		parent::__construct();
 
@@ -38,6 +41,7 @@ class SmishingController extends AppBaseController {
 		$this->domainRepository = $domainRepo;
 		$this->groupRepository = $groupRepo;
 		$this->campaignRepository = $campaignRepo;
+		$this->smsTemplateRepository = $smsTemplateRepo;
 	}
 
 	/**
@@ -46,7 +50,7 @@ class SmishingController extends AppBaseController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		$sms_templates = SmsTemplate::all()->where('is_public', 1);
+		$sms_templates = $this->smsTemplateRepository->pushCriteria(new BelongsToCompanyCriteria(true))->all()->sortByDesc('updated_at');
 
 		$languages = [];
 		$id = 0;

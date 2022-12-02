@@ -7,9 +7,9 @@
 
                 <section class="mb-20">
                     <h1 class="d-none mb-20">Leaderboard</h1>
-                    <div class="d-flex flex-row justify-space-between align-item-end">
+                    <div class="d-flex flex-row justify-space-between align-items-end">
                         <form id="js_search_form" method="get" action="">
-                            <div class="d-flex flex-row align-item-end">
+                            <div class="d-flex flex-row align-items-end">
                                 <div class="me-10">
                                     <label>Start date</label>
                                     <input type="text" name="start_date" class="datepicker form-control"

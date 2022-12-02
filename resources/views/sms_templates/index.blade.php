@@ -17,6 +17,9 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1" data-toggle="tab">Public SMS templates</a></li>
                 <li><a href="#tab_2" data-toggle="tab">Custom SMS templates</a></li>
+                @if(Auth::user()->hasRole('captain'))
+                <li><a href="#tab_3" data-toggle="tab">Blacklisted SMS terms</a></li>
+                @endif
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
@@ -25,6 +28,11 @@
                 <div class="tab-pane" id="tab_2">
                     @include('sms_templates.table_private')
                 </div>
+                @if(Auth::user()->hasRole('captain'))
+                <div class="tab-pane" id="tab_3">
+                    @include('options.blacklisted_sms_terms')
+                </div>
+                @endif
             </div>
         </div>
     </div>

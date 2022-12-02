@@ -4,6 +4,7 @@
             <tr>
                 <th>Name</th>
                 <th>Company</th>
+                <th>Language</th>
                 <th>Last Modified</th>
                 <th width="170">Action</th>
             </tr>
@@ -14,6 +15,7 @@
             <tr>
                 <td>{!! $smsTemplate->name !!}</td>
                 <td>{!! $smsTemplate->company->name !!}</td>
+                <td><img src="/img/pmflags/{!! $smsTemplate->language->code !!}.png"> {!! $smsTemplate->language->name !!}</td>
                 <td>{!! $smsTemplate->updated_at !!}</td>
                 <td>
                     {!! Form::open(['route' => ['smsTemplates.destroy', $smsTemplate->id], 'method' => 'delete']) !!}

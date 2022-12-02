@@ -40,13 +40,16 @@ body {font-family: 'Open sans', 'Source Sans Pro','Helvetica Neue',Helvetica,Ari
 .mt-10 {margin-top: 10px !important;}
 .mt-20 {margin-top: 20px !important;}
 .mt-30 {margin-top: 30px !important;}
+.me-20 {margin-right: 20px !important;}
+.ms-20 {margin-left: 20px !important;}
 
 .d-none {display: none !important;}
 .d-block {display: block !important;}
 .d-flex {display: flex !important;}
 .flex-row {flex-direction: row !important;}
 .justify-space-between {justify-content: space-between !important;}
-.align-item-end {align-items: flex-end !important;}
+.align-items-end {align-items: flex-end !important;}
+.align-items-center {align-items: center !important;}
 
 .w-full {width: 100%;}
 .h-full {height: 100%;}
@@ -245,6 +248,8 @@ table {margin-bottom: 0;}
 .smishing-table .image-col img {width: 100px; height: 100px; margin-right: 20px;}
 .smishing-table .content-col {width: 100%;}
 .smishing-table .date-col {white-space: nowrap;}
+.smishing-table .private {background-color: #ffffe0; position: relative;}
+.smishing-table .private:after {content: "MY COMPANY TEMPLATE"; position: absolute; right: 8px; bottom: 8px; z-index: 1; color: #ffffe0; font-size: 11px; padding: 2px 8px 4px; border-radius: 4px; background-color: rgba(0,0,0,0.5);}
 
 .custom-table-data .toolbar {display: flex; flex-flow: row-reverse; justify-content: space-between;}
 .dataTables_year {float: left; margin-left: 20px;}
@@ -273,3 +278,11 @@ table {margin-bottom: 0;}
 .finish .icon.fail {color: #ee0070;}
 .finish .score-value {font-size: 50px; font-weight: bold; line-height: 1; margin-top: 10px;}
 .finish .score-text {font-size: 20px;}
+
+table.dataTable {width: 100% !important;}
+
+.list-group.terms {padding: 0; margin: 0 0 30px; list-style: none; max-width: 500px;}
+.list-group.terms .list-group-item {position: relative; display: flex; justify-content: space-between; align-items: center; flex-flow: row nowrap; padding: 10px 0; margin: 0; background-color: #fff; border: 0; border-bottom: 1px solid #ddd; border-radius: 0;}
+.list-group.terms .list-group-item .col {padding: 0 15px;}
+.list-group.terms .list-group-item .col:first-child {flex: 1;}
+.list-group.terms .list-group-item input[type="text"] {width: 100%;}

@@ -19,9 +19,9 @@
                     <div class="clearfix"></div>
                     <div class="box box-primary">
                         <div class="box-body">
-                            <div class="d-flex flex-row justify-space-between align-item-end">
+                            <div class="d-flex flex-row justify-space-between align-items-end">
                                 <form id="js_search_form" method="get" action="">
-                                    <div class="d-flex flex-row align-item-end">
+                                    <div class="d-flex flex-row align-items-end">
                                         <div class="me-10">
                                             <label>From date</label>
                                             <input type="text" name="start_date" class="datepicker form-control"

@@ -19,12 +19,13 @@
         </div>
 
         <div class="form-group">
+            {!! Form::label('name', 'Content:') !!}
             <textarea class="form-control" name="content">{!! isset($smsTemplate) ? $smsTemplate->content : "" !!}</textarea>
         </div>
 
         <div class="form-group">
             @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
-                {!! Form::label('company_id', 'Company') !!}
+                {!! Form::label('company_id', 'For Company') !!}
                 {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
             @endif
         </div>
@@ -36,9 +37,9 @@
             @endif
         </div>
 
-        <div class="form-group">
+        <div class="form-group hidden">
             @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
-                {!! Form::checkbox('is_public', 1, isset($smsTemplate) ? $smsTemplate->is_public : false, ['id' => 'is_public']) !!}
+                {!! Form::checkbox('is_public', 1, $default_is_public, ['id' => 'is_public']) !!}
                 {!! Form::label('is_public', 'Public template') !!}
             @endif
         </div>
@@ -137,7 +138,13 @@
                 $temp.val(text).select();
                 document.execCommand("copy");
                 $temp.remove();
-            })
+            });
         }
+
+		$('#company_id').on('change', function(){
+			var v = ~~$(this).val();
+			$('#is_public').prop('checked', !(v > 0));
+		}).trigger('change');
+
     });
 </script>

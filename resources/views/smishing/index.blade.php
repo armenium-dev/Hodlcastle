@@ -2,6 +2,9 @@
 
 @section('content')
     <section class="content-header">
+        <div class="pull-right">
+            <a class="btn btn-success" href="{!! route('smsTemplates.create') !!}">Custom SMS</a>
+        </div>
         <h1>Smishing</h1>
     </section>
     <div class="content">

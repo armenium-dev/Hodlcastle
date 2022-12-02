@@ -12,7 +12,7 @@ use Carbon\Carbon;
     <tbody>
     @foreach($sms_templates as $item)
         @if($item->language->code == $language['code'])
-        <tr>
+        <tr class="{!! $item->is_public ? 'public' : 'private' !!}">
             <td class="image-col">
                 @if($item->image)
                 <img src="{!! $item->image->crop(100, 100, true) !!}" />

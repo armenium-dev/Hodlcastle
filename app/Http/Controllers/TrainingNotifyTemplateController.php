@@ -117,7 +117,7 @@ class TrainingNotifyTemplateController extends AppBaseController{
 	public function create(Request $request){
 		$this->companyRepository->pushCriteria(new RequestCriteria($request));
 
-		$companies = [0 => 'for All companies'] + $this->companyRepository->pluck('name', 'id')->toArray();
+		$companies = [0 => 'for All companies (PUBLIC)'] + $this->companyRepository->pluck('name', 'id')->toArray();
 
 		$languages = $this->languageRepository->orderBy('name', 'ASC')->pluck('name', 'id');
 
