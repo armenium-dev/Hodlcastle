@@ -6,11 +6,13 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-            {!! Form::label('image', 'Template Image:') !!}
-            @if(isset($smsTemplate) && $smsTemplate->image)
-                <img src="{{ $smsTemplate->image->crop(100, 100, true) }}" alt="" class="d-block" />
+            @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
+                {!! Form::label('image', 'Template Image:') !!}
+                @if(isset($smsTemplate) && $smsTemplate->image)
+                    <img src="{{ $smsTemplate->image->crop(100, 100, true) }}" alt="" class="d-block" />
+                @endif
+                {!! Form::file('image', ['class' => 'form-control']) !!}
             @endif
-            {!! Form::file('image', ['class' => 'form-control']) !!}
         </div>
 
         <div class="form-group">

@@ -595,6 +595,10 @@ table {
   width: 100%;
 }
 
+.smishing-table {
+  border-collapse: unset;
+}
+
 .smishing-table .image-col img {
   width: 100px;
   height: 100px;
@@ -610,7 +614,7 @@ table {
 }
 
 .smishing-table .private {
-  background-color: #ffffe0;
+  background-color: #ffffef;
   position: relative;
 }
 
@@ -620,7 +624,7 @@ table {
   right: 8px;
   bottom: 8px;
   z-index: 1;
-  color: #ffffe0;
+  color: #ffffef;
   font-size: 11px;
   padding: 2px 8px 4px;
   border-radius: 4px;

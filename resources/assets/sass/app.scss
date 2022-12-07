@@ -244,12 +244,13 @@ table {margin-bottom: 0;}
 .user-panel {display: flex; flex-flow: column nowrap; align-items: center;}
 .user-panel > .info {position: initial; left: auto; line-height: normal; padding: 5px; width: 100%;}
 
-.smishing-table .image-col {}
+.smishing-table {border-collapse: unset;}
 .smishing-table .image-col img {width: 100px; height: 100px; margin-right: 20px;}
 .smishing-table .content-col {width: 100%;}
 .smishing-table .date-col {white-space: nowrap;}
-.smishing-table .private {background-color: #ffffe0; position: relative;}
-.smishing-table .private:after {content: "MY COMPANY TEMPLATE"; position: absolute; right: 8px; bottom: 8px; z-index: 1; color: #ffffe0; font-size: 11px; padding: 2px 8px 4px; border-radius: 4px; background-color: rgba(0,0,0,0.5);}
+.smishing-table .private {background-color: #ffffef; position: relative;}
+.smishing-table .private:after {content: "MY COMPANY TEMPLATE"; position: absolute; right: 8px; bottom: 8px; z-index: 1; color: #ffffef; font-size: 11px; padding: 2px 8px 4px; border-radius: 4px; background-color: rgba(0,0,0,0.5);}
+.smishing-table .private td {}
 
 .custom-table-data .toolbar {display: flex; flex-flow: row-reverse; justify-content: space-between;}
 .dataTables_year {float: left; margin-left: 20px;}
