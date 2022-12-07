@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            @if(Auth::check() && Auth::user()->can('sms_template.see_lang_tags_image'))
+            @if(Auth::check() && Auth::user()->can('sms_template.can_select_lang'))
                 {!! Form::label('language_id', 'Lang:') !!}
                 {!! Form::select('language_id', $languages, $defult_language_id, ['class' => 'form-control']) !!}
             @endif
