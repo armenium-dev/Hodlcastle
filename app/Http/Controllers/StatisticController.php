@@ -52,8 +52,10 @@ class StatisticController extends AppBaseController {
 		}
 
 		$campaigns = $this->campaignRepository
-			->with('recipients')
-			->where(['company_id' => Auth::user()->company->id])
+            ->pushCriteria(new CampaignsRunningCriteria())
+            ->pushCriteria(BelongsToCompanyCriteria::class)
+            ->has('recipients')
+            ->has('results')
 			->withCount('recipients')
 			->orderBy('created_at', 'DESC')
 			->get();
@@ -70,7 +72,6 @@ class StatisticController extends AppBaseController {
 			$clickOnly = $campaign->countResultsOnly('click');
 			$openOnly = $campaign->countResultsOnly('open');
 			$reportOnly = $campaign->countResultsOnly('report');
-			$smishOnly = $campaign->countResultsOnly('smish');
 
 			if($sent){
 				$campaign->sentsCount = $sent;
@@ -79,7 +80,6 @@ class StatisticController extends AppBaseController {
 				$campaign->clicksPercent = $click * 100 / $sent;
 				$campaign->reportsPercent = $report * 100 / $sent;
 				$campaign->attachmentsPercent = $attachment * 100 / $sent;
-				$campaign->smishsPercent = $smishOnly * 100 / $sent;
 
 				$campaign->clicksCount = $click;
 				$campaign->reportsCount = $report;
