@@ -9,7 +9,7 @@
 	<div class="tab-content">
 		@foreach($languages as $language)
 			<div class="tab-pane {!! $language['class'] !!}" id="tab_{!! $language['id'] !!}">
-				@include('smishing.table')
+				@include('smishing.'.$display_type)
 			</div>
 		@endforeach
 	</div>

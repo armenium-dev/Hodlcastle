@@ -66,10 +66,12 @@ class SmishingController extends AppBaseController {
 		reset($languages);
 		$languages[key($languages)]['class'] = 'active';
 
+		$display_type = isset($_COOKIE['display_type']) ? $_COOKIE['display_type'] : 'grid';
+
 		#dd($languages);
 		#dd($sms_templates);
 
-		return view('smishing.index', compact('sms_templates', 'languages'));
+		return view('smishing.index', compact('sms_templates', 'languages', 'display_type'));
 	}
 
 	public function select($id){

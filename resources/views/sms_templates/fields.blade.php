@@ -5,15 +5,15 @@
 <div class="row">
 
     <div class="col-sm-6">
+        @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
         <div class="form-group">
-            @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
-                {!! Form::label('image', 'Template Image:') !!}
-                @if(isset($smsTemplate) && $smsTemplate->image)
-                    <img src="{{ $smsTemplate->image->crop(100, 100, true) }}" alt="" class="d-block" />
-                @endif
-                {!! Form::file('image', ['class' => 'form-control']) !!}
+            {!! Form::label('image', 'Template Image:') !!}
+            @if(isset($smsTemplate) && $smsTemplate->image)
+                <img src="{{ $smsTemplate->image->crop(100, 100, true) }}" alt="" class="d-block" />
             @endif
+            {!! Form::file('image', ['class' => 'form-control']) !!}
         </div>
+        @endif
 
         <div class="form-group">
             {!! Form::label('name', 'Name:') !!}
@@ -25,26 +25,26 @@
             <textarea class="form-control" name="content">{!! isset($smsTemplate) ? $smsTemplate->content : "" !!}</textarea>
         </div>
 
+        @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
         <div class="form-group">
-            @if(Auth::check() && Auth::user()->can('sms_template.set_company'))
-                {!! Form::label('company_id', 'For Company') !!}
-                {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
-            @endif
+            {!! Form::label('company_id', 'For Company') !!}
+            {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
         </div>
+        @endif
 
+        @if(Auth::check() && Auth::user()->can('sms_template.can_select_lang'))
         <div class="form-group">
-            @if(Auth::check() && Auth::user()->can('sms_template.can_select_lang'))
-                {!! Form::label('language_id', 'Lang:') !!}
-                {!! Form::select('language_id', $languages, $defult_language_id, ['class' => 'form-control']) !!}
-            @endif
+            {!! Form::label('language_id', 'Lang:') !!}
+            {!! Form::select('language_id', $languages, $defult_language_id, ['class' => 'form-control']) !!}
         </div>
+        @endif
 
+        @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
         <div class="form-group hidden">
-            @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
-                {!! Form::checkbox('is_public', 1, $default_is_public, ['id' => 'is_public']) !!}
-                {!! Form::label('is_public', 'Public template') !!}
-            @endif
+            {!! Form::checkbox('is_public', 1, $default_is_public, ['id' => 'is_public']) !!}
+            {!! Form::label('is_public', 'Public template') !!}
         </div>
+        @endif
     </div>
     <div class="col-sm-6">
         <table class="table">

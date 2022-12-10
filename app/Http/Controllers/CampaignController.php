@@ -330,6 +330,7 @@ class CampaignController extends AppBaseController{
 		$landings       = $this->landingRepository->pluck('name', 'id');
 		$domains        = $this->domainRepository->listForCompany();
 		$groups         = $this->groupRepository->listForCompany();
+		$landingTemplates = $this->landingTemplateRepository->listForCompany();
 		$mail_drivers   = $this->mail_drivers;
 		$smishing = $user->company->smishing;
 		$type = $request->get('type') ?: 'email';
@@ -338,6 +339,7 @@ class CampaignController extends AppBaseController{
 			'smsTemplates',
 			'emailTemplates',
 			'landings',
+			'landingTemplates',
 			'domains',
 			'groups',
 			'mail_drivers',
