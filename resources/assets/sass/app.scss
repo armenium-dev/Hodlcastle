@@ -14,7 +14,7 @@ $break-medium: 768px;
 .trans_all *{outline:none;transition:all .2s ease;-moz-transition:all .2s ease;-webkit-transition:all .2s ease;-ms-transition:all .2s ease;-o-transition:all .2s ease;}
 .trans_me_slow,
 .trans_all_slow,
-.trans_all_slow *{outline:none;transition:all .5s linear .1s;-moz-transition:all .5s linear .1s;-webkit-transition:all .5s linear .1s;-ms-transition:all .5s linear .1s;-o-transition:all .5s linear .1s;}
+.trans_all_slow *{outline:none;transition:all .4s ease;-moz-transition:all .4s ease;-webkit-transition:all .4s ease;-ms-transition:all .4s ease;-o-transition:all .4s ease;}
 .trans_none{transition:none;-moz-transition:none;-webkit-transition:none;-ms-transition:none;-o-transition:none;}
 .trans_none_all,
 .trans_none_all *{transition:none;-moz-transition:none;-webkit-transition:none;-ms-transition:none;-o-transition:none;}

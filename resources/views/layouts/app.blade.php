@@ -5,7 +5,7 @@
 <body class="skin-blue sidebar-mini">
     <div class="js_ajax_message loader">Sending request...</div>
 @if (!Auth::guest())
-    <div class="wrapper trans_all">
+    <div class="wrapper trans_all_slow">
         <!-- Main Header -->
         <header class="main-header">
 
