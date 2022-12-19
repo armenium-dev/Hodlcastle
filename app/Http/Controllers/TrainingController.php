@@ -66,6 +66,12 @@ class TrainingController extends AppBaseController{
 	public function store(CreateTrainingRequest $request){
 		$input = $request->all();
 
+		if(!isset($input['groups'])){
+			Flash::error('Groups not selected');
+
+			return redirect(route('trainings.create'));
+		}
+
 		if(intval($input['start_template_id']) == 0 ||
 			intval($input['finish_template_id']) == 0 ||
 			intval($input['notify_template_id']) == 0){

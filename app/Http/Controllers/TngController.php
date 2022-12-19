@@ -270,7 +270,9 @@ class TngController extends Controller{
 			}
 		}
 
-		$user_score = intval(round($correct_answers * 100 / $total_answers, -1, PHP_ROUND_HALF_UP));
+		if($total_answers > 0){
+			$user_score = intval(round($correct_answers * 100 / $total_answers, -1, PHP_ROUND_HALF_UP));
+		}
 
 		$res['correct_answers'] = $correct_answers;
 		$res['wrong_answers'] = $wrong_answers;

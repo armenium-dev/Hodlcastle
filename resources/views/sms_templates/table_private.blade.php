@@ -14,7 +14,13 @@
             @if(is_object($smsTemplate))
             <tr>
                 <td>{!! $smsTemplate->name !!}</td>
-                <td>{!! $smsTemplate->company->name !!}</td>
+                <td>
+                    @if(!is_null($smsTemplate->company))
+                        {!! $smsTemplate->company->name !!}
+                    @else
+                        for All companies
+                    @endif
+                </td>
                 <td><img src="/img/pmflags/{!! $smsTemplate->language->code !!}.png"> {!! $smsTemplate->language->name !!}</td>
                 <td>{!! $smsTemplate->updated_at !!}</td>
                 <td>

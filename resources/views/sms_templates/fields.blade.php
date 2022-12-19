@@ -40,7 +40,7 @@
         @endif
 
         @if(Auth::check() && Auth::user()->can('sms_template.set_public'))
-        <div class="form-group hidden">
+        <div class="form-group -hidden">
             {!! Form::checkbox('is_public', 1, $default_is_public, ['id' => 'is_public']) !!}
             {!! Form::label('is_public', 'Public template') !!}
         </div>

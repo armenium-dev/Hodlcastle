@@ -50,9 +50,11 @@ class SmsTemplateController extends AppBaseController {
 	 * @return Response
 	 */
 	public function index(Request $request){
-		$smsTemplatesPublic = $this->smsTemplateRepository->findByField('is_public', 1);
-		$this->smsTemplateRepository->pushCriteria(new RequestCriteria($request))->pushCriteria(new BelongsToCompanyCriteria);
-		$smsTemplates = $this->smsTemplateRepository->all();
+		$smsTemplates = $this->smsTemplateRepository->findByField('is_public', 0);
+		$this->smsTemplateRepository
+			->pushCriteria(new RequestCriteria($request))
+			->pushCriteria(new BelongsToCompanyCriteria);
+		#$smsTemplates = $this->smsTemplateRepository->all();
 
 		//Bugsnag::notifyException(new RuntimeException("Test error"));
 
@@ -63,7 +65,7 @@ class SmsTemplateController extends AppBaseController {
 			$blacklisted_sms_terms = json_decode($opt->option_value, true);
 		}
 
-		return view('sms_templates.index')->with(compact('smsTemplates', 'smsTemplatesPublic', 'blacklisted_sms_terms'));
+		return view('sms_templates.index')->with(compact('smsTemplates', 'blacklisted_sms_terms'));
 	}
 
     public function table(Request $request){
@@ -84,7 +86,7 @@ class SmsTemplateController extends AppBaseController {
 
 	            ->addIndexColumn()
                 ->addColumn('company', function($row){
-                    return $row->company ? $row->company->name : '';
+                    return $row->company ? $row->company->name : 'for All companies (PUBLIC)';
                 })
                 ->addColumn('language', function($row){
                     return $row->language ? $row->language->name : '';
@@ -204,14 +206,22 @@ class SmsTemplateController extends AppBaseController {
 		}
 
 		$this->companyRepository->pushCriteria(new RequestCriteria($request));
-		$companies = $this->companyRepository->pluck('name', 'id');
+		$companies = [0 => 'for All companies (PUBLIC)'] + $this->companyRepository->pluck('name', 'id')->toArray();
 
 		$languages = $this->languageRepository->orderBy('name', 'ASC')->pluck('name', 'id');
 		$defult_language_id = null;
+		$default_is_public = null;
 		
 		$landing_variables = $this->getLoginVariables();
 
-		return view('sms_templates.edit')->with(compact('smsTemplate', 'companies', 'languages', 'defult_language_id', 'landing_variables'));
+		return view('sms_templates.edit')->with(compact(
+			'smsTemplate',
+			'companies',
+			'languages',
+			'defult_language_id',
+			'landing_variables',
+			'default_is_public'
+		));
 	}
 
     /**
