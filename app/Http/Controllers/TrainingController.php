@@ -32,13 +32,14 @@ class TrainingController extends AppBaseController{
 	private $trainingNotifyTemplateRepository;
 
 	public function __construct(
+		Request $request,
 		TrainingNotifyTemplateRepository $trainingNotifyTemplateRepo,
 		TrainingRepository  $trainingRepo,
 		ModuleRepository    $moduleRepo,
 		GroupRepository     $groupRepo,
 		RecipientRepository $recipientRepo
 	){
-		parent::__construct();
+		parent::__construct($request);
 
 		$this->trainingNotifyTemplateRepository = $trainingNotifyTemplateRepo;
 		$this->trainingRepository = $trainingRepo;

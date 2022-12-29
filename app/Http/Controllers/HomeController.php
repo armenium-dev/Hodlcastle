@@ -15,8 +15,8 @@ class HomeController extends AppBaseController{
 	 * Create a new controller instance.
 	 * @return void
 	 */
-	public function __construct(CampaignRepository $campaignRepo, DomainRepository $domainRepo){
-		parent::__construct();
+	public function __construct(Request $request, CampaignRepository $campaignRepo, DomainRepository $domainRepo){
+		parent::__construct($request);
 		
 		$this->campaignRepository = $campaignRepo;
 		$this->domainRepository   = $domainRepo;

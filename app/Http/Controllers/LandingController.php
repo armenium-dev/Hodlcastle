@@ -19,9 +19,9 @@ class LandingController extends AppBaseController
     private $landingRepository;
     private $companyRepository;
 
-    public function __construct(LandingRepository $landingRepo, CompanyRepository $companyRepo)
+    public function __construct(Request $request, LandingRepository $landingRepo, CompanyRepository $companyRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->landingRepository = $landingRepo;
         $this->companyRepository = $companyRepo;

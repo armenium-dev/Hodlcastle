@@ -18,8 +18,10 @@ class RecipientController extends AppBaseController
     private $recipientRepository;
     private $groupRepository;
 
-    public function __construct(RecipientRepository $recipientRepo, GroupRepository $groupRepo)
+    public function __construct(Request $request, RecipientRepository $recipientRepo, GroupRepository $groupRepo)
     {
+		parent::__construct($request);
+
         $this->recipientRepository = $recipientRepo;
         $this->groupRepository = $groupRepo;
     }

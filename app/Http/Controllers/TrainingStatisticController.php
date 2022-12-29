@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Criteria\BelongsToCompanyCriteria;
+use App\Models\DownloadFiles;
 use App\Models\Leaderboard;
 use App\Models\TrainingExport;
 use Illuminate\Http\Request;
@@ -17,8 +18,8 @@ use Illuminate\Support\Facades\DB;
 class TrainingStatisticController extends AppBaseController{
 	private $trainingStatisticRepository;
 
-	public function __construct(TrainingStatisticRepository $trainingStatisticRepo){
-		parent::__construct();
+	public function __construct(Request $request, TrainingStatisticRepository $trainingStatisticRepo){
+		parent::__construct($request);
 
 		$this->trainingStatisticRepository = $trainingStatisticRepo;
 	}
@@ -185,7 +186,9 @@ class TrainingStatisticController extends AppBaseController{
 			'Time spend',
 		];
 
-		$fp = fopen($csv_path.'/'.$csv_file_name, 'w');
+		$file_path = $csv_path.'/'.$csv_file_name;
+
+		$fp = fopen($file_path, 'w');
 		fputcsv($fp, $headers);
 
 		foreach($rows as $fields){
@@ -206,6 +209,8 @@ class TrainingStatisticController extends AppBaseController{
 		fclose($fp);
 
 		$save_file_url = url(sprintf('%s%s%s', 'csv', '/', $csv_file_name));
+
+		DownloadFiles::create(['file' => $file_path]);
 
 		return $save_file_url;
 	}

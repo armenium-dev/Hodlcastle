@@ -20,9 +20,9 @@ class PageTextController extends AppBaseController
     private $pageTextRepository;
     private $pageRepository;
 
-    public function __construct(PageTextRepository $pageTextRepo, PageRepository $pageRepo)
+    public function __construct(Request $request, PageTextRepository $pageTextRepo, PageRepository $pageRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->pageTextRepository = $pageTextRepo;
         $this->pageRepository = $pageRepo;

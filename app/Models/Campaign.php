@@ -251,14 +251,20 @@ class Campaign extends Model{
 
 
 	public function sendToAllRecipientsByCron(){
+		#Log::stack(['custom'])->debug($this->id);
+		#Log::stack(['custom'])->debug($this->groups);
 
 		foreach($this->groups as $group){
 			$recipients = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'))->get();
-			#Log::stack(['custom'])->debug($recipient);
+			#Log::stack(['custom'])->debug($group->id);
+			#Log::stack(['custom'])->debug($recipients);
 
 			foreach($recipients as $recipient){
 				if($recipient){
 					if($this->schedule->email_template_id){
+						#Log::stack(['custom'])->debug($this->id);
+						#Log::stack(['custom'])->debug($this->schedule->id);
+						#Log::stack(['custom'])->debug($this->schedule->emailTemplate->id);
 						$this->schedule->emailTemplate->send($recipient, $this);
 					}elseif($this->schedule->sms_template_id){
 						$recipient->attachToCampaign($this);

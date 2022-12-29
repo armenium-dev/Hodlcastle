@@ -30,11 +30,24 @@
                 </div>
                 @if(Auth::user()->hasRole('captain'))
                 <div class="tab-pane" id="tab_3">
-                    @include('options.blacklisted_sms_terms')
+                    @include('settings.blacklisted_sms_terms')
                 </div>
                 @endif
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+		$(document).ready(function(){
+			let hash = window.location.hash;
+			console.log(hash);
+			hash && $('ul.nav.nav-tabs a[href="' + hash + '"]').tab('show');
+
+			$('ul.nav.nav-tabs a').click(function (e) {
+				$(this).tab('show');
+				//$('body').scrollTop();
+				window.location.hash = this.hash;
+			});
+		});
+    </script>
 @endsection
 

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Campaign;
+use App\Models\DownloadFiles;
 use App\Models\ShortLink;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -11,14 +12,21 @@ use Swift_Attachment;
 use Swift_Events_SendEvent;
 use Swift_Events_SendListener;
 use App\Models\SentAttachEmails;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader;
 
 class SwiftMailAttachPlugin implements Swift_Events_SendListener {
+
 	/**
 	 * Invoked immediately before the Message is sent.
 	 *
 	 * @param Swift_Events_SendEvent $evt
 	 */
 	public function beforeSendPerformed(Swift_Events_SendEvent $evt){
+		#Log::stack(['custom'])->debug(__CLASS__);
+
 		$path = public_path('attaches');
 
 		if(!is_dir($path)){
@@ -46,11 +54,34 @@ class SwiftMailAttachPlugin implements Swift_Events_SendListener {
 	protected function setAttachment($message){
 		$attach_file = $this->createAttacheFile($message);
 		if($attach_file){
+			DownloadFiles::create(['file' => $attach_file]);
 			$message->attach(Swift_Attachment::fromPath($attach_file));
 		}
 	}
 
 	public function createAttacheFile($message){
+
+		$url = $this->makeTrackingUrl($message);
+
+		$inputFileType  = 'Xlsx';
+		$inputFileName  = 'Document-template01.xlsm';
+		$inputFile      = public_path('file_templates/'.$inputFileName);
+		$outputFileName = public_path('attaches/'.$this->generateAttachFileName($inputFileName));
+
+		$objReader = IOFactory::createReader($inputFileType);
+		$objReader->setReadDataOnly(false);
+		$objPHPExcel = $objReader->load($inputFile);
+		$objPHPExcel->setActiveSheetIndex(0);
+		#$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, 101, $url);
+		$objPHPExcel->getActiveSheet()->setCellValue('Z101', $url);
+		$objPHPExcel->getActiveSheet()->setTitle('Simple');
+		$objWriter = IOFactory::createWriter($objPHPExcel, $inputFileType);
+		$objWriter->save($outputFileName);
+
+		return file_exists($outputFileName) ? $outputFileName : false;
+	}
+
+	/*public function createAttacheFile($message){
 
 		$url = $this->makeTrackingUrl($message);
 
@@ -68,7 +99,7 @@ class SwiftMailAttachPlugin implements Swift_Events_SendListener {
 		$objWriter->save($outputFileName);
 
 		return file_exists($outputFileName) ? $outputFileName : false;
-	}
+	}*/
 
 	public function generateAttachFileName($inputFileName){
 		$file_ext = $this->get_file_ext($inputFileName);

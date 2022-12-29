@@ -20,9 +20,9 @@ class PageVideoController extends AppBaseController
     private $pageVideoRepository;
     private $pageRepository;
 
-    public function __construct(PageVideoRepository $pageVideoRepo, PageRepository $pageRepo)
+    public function __construct(Request $request, PageVideoRepository $pageVideoRepo, PageRepository $pageRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->pageVideoRepository = $pageVideoRepo;
         $this->pageRepository = $pageRepo;

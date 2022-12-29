@@ -16,8 +16,10 @@ class ResultController extends AppBaseController
     /** @var  ResultRepository */
     private $resultRepository;
 
-    public function __construct(ResultRepository $resultRepo)
+    public function __construct(Request $request, ResultRepository $resultRepo)
     {
+		parent::__construct($request);
+
         $this->resultRepository = $resultRepo;
     }
 

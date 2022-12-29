@@ -32,29 +32,22 @@
                                 <span class="hidden-xs">{!! Auth::user()->name !!}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <!-- The user image in the menu -->
-                                <li class="user-header">
-<!--                                     <img src="logo.png"
-                                         class="img-circle" alt="User Image"/> -->
-                                    <p>
-                                        {!! Auth::user()->name !!}
+                                <li class="user">
+                                    <a href="{{ route('profile.index') }}">
+                                        <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(100, 100, true) : '/public/img/logo.png' }}" class="img-circle" alt="User Avatar"/>
+                                    </a>
+                                    <div class="info">
+                                        <a href="{{ route('profile.index') }}">{!! Auth::user()->name !!}</a>
                                         <small>Member since {!! Auth::user()->created_at ? Auth::user()->created_at->format('M. Y') : '-' !!}</small>
-                                    </p>
+                                    </div>
                                 </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="{{ route('profile.index') }}" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="{!! url('/logout') !!}" class="btn btn-default btn-flat"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            Sign out
-                                        </a>
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </div>
+                                <li><a href="{{ route('profile.index') }}" class="link"><i class="fa fa-fw fa-user"></i> Profile</a></li>
+                                @if(Auth::user()->hasRole('captain'))
+                                <li><a href="{{ route('settings.index') }}" class="link"><i class="fa fa-fw fa-sliders"></i> Settings</a></li>
+                                @endif
+                                <li>
+                                    <a href="{!! url('/logout') !!}" class="link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-fw fa-sign-out"></i> Logout</a>
+                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </li>
                             </ul>
                         </li>
@@ -72,7 +65,6 @@
                 @yield('content')
             </div>
         </section>
-        <!-- Main Footer -->
         <footer class="main-footer">
             <strong>Copyright © <?php echo date('Y'); ?> <a href="#">phishmanager</a>.</strong> All rights reserved.
         </footer>
@@ -84,8 +76,7 @@
             <div class="navbar-header">
 
                 <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#app-navbar-collapse">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -93,9 +84,7 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{!! url('/') !!}">
-                    PhishManager
-                </a>
+                <a class="navbar-brand" href="{!! url('/') !!}">PhishManager</a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">

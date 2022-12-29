@@ -33,7 +33,7 @@ class Company extends Model{
 		'soft_limit',
 		'max_recipients',
 		'is_trial',
-		'smishing',
+		'profile_id',
 	];
 	
 	public $appends = ['recipients_capacity'];
@@ -48,7 +48,7 @@ class Company extends Model{
 		'soft_limit'     => 'integer',
 		'max_recipients' => 'integer',
 		'is_trial'       => 'boolean',
-		'smishing'       => 'boolean',
+		'profile_id'       => 'integer',
 		//'expires_at' => 'date:d-m-Y H:i:s'
 	];
 	
@@ -88,7 +88,13 @@ class Company extends Model{
 	public function logo(){
 		return $this->morphOne('App\Models\Image', 'imageable')->orderBy('id', 'DESC');
 	}
-	
+
+	public function profile(){
+		return $this->belongsTo('App\Models\CompanyProfiles')->withDefault([
+			'name' => 'No profile',
+		]);
+	}
+
 	public static function boot(){
 		self::creating(function($model){
 			$model->expires_at = Carbon::now()->addYear();

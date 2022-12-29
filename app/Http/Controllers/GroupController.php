@@ -27,9 +27,9 @@ class GroupController extends AppBaseController
     private $groupRepository;
     private $companyRepository;
 
-    public function __construct(GroupRepository $groupRepo, CompanyRepository $companyRepo)
+    public function __construct(Request $request, GroupRepository $groupRepo, CompanyRepository $companyRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->groupRepository = $groupRepo;
         $this->companyRepository = $companyRepo;

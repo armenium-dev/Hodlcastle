@@ -17,9 +17,9 @@ class ModuleController extends AppBaseController
     /** @var  ModuleRepository */
     private $moduleRepository;
 
-    public function __construct(ModuleRepository $moduleRepo)
+    public function __construct(Request $request, ModuleRepository $moduleRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->moduleRepository = $moduleRepo;
     }

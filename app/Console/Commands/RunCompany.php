@@ -37,7 +37,7 @@ class RunCompany extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		Log::stack(['cron'])->debug(__CLASS__.'::'.__FUNCTION__.' - RUN');
+		Log::stack(['cron'])->debug(__CLASS__);
 		
 		$this->companyRepository->pushCriteria(CompaniesRunningCriteria::class);
 		$companies = $this->companyRepository->all();
@@ -50,6 +50,6 @@ class RunCompany extends Command{
 			$this->companyRepository->deactivate($company['id']);
 		});
 		
-		Log::stack(['cron'])->debug('------------------------------------------------------------');
+		Log::stack(['cron'])->debug('-------------------------------------------');
 	}
 }

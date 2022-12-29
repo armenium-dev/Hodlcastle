@@ -82,7 +82,16 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
         Route::resource('pagevideos', 'PageVideoController');
         Route::resource('pagequizs', 'PageQuizController');
         Route::resource('pagetexts', 'PageTextController');
-        Route::post('options/blacklisted_sms_terms/store', 'OptionsController@blacklistedSmsTermsStore')->name('options.blacklisted_sms_terms.store');
+
+		Route::post('settings/blacklisted_sms_terms/store', 'SettingsController@blacklistedSmsTermsStore')->name('settings.blacklisted_sms_terms.store');
+        Route::get('settings/company-profiles', 'SettingsController@companyProfiles')->name('settings.company_profiles.index');
+        Route::post('settings/company-profiles/store', 'SettingsController@companyProfilesStore')->name('settings.company_profiles.store');
+        Route::get('settings/company-profile-terms', 'SettingsController@companyProfileTerms')->name('settings.company_profiles.terms');
+        Route::post('settings/company-profile-terms/store', 'SettingsController@companyProfileTermsStore')->name('settings.company_profile_terms.store');
+        Route::get('settings/company-profile-rules', 'SettingsController@companyProfileRules')->name('settings.company_profiles.rules');
+        Route::post('settings/company-profile-rules/store', 'SettingsController@companyProfileRulesStore')->name('settings.company_profile_rules.store');
+        Route::post('settings/company-profiles/destoiy', 'SettingsController@companyProfileDestroy')->name('settings.company_profiles.destroy');
+		Route::resource('settings', 'SettingsController');
     });
 
 

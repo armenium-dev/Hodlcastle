@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\PermissionHelper;
 use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use App\Models\CompanyProfiles;
 use App\Repositories\CompanyRepository;
 use App\Http\Controllers\AppBaseController;
 use Auth;
@@ -17,8 +18,8 @@ class CompanyController extends AppBaseController{
 	/** @var  CompanyRepository */
 	private $companyRepository;
 	
-	public function __construct(CompanyRepository $companyRepo){
-		parent::__construct();
+	public function __construct(Request $request, CompanyRepository $companyRepo){
+		parent::__construct($request);
 		
 		$this->companyRepository = $companyRepo;
 	}
@@ -60,8 +61,10 @@ class CompanyController extends AppBaseController{
 		if(!Auth::user()->can('addCompany')){
 			return $this->sendError('Page not found');
 		}
-		
-		return view('companies.create');
+
+		$profiles = CompanyProfiles::all();
+
+		return view('companies.create')->with(['profiles' => $profiles->pluck('name', 'id')]);
 	}
 	
 	/**
@@ -111,8 +114,10 @@ class CompanyController extends AppBaseController{
 		if(empty($company) || !PermissionHelper::authUserAccessToCompany($company)){
 			return $this->sendError('Page not found');
 		}
-		
-		return view('companies.edit')->with('company', $company);
+
+		$profiles = CompanyProfiles::all();
+
+		return view('companies.edit')->with(['company' => $company, 'profiles' => $profiles->pluck('name', 'id')]);
 	}
 	
 	/**

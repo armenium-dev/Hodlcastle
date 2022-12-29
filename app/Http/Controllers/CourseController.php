@@ -23,13 +23,14 @@ class CourseController extends AppBaseController
     private $moduleRepository;
     private $pageRepository;
 
-    public function __construct(CourseRepository $courseRepo,
-                                LanguageRepository $languageRepo,
-                                ModuleRepository $moduleRepo,
-                                PageRepository $pageRepo
-    )
-    {
-        parent::__construct();
+    public function __construct(
+		Request $request,
+		CourseRepository $courseRepo,
+		LanguageRepository $languageRepo,
+		ModuleRepository $moduleRepo,
+		PageRepository $pageRepo
+    ){
+        parent::__construct($request);
 
         $this->courseRepository = $courseRepo;
         $this->languageRepository = $languageRepo;

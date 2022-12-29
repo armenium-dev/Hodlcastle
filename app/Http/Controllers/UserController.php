@@ -20,8 +20,8 @@ class UserController extends AppBaseController{
 	 * Create a new controller instance.
 	 * @return void
 	 */
-	public function __construct(CompanyRepository $companyRepo, UserRepository $userRepository){
-		parent::__construct();
+	public function __construct(Request $request, CompanyRepository $companyRepo, UserRepository $userRepository){
+		parent::__construct($request);
 		
 		$this->companyRepository = $companyRepo;
 		$this->userRepository    = $userRepository;

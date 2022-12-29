@@ -22,8 +22,8 @@ class ReportController extends AppBaseController{
 	private $domainRepository;
 	private $companyRepository;
 
-	public function __construct(CampaignRepository $campaignRepo, DomainRepository $domainRepo, CompanyRepository $companyRepo){
-		parent::__construct();
+	public function __construct(Request $request, CampaignRepository $campaignRepo, DomainRepository $domainRepo, CompanyRepository $companyRepo){
+		parent::__construct($request);
 
 		$this->companyRepository = $companyRepo;
 		$this->campaignRepository = $campaignRepo;

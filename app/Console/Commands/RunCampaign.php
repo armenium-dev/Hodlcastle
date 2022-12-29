@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Criteria\CampaignsRunningCriteria;
 use Illuminate\Console\Command;
 use App\Repositories\CampaignRepository;
+use Illuminate\Support\Facades\Log;
 
 class RunCampaign extends Command{
 
@@ -36,12 +37,17 @@ class RunCampaign extends Command{
      * @return mixed
      */
     public function handle(){
+		Log::stack(['cron'])->debug(__CLASS__);
+
         $this->campaignRepository->pushCriteria(CampaignsRunningCriteria::class);
         $campaigns = $this->campaignRepository->all();
+		Log::stack(['custom'])->debug($campaigns);
 
         $campaigns->each(function($campaign){
             #$campaign->sendToNextRecipient();
             $campaign->sendToAllRecipientsByCron();
         });
+
+		Log::stack(['cron'])->debug('-------------------------------------------');
     }
 }

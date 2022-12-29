@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\CampaignsFilteringCriteria;
 use App\Http\Requests\CreateCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
 use App\Models\Campaign;
@@ -23,7 +24,6 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Excel;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use App\Criteria\CampaignsRunningCriteria;
 use App\Criteria\BelongsToCompanyCriteria;
 use Mail;
 use Illuminate\Support\Facades\URL;
@@ -42,6 +42,7 @@ class CampaignController extends AppBaseController{
 	private $mail_drivers = ['default' => 'Default', 'mailgun' => 'Mailgun'];
 
 	public function __construct(
+		Request $request,
 		CampaignRepository $campaignRepo,
 		EmailTemplateRepository $emailTemplateRepo,
 		SmsTemplateRepository $smsTemplateRepo,
@@ -51,7 +52,7 @@ class CampaignController extends AppBaseController{
 		RecipientRepository $recipientRepo,
 		LandingTemplateRepository $landingTemplateRepository
 	){
-		parent::__construct();
+		parent::__construct($request);
 
 		$this->campaignRepository      = $campaignRepo;
 		$this->emailTemplateRepository = $emailTemplateRepo;
@@ -76,8 +77,7 @@ class CampaignController extends AppBaseController{
 		$type = 'email';
 
 		$this->campaignRepository
-            //->pushCriteria(CampaignsRunningCriteria::class/*new RequestCriteria($request)*/)
-			->pushCriteria(new CampaignsRunningCriteria($type))
+			->pushCriteria(new CampaignsFilteringCriteria($type))
 			->pushCriteria(BelongsToCompanyCriteria::class);
 
 		$campaigns = $this->campaignRepository->all()->sortByDesc('created_at');
@@ -98,7 +98,7 @@ class CampaignController extends AppBaseController{
 		$type = 'sms';
 
 		$this->campaignRepository
-			->pushCriteria(new CampaignsRunningCriteria($type))
+			->pushCriteria(new CampaignsFilteringCriteria($type))
 			->pushCriteria(BelongsToCompanyCriteria::class);
 
 		$campaigns = $this->campaignRepository->all()->sortByDesc('created_at');
@@ -161,6 +161,11 @@ class CampaignController extends AppBaseController{
 		$is_sms_campaign   = false;
 
 		$input = $request->all();
+
+		if(!$user->company->status){
+			$errors++;
+			$error_mess[] = sprintf('Your company "%s" status not active.', $user->company->name);
+		}
 
 		$input['is_email_campaign'] = $is_email_campaign;
 		$input['is_sms_campaign'] = $is_sms_campaign;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Criteria\BelongsToCompanyCriteria;
 use App\Models\Campaign;
+use App\Models\DownloadFiles;
 use App\Models\Leaderboard;
 use App\Repositories\CampaignRepository;
 use App\Repositories\DomainRepository;
@@ -18,8 +19,8 @@ class LeaderboardController extends AppBaseController{
 	private $campaignRepository;
 	private $domainRepository;
 
-	public function __construct(CampaignRepository $campaignRepo, DomainRepository $domainRepo){
-		parent::__construct();
+	public function __construct(Request $request, CampaignRepository $campaignRepo, DomainRepository $domainRepo){
+		parent::__construct($request);
 
 		$this->campaignRepository = $campaignRepo;
 		$this->domainRepository   = $domainRepo;
@@ -133,7 +134,9 @@ class LeaderboardController extends AppBaseController{
 			'Location',
 		];
 
-		$fp = fopen($csv_path.'/'.$csv_file_name, 'w');
+		$file_path = $csv_path.'/'.$csv_file_name;
+
+		$fp = fopen($file_path, 'w');
 		fputcsv($fp, $headers);
 
 		foreach($leaderboard as $fields){
@@ -158,6 +161,8 @@ class LeaderboardController extends AppBaseController{
 		fclose($fp);
 
 		$save_file_url = url(sprintf('%s%s%s', 'csv', '/', $csv_file_name));
+
+		DownloadFiles::create(['file' => $file_path]);
 
 		return $save_file_url;
 	}

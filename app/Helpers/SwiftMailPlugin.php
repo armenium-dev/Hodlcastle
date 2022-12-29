@@ -2,58 +2,56 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
 use Swift_Events_SendEvent;
 use App\Models\ShortLink;
 use App\Models\Campaign;
 
-class SwiftMailPlugin implements \Swift_Events_SendListener
-{
-    /**
-     * Invoked immediately before the Message is sent.
-     *
-     * @param Swift_Events_SendEvent $evt
-     */
-    public function beforeSendPerformed(Swift_Events_SendEvent $evt)
-    {
-     
-    	//$this->fixingTrackingURLs($message);
-    	
-        if(Campaign::getShort()){
-            $message = $evt->getMessage();
-            $this->replaceTrackingUrl($message);
-        }
-    }
+class SwiftMailPlugin implements \Swift_Events_SendListener{
+	/**
+	 * Invoked immediately before the Message is sent.
+	 *
+	 * @param Swift_Events_SendEvent $evt
+	 */
+	public function beforeSendPerformed(Swift_Events_SendEvent $evt){
+		#Log::stack(['custom'])->debug(__CLASS__);
 
-    /**
-     * Invoked immediately after the Message is sent.
-     *
-     * @param Swift_Events_SendEvent $evt
-     */
-    public function sendPerformed(Swift_Events_SendEvent $evt)
-    {
-        // TODO: Implement sendPerformed() method.
-    }
+		//$this->fixingTrackingURLs($message);
 
-    protected function replaceTrackingUrl($message)
-    {
-        $body = $message->getBody();
+		if(Campaign::getShort()){
+			$message = $evt->getMessage();
+			$this->replaceTrackingUrl($message);
+		}
+	}
 
-        preg_match_all("/<[Aa][\s]{1}[^>]*[Hh][Rr][Ee][Ff][^=]*=[ '\"\s]*([^ \"'>\s#]+)[^>]*>/", $body, $matches);
-        $urls = $matches[1];
+	/**
+	 * Invoked immediately after the Message is sent.
+	 *
+	 * @param Swift_Events_SendEvent $evt
+	 */
+	public function sendPerformed(Swift_Events_SendEvent $evt){
+		// TODO: Implement sendPerformed() method.
+	}
 
-        for ($i = 0; $i < count($urls); $i++) {
-            $url = parse_url($urls[$i]);
+	protected function replaceTrackingUrl($message){
+		$body = $message->getBody();
 
-//            $code = ShortLink::generate($url['query']);
-            $code = ShortLink::generate($urls[$i]);
+		preg_match_all("/<[Aa][\s]{1}[^>]*[Hh][Rr][Ee][Ff][^=]*=[ '\"\s]*([^ \"'>\s#]+)[^>]*>/", $body, $matches);
+		$urls = $matches[1];
 
-            $replace = $url['scheme'] . '://' . env('SHORT_URL_DOMAIN') . '/short/' . $code->code;
-            $body = str_replace($urls[$i], $replace, $body);
-        }
+		for($i = 0; $i < count($urls); $i++){
+			$url = parse_url($urls[$i]);
 
-        $message->setBody($body);
-    }
-	
+			//            $code = ShortLink::generate($url['query']);
+			$code = ShortLink::generate($urls[$i]);
+
+			$replace = $url['scheme'].'://'.env('SHORT_URL_DOMAIN').'/short/'.$code->code;
+			$body = str_replace($urls[$i], $replace, $body);
+		}
+
+		$message->setBody($body);
+	}
+
 	/** NOT USED
 	 * @param $message
 	 *
@@ -61,9 +59,9 @@ class SwiftMailPlugin implements \Swift_Events_SendListener
 	 */
 	public function fixingTrackingURLs($message){
 		$body = $message->getBody();
-		
+
 		preg_match_all("/<[Aa][\s]{1}[^>]*[Hh][Rr][Ee][Ff][^=]*=[ '\"\s]*([^ \"'>\s#]+)[^>]*>/", $body, $matches);
-		
+
 		if(isset($matches[1]) && !empty($matches[1])){
 			$tracking_url = end($matches[1]);
 			$a = explode('/', $tracking_url);
@@ -80,5 +78,5 @@ class SwiftMailPlugin implements \Swift_Events_SendListener
 		$message->setBody($body);
 		return $body;
 	}
-	
+
 }

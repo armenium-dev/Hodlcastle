@@ -21,9 +21,9 @@ class StatisticController extends AppBaseController
      * @param DomainRepository $domainRepo
      * @param CompanyRepository $companyRepo
      */
-    public function __construct(CampaignRepository $campaignRepo, DomainRepository $domainRepo, CompanyRepository $companyRepo)
+    public function __construct(Request $request, CampaignRepository $campaignRepo, DomainRepository $domainRepo, CompanyRepository $companyRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->companyRepository = $companyRepo;
         $this->campaignRepository = $campaignRepo;

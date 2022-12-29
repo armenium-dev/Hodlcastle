@@ -29,15 +29,17 @@ class SupergroupController extends AppBaseController
     private $groupRepository;
     private $recipientRepository;
 
-    public function __construct(SupergroupRepository $supergroupRepo,
-                                CompanyRepository $companyRepo,
-                                EmailTemplateRepository $emailTemplateRepo,
-                                LandingRepository $landingRepo,
-                                DomainRepository $domainRepo,
-                                GroupRepository $groupRepo,
-                                RecipientRepository $recipientRepo)
+    public function __construct(
+		Request $request,
+		SupergroupRepository $supergroupRepo,
+		CompanyRepository $companyRepo,
+		EmailTemplateRepository $emailTemplateRepo,
+		LandingRepository $landingRepo,
+		DomainRepository $domainRepo,
+		GroupRepository $groupRepo,
+		RecipientRepository $recipientRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->supergroupRepository = $supergroupRepo;
         $this->companyRepository = $companyRepo;

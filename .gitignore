@@ -9,7 +9,6 @@
 Homestead.json
 Homestead.yaml
 /temp
-*.log
 /db-dumps
 /database/dumps
 /public/.htaccess
@@ -20,9 +19,12 @@ composer.json
 composer.lock
 /videos
 twilio.txt
+*.log
 *.rar
 *.zip
 *.bak
 *.bak2
 *.csv
+*.xlsm
+*.xlsx
 

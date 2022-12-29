@@ -16,8 +16,10 @@ class EventController extends AppBaseController
     /** @var  EventRepository */
     private $eventRepository;
 
-    public function __construct(EventRepository $eventRepo)
+    public function __construct(Request $request, EventRepository $eventRepo)
     {
+		parent::__construct($request);
+
         $this->eventRepository = $eventRepo;
     }
 

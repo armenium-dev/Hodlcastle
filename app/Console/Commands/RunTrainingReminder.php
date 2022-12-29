@@ -57,7 +57,7 @@ class RunTrainingReminder extends Command{
 			});
 		}
 
-		Log::stack(['cron'])->debug('------------------------------------------------------------');
+		Log::stack(['cron'])->debug('-------------------------------------------');
 	}
 
 	private function getTrainingStatisticsData(){

@@ -19,8 +19,8 @@ class LanguagesController extends AppBaseController{
 	/** @var  LanguageRepository */
 	private $languageRepository;
 
-	public function __construct(LanguageRepository $landingRepo){
-		parent::__construct();
+	public function __construct(Request $request, LanguageRepository $landingRepo){
+		parent::__construct($request);
 
 		$this->languageRepository = $landingRepo;
 	}

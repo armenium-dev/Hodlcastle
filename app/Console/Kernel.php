@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel{
 		#$schedule->command('company:run')->everyMinute();
 		$schedule->command('company:run')->twiceDaily(1, 13);
 		$schedule->command('training_reminder:run')->everyMinute();
+		$schedule->command('delete_download_files:run')->everyMinute();
 	}
 
 	/**

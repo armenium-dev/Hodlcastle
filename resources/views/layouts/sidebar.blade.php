@@ -5,9 +5,7 @@
 
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
-            <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(100, 100, true) : '/public/img/logo.png' }}"
-                 class="logo"
-                 alt="User Image"/>
+            <img src="{{ Auth::user()->company && Auth::user()->company->logo ? Auth::user()->company->logo->crop(100, 100, true) : '/public/img/logo.png' }}" class="logo" alt="User Image"/>
 
             <div class="info">
                 @if (Auth::guest())

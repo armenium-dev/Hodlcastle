@@ -34,8 +34,8 @@
                     @endif
                 </div>
                 <div class="col-sm-6">
-                    {!! Form::checkbox('smishing', 1, isset($company) ? $company->smishing : false, ['id' => 'smishing']) !!}
-                    {!! Form::label('smishing', 'Allow smishing') !!}
+                    {!! Form::label('profile_id', 'Profile') !!}
+                    {!! Form::select('profile_id', $profiles, isset($company) ? $company->profile_id : null, ['class' => 'form-control']) !!}
                 </div>
             </div>
         </div>

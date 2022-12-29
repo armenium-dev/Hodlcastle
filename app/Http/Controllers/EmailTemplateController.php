@@ -32,8 +32,13 @@ class EmailTemplateController extends AppBaseController{
 	private $companyRepository;
 	private $languageRepository;
 	
-	public function __construct(EmailTemplateRepository $emailTemplateRepo, CompanyRepository $companyRepo, LanguageRepository $languageRepo){
-		parent::__construct();
+	public function __construct(
+		Request $request,
+		EmailTemplateRepository $emailTemplateRepo,
+		CompanyRepository $companyRepo,
+		LanguageRepository $languageRepo
+	){
+		parent::__construct($request);
 		
 		$this->emailTemplateRepository = $emailTemplateRepo;
 		$this->companyRepository       = $companyRepo;

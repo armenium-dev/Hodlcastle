@@ -6,7 +6,7 @@ use App\Criteria\BelongsToCompanyCriteria;
 use App\Http\Requests\CreateSmsTemplateRequest;
 use App\Http\Requests\UpdateSmsTemplateRequest;
 use App\Models\Campaign;
-use App\Models\Options;
+use App\Models\Settings;
 use App\Models\Recipient;
 use App\Repositories\SmsTemplateRepository;
 use App\Repositories\LanguageRepository;
@@ -34,8 +34,8 @@ class SmsTemplateController extends AppBaseController {
     private $companyRepository;
     private $languageRepository;
 
-	public function __construct(SmsTemplateRepository $smsTemplateRepo, CompanyRepository $companyRepo, LanguageRepository $languageRepo){
-		parent::__construct();
+	public function __construct(Request $request, SmsTemplateRepository $smsTemplateRepo, CompanyRepository $companyRepo, LanguageRepository $languageRepo){
+		parent::__construct($request);
 
 		$this->smsTemplateRepository = $smsTemplateRepo;
 		$this->companyRepository     = $companyRepo;
@@ -58,7 +58,7 @@ class SmsTemplateController extends AppBaseController {
 
 		//Bugsnag::notifyException(new RuntimeException("Test error"));
 
-		$opt = Options::where(['option_key' => 'blacklisted_sms_terms'])->first();
+		$opt = Settings::where(['option_key' => 'blacklisted_sms_terms'])->first();
 
 		$blacklisted_sms_terms = [0 => ''];
 		if(!is_null($opt)){
@@ -320,7 +320,7 @@ class SmsTemplateController extends AppBaseController {
 		$input = $request->all();
 		$content = trim(strtolower(strip_tags(nl2br($input['content']))));
 
-		$opt = Options::where(['option_key' => 'blacklisted_sms_terms'])->first();
+		$opt = Settings::where(['option_key' => 'blacklisted_sms_terms'])->first();
 
 		if(!is_null($opt)){
 			$blacklisted_sms_terms = json_decode($opt->option_value, true);

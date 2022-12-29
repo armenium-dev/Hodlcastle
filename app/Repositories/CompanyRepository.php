@@ -40,9 +40,9 @@ class CompanyRepository extends ParentRepository{
 				$input['is_trial'] = 0;
 			}
 			
-			if(!isset($input['smishing'])){
+			/*if(!isset($input['smishing'])){
 				$input['smishing'] = 0;
-			}
+			}*/
 			
 			$input['expires_at'] = Carbon::createFromFormat(Company::DATE_FORMAT, $input['expires_at']);
 			$input['status'] = $this->is_expired($input['expires_at']);
@@ -81,9 +81,9 @@ class CompanyRepository extends ParentRepository{
 				$input['is_trial'] = 0;
 			}
 			
-			if(!isset($input['smishing'])){
+			/*if(!isset($input['smishing'])){
 				$input['smishing'] = 0;
-			}
+			}*/
 			
 			$input['expires_at'] = Carbon::createFromFormat(Company::DATE_FORMAT, $input['expires_at']);
 			$input['status'] = $this->is_expired($input['expires_at']);

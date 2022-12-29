@@ -133,12 +133,12 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 	 * @param bool $test
 	 */
 	public function send(Recipient $recipient, $campaign = null, $test = false, $training = null){
-		if($campaign){
-			if($campaign->schedule->domain){
-				URL::forceRootUrl('https://'.$campaign->schedule->domain->domain);
-			}
+		if(!$campaign) return;
+
+		if($campaign->schedule->domain){
+			URL::forceRootUrl('https://'.$campaign->schedule->domain->domain);
 		}
-		
+
 		$mailTemplate = $this->buildMailTemplate($recipient, $campaign, $test, $training);
 		$build        = $mailTemplate->build();
 		
@@ -170,53 +170,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 			URL::forceRootUrl(env('APP_URL'));
 		}
 	}
-	
-	public function getSubFolders($dir){
-		$files   = scandir($dir);
-		$folders = array();
-		foreach($files as $key => $value){
-			$path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-			if($value != "." && $value != ".." && is_dir($path)){
-				$folders[] = $value;
-			}
-		}
-		
-		return $folders;
-	}
-	
-	public function getFolderFiles($dir){
-		$items = scandir($dir);
-		$files = array();
-		foreach($items as $key => $value){
-			$path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-			if(!is_dir($path)){
-				$files[] = $value;
-			}
-		}
-		
-		return $files;
-	}
-	
-	public function getLoginVariables(){
-		$root        = dirname(__DIR__, 2);
-		$dir         = $root.'/public/account/';
-		$results     = array();
-		$login_pages = $this->getSubFolders($dir);
-		foreach($login_pages as $login_page){
-			$login_page_folders = $this->getSubFolders($dir.$login_page);
-			$login_page_files   = $this->getFolderFiles($dir.$login_page);
-			if(in_array('assets', $login_page_folders) && in_array('index.html', $login_page_files)){
-				$results[] = array(
-					'variable'    => 'login-'.$login_page,
-					'path'        => $login_page,
-					'description' => 'URL to fake '.strtoupper($login_page).' login page '
-				);
-			}
-		}
-		
-		return $results;
-	}
-	
+
 	public function buildMailTemplate(Recipient $recipient, $campaign = null, $test = false, $training = null){
 		$this->text = $this->text ? $this->text : '';
 		$this->html = $this->html ? $this->html : '';
@@ -245,9 +199,14 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		];
 		
 		$login_variables = $this->getLoginVariables();
-		
+		#Log::stack(['custom'])->debug($login_variables);
+
 		foreach($login_variables as $login_variable){
-			$mail_with['.'.$login_variable['variable']] = $this->makeFakeLoginPageUrl($recipient, $campaign, $login_variable['path']);
+			$url = $this->makeFakeLoginPageUrl($recipient, $campaign, $login_variable['path']);
+
+			if(is_null($url)) continue;
+
+			$mail_with['.'.$login_variable['variable']] = $url;
 		}
 		
 		$mail->with($mail_with);
@@ -318,11 +277,16 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		
 		if($campaign){
 			$campaignWithPivot = $recipient->campaigns()->find($campaign->id);
+			#Log::stack(['custom'])->debug($campaignWithPivot);
+			if(is_null($campaignWithPivot)){
+				Log::stack(['custom'])->debug('$campaignWithPivot is null');
+				Log::stack(['custom'])->debug('campaign->id: '.$campaign->id);
+			}
 		}
-		
+
 		if($campaignWithPivot){
 			$href = $campaignWithPivot->schedule->domain->url.'?rid='.$campaignWithPivot->pivot->code;
-			
+
 			if(!$campaignWithPivot->schedule){
 				throw new \Exception('Campaign got no schedule');
 			}
@@ -330,7 +294,8 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 				throw new \Exception('Campaign got no domain');
 			}
 		}
-		
+
+
 		$params = $recipient->email.','.$campaign->id;
 		$params = base64_encode($params);
 		
@@ -339,15 +304,63 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
 			$tracking_url = 'http://'.$tracking_url;
 		}
-		
-		$send_to_landing = $campaignWithPivot->schedule->send_to_landing;
-		$redirect_url    = $campaignWithPivot->schedule->redirect_url;
-		
-		if(intval($send_to_landing) == 0 && !empty($redirect_url)){
-			$tracking_url = $redirect_url;
+
+		if($campaignWithPivot){
+			$send_to_landing = $campaignWithPivot->schedule->send_to_landing; // not used
+			$redirect_url = $campaignWithPivot->schedule->redirect_url;
+
+			if(intval($send_to_landing) == 0 && !empty($redirect_url)){
+				$tracking_url = $redirect_url;
+			}
 		}
-		
+
 		return $tracking_url;
 	}
-	
+
+	public function getSubFolders($dir){
+		$files   = scandir($dir);
+		$folders = array();
+		foreach($files as $key => $value){
+			$path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+			if($value != "." && $value != ".." && is_dir($path)){
+				$folders[] = $value;
+			}
+		}
+
+		return $folders;
+	}
+
+	public function getFolderFiles($dir){
+		$items = scandir($dir);
+		$files = array();
+		foreach($items as $key => $value){
+			$path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+			if(!is_dir($path)){
+				$files[] = $value;
+			}
+		}
+
+		return $files;
+	}
+
+	public function getLoginVariables(){
+		$root        = dirname(__DIR__, 2);
+		$dir         = $root.'/public/account/';
+		$results     = array();
+		$login_pages = $this->getSubFolders($dir);
+		foreach($login_pages as $login_page){
+			$login_page_folders = $this->getSubFolders($dir.$login_page);
+			$login_page_files   = $this->getFolderFiles($dir.$login_page);
+			if(in_array('assets', $login_page_folders) && in_array('index.html', $login_page_files)){
+				$results[] = array(
+					'variable'    => 'login-'.$login_page,
+					'path'        => $login_page,
+					'description' => 'URL to fake '.strtoupper($login_page).' login page '
+				);
+			}
+		}
+
+		return $results;
+	}
+
 }

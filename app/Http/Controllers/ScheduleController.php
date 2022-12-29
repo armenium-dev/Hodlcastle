@@ -16,8 +16,10 @@ class ScheduleController extends AppBaseController
     /** @var  ScheduleRepository */
     private $scheduleRepository;
 
-    public function __construct(ScheduleRepository $scheduleRepo)
+    public function __construct(Request $request, ScheduleRepository $scheduleRepo)
     {
+		parent::__construct($request);
+
         $this->scheduleRepository = $scheduleRepo;
     }
 

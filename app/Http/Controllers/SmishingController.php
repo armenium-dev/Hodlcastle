@@ -29,13 +29,14 @@ class SmishingController extends AppBaseController {
 	private $smsTemplateRepository;
 
 	public function __construct(
+		Request $request,
 		LanguageRepository $languageRepo,
 		DomainRepository $domainRepo,
 		GroupRepository $groupRepo,
 		CampaignRepository $campaignRepo,
 		SmsTemplateRepository $smsTemplateRepo
 	){
-		parent::__construct();
+		parent::__construct($request);
 
 		$this->languageRepository = $languageRepo;
 		$this->domainRepository = $domainRepo;

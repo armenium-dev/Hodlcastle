@@ -21,11 +21,11 @@ class PageQuizController extends AppBaseController
     private $pageQuizRepository;
     private $pageQuizQuestionRepository;
 
-    public function __construct(PageRepository $pageRepo,
+    public function __construct(Request $request, PageRepository $pageRepo,
                                 PageQuizRepository $pageQuizRepo,
                                 PageQuizQuestionRepository $pageQuizQuestionRepo)
     {
-        parent::__construct();
+        parent::__construct($request);
 
         $this->pageRepository = $pageRepo;
         $this->pageQuizRepository = $pageQuizRepo;

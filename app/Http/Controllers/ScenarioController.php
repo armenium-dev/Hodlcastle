@@ -37,6 +37,7 @@ class ScenarioController extends AppBaseController{
 	private $mail_drivers = ['default' => 'Default', 'mailgun' => 'Mailgun'];
 
 	public function __construct(
+		Request $request,
 		ScenarioRepository $scenarioRepo,
 		LanguageRepository $languageRepo,
 		EmailTemplateRepository $emailTemplateRepo,
@@ -44,7 +45,7 @@ class ScenarioController extends AppBaseController{
 		GroupRepository $groupRepo,
 		CampaignRepository $campaignRepo
 	){
-		parent::__construct();
+		parent::__construct($request);
 
 		$this->scenarioRepository = $scenarioRepo;
 		$this->languageRepository = $languageRepo;
