@@ -37,7 +37,7 @@ class CampaignsRunningCriteria implements CriteriaInterface {
 			}
 
 			$now = Carbon::now();
-			Log::stack(['custom'])->debug($now);
+			#Log::stack(['custom'])->debug($now);
 
             $q->whereDate('schedule_start', '<=', $now)
               ->whereDate('schedule_end', '>', $now)

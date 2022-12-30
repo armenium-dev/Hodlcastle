@@ -12,6 +12,7 @@ class AddFieldsToSettingsTable extends Migration{
 	 */
 	public function up(){
 		Schema::table('settings', function(Blueprint $table){
+			$table->string('option_name', 50)->nullable()->after('id');
 			$table->integer('custom_option')->default(0);
 			$table->string('custom_option_page_link', 255)->nullable();
 		});

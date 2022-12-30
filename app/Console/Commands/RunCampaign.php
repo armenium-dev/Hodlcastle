@@ -41,7 +41,7 @@ class RunCampaign extends Command{
 
         $this->campaignRepository->pushCriteria(CampaignsRunningCriteria::class);
         $campaigns = $this->campaignRepository->all();
-		Log::stack(['custom'])->debug($campaigns);
+		#Log::stack(['custom'])->debug($campaigns);
 
         $campaigns->each(function($campaign){
             #$campaign->sendToNextRecipient();
