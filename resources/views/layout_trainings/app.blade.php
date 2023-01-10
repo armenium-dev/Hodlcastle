@@ -2,7 +2,7 @@
 <html>
 @include('layout_trainings.common.head')
 
-<body>
+<body class="training-body">
     <div class="site-wrapper">
 
         <div class="site-wrapper-inner">

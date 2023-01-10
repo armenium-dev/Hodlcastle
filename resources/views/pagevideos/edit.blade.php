@@ -4,10 +4,11 @@
     <div class="content-header">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Youtube Video Attachment</h3>
+                <h3 class="box-title">Vimeo Video Attachment</h3>
             </div>
             <div class="box-body">
-                Paste the link to the video and save the form.
+                <div>Paste the code of the vimeo video and save the form.</div>
+                <img src="/img/10-01-2023 22-25-15.jpg" />
             </div>
         </div>
     </div>

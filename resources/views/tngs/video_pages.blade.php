@@ -29,7 +29,15 @@
 
                 <div class="form-group col-sm-12">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $page_content->url }}"></iframe>
+                        @php
+                        if(is_numeric($page_content->url)){
+							$url = 'https://player.vimeo.com/video/'.$page_content->url;
+                        }else{
+							$url = 'https://www.youtube.com/embed/'.$page_content->url;
+                        }
+                        @endphp
+                        <iframe src="{{ $url }}?title=0&byline=0&portrait=0" class="embed-responsive-item" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                        <script src="https://player.vimeo.com/api/player.js"></script>
                     </div>
                 </div>
 

@@ -48,12 +48,12 @@ class PageVideoRepository extends ParentRepository
 
             $input = $request->all();
 
-            $youtubeCode = $input['url'];
+            /*$video_code = $input['url'];
 
-            preg_match('#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})#', $youtubeCode, $matches);
+            preg_match('#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})#', $video_code, $matches);
             if(isset($matches[2]) && $matches[2] != ''){
                 $input['url'] = $matches[2];
-            }
+			}*/
 
             $model = parent::update($input, $id);
 
