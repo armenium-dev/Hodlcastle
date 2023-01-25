@@ -33,6 +33,7 @@ body {font-family: 'Open sans', 'Source Sans Pro','Helvetica Neue',Helvetica,Ari
 
 .content-layout {min-height: calc(100vh - 100px); display: flex;}
 
+.m-0 {margin: 0 !important;}
 .mb-10 {margin-bottom: 10px !important;}
 .mb-20 {margin-bottom: 20px !important;}
 .mb-30 {margin-bottom: 30px !important;}
@@ -66,6 +67,8 @@ body {font-family: 'Open sans', 'Source Sans Pro','Helvetica Neue',Helvetica,Ari
 .max-w-600 {max-width: 600px;}
 .max-w-700 {max-width: 700px;}
 
+.fw-normal {font-weight: normal !important;}
+
 .main-footer {height: 50px; text-align: center}
 .wrapper {min-height: 100vh !important;}
 .navbar-laravel {background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);}
@@ -76,6 +79,7 @@ body {font-family: 'Open sans', 'Source Sans Pro','Helvetica Neue',Helvetica,Ari
 .repeater-delete-row {float: left; width: 3%; display: inline-block; cursor: pointer;}
 .repeater-delete-row {padding: 10px 10px;}
 .domain-repeater-row .form-control {float: left; width: 95%; display: inline-block;}
+.error-text {color: #f00;}
 .error-repeater-row {border: red 1px solid;}
 .error-repeater-message {position: absolute; left: 16px; height: 20px; margin-top: 35px; color: red;}
 .error-repeater-message-hide {display: none;}
@@ -365,3 +369,4 @@ body.training-body .site-wrapper {display: block;}
 body.training-body .site-wrapper .site-wrapper-inner {display: flex; flex-flow: column; justify-content: center; align-items: center; height: 100%; min-height: 100vh;}
 body.training-body .site-wrapper .site-wrapper-inner .cover-container {display: flex; flex-flow: column nowrap; height: 100%; min-height: 100vh}
 body.training-body .site-wrapper .site-wrapper-inner .cover-container .inner.cover {flex: 1; display: flex; flex-direction: column; justify-content: center;}
+

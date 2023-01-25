@@ -43,16 +43,16 @@ class RunTrainingReminder extends Command{
 	public function handle(){
 		Log::stack(['cron'])->debug(__CLASS__);
 
-		$NOYIFY_FATER_DAYS = env('NEXT_NOYIFY_FATER_DAYS', 3);
+		$NOYIFY_AFTER_DAYS = env('NEXT_NOYIFY_AFTER_DAYS', 3);
 		$statistics = $this->getTrainingStatisticsData();
 
 		if($statistics->count()){
-			$statistics->each(function($statistic) use ($NOYIFY_FATER_DAYS){
+			$statistics->each(function($statistic) use ($NOYIFY_AFTER_DAYS){
 				Log::stack(['cron'])->debug('Statistic ID = '.$statistic->id.', Notify date = '.$statistic->notify_training);
 				$recipient = $this->getRecipient($statistic);
 				$training = $this->getTraining($statistic);
 				$this->send($recipient, $training);
-				$statistic->notify_training = Carbon::now()->addDays($NOYIFY_FATER_DAYS);
+				$statistic->notify_training = Carbon::now()->addDays($NOYIFY_AFTER_DAYS);
 				$statistic->save();
 			});
 		}

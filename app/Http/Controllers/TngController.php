@@ -283,7 +283,7 @@ class TngController extends Controller{
 	}
 
 	private function createNewTrainingForCurrentRecipient($training, $recipient, $current_code){
-		$FIRST_NOYIFY_FATER_DAYS = env('FIRST_NOYIFY_FATER_DAYS', 3);
+		$FIRST_NOYIFY_AFTER_DAYS = env('FIRST_NOYIFY_AFTER_DAYS', 3);
 
 		$training_recipient = TrainingRecipient::where([
 			'training_id' => $training->id,
@@ -304,7 +304,7 @@ class TngController extends Controller{
 		$input['recipient_id'] = $recipient->id;
 		$input['company_id'] = $recipient->groups[0]->company->id;
 		$input['code'] = $this->code;
-		$input['notify_training'] = Carbon::now()->addDays($FIRST_NOYIFY_FATER_DAYS);
+		$input['notify_training'] = Carbon::now()->addDays($FIRST_NOYIFY_AFTER_DAYS);
 
 		$result = TrainingStatistic::create($input);
 		#dd($result);

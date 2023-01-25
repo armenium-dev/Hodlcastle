@@ -23,7 +23,9 @@ class UserRepository extends ParentRepository {
 		$this->saveImage($request, $model->id, 'logo');
 		
 		if($request->roles <> ''){
+			$model->roles()->detach();
 			$model->roles()->attach($request->roles);
+			#$model->roles()->syncWithoutDetaching($request->roles);
 		}
 		
 		return $model;

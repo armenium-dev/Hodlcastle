@@ -109,13 +109,13 @@ class TrainingRepository extends ParentRepository{
 	}
 
 	public function setInitialTrainingStatistic($recipient){
-		$FIRST_NOYIFY_FATER_DAYS = env('FIRST_NOYIFY_FATER_DAYS', 3);
+		$FIRST_NOYIFY_AFTER_DAYS = env('FIRST_NOYIFY_AFTER_DAYS', 3);
 
 		$temp = [];
 		$temp['recipient_id'] = $recipient->id;
 		$temp['company_id'] = $recipient->groups[0]->company->id;
 		$temp['code'] = self::$recipient_code;
-		$temp['notify_training'] = Carbon::now()->addDays($FIRST_NOYIFY_FATER_DAYS);
+		$temp['notify_training'] = Carbon::now()->addDays($FIRST_NOYIFY_AFTER_DAYS);
 
 		$statistic_item = TrainingStatistic::create($temp);
 

@@ -51,6 +51,7 @@ class LandingTemplateRepository extends ParentRepository{
 		$uuid = (string)Str::uuid();
 		$input['uuid'] = $uuid;
 		$input['url'] = url("/lp/$uuid");
+		$input['options'] = json_encode($input['options']);
 		$model = parent::create($input);
 
 		$this->saveImage($request, $model->id);
@@ -64,6 +65,7 @@ class LandingTemplateRepository extends ParentRepository{
 		$input = $request->all();
 
 		$input['content'] = $this->fixingURLs($input['content'], $id);
+		$input['options'] = json_encode($input['options']);
 
 		$this->saveImage($request, $id);
 

@@ -35,6 +35,7 @@ class LandingTemplate extends Model {
 		'content',
 		'uuid',
 		'url',
+		'options',
 	];
 
 	/**

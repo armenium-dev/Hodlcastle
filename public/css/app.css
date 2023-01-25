@@ -67,6 +67,10 @@ body {
   display: flex;
 }
 
+.m-0 {
+  margin: 0 !important;
+}
+
 .mb-10 {
   margin-bottom: 10px !important;
 }
@@ -187,6 +191,10 @@ body {
   max-width: 700px;
 }
 
+.fw-normal {
+  font-weight: normal !important;
+}
+
 .main-footer {
   height: 50px;
   text-align: center;
@@ -241,6 +249,10 @@ body {
   float: left;
   width: 95%;
   display: inline-block;
+}
+
+.error-text {
+  color: #f00;
 }
 
 .error-repeater-row {

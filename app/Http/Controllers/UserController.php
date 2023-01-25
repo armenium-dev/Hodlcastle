@@ -39,8 +39,8 @@ class UserController extends AppBaseController{
 	
 	public function create(){
 		$roles     = Role::get();
-		$companies = ['' => '--- Select Company ---'];
-		$companies = array_merge($companies, $this->companyRepository->all()->pluck('name', 'id')->toArray());
+		$companies_e = ['' => '--- Select Company ---'];
+		$companies = $companies_e + $this->companyRepository->all()->pluck('name', 'id')->toArray();
 
 		return view('users.create', compact('roles', 'companies'));
 	}

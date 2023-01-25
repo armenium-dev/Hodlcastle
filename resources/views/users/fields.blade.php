@@ -34,6 +34,9 @@
 </div>
 <hr>
 <div class="clearfix">
+    <div class="col-sm-12">
+        <small>Min 16 characters of which at least 1 letter, 1 number and 1 special character.</small>
+    </div>
     <div class="form-group col-sm-6 @if ($errors->has('password')) has-error @endif">
         {{ Form::label('password', 'Password') }}<br>
         {{ Form::password('password', array('class' => 'form-control')) }}
@@ -42,6 +45,9 @@
         {{ Form::label('password', 'Confirm Password') }}<br>
         {{ Form::password('password_confirmation', array('class' => 'form-control')) }}
     </div>
+    @if ($errors->has('password'))
+        <div class="col-sm-12 error-text"></div>
+    @endif
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
