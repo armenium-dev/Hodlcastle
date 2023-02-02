@@ -14,7 +14,7 @@
             {!! Form::text('email', null, ['class' => 'form-control']) !!}
         </div>
         @include('schedules.fields.relation', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
-        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
+        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => true])
         <div id="app"></div>
     </div>
     <div class="col-sm-6">

@@ -38,5 +38,9 @@ use Carbon\Carbon;
 </div>
 
 <div class="form-group scheduled_type">
-	{!! Form::checkbox('schedule[send_weekend]', 1, isset($model->schedule) ? $model->schedule->send_weekend : null, ['class' => 'flat-green', 'id' => 'send_weekend'.$checkbox_id_suffix]) !!} {!! Form::label('send_weekend'.$checkbox_id_suffix, 'Send on Weekend:') !!}
+	@if($display_send_weekend)
+		{!! Form::checkbox('schedule[send_weekend]', 1, isset($model->schedule) ? $model->schedule->send_weekend : null, ['class' => 'flat-green', 'id' => 'send_weekend'.$checkbox_id_suffix]) !!} {!! Form::label('send_weekend'.$checkbox_id_suffix, 'Send on Weekend:') !!}
+	@else
+		{!! Form::hidden('schedule[send_weekend]', 0) !!}
+	@endif
 </div>

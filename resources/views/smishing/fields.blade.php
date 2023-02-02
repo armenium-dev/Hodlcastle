@@ -45,7 +45,7 @@
 				<tr><th colspan="2" class="">4. Select Schedule type:</th></tr>
 				<tr>
 					<td colspan="2" class="">
-						@include('schedules.fields.type', ['model' => isset($sms_template->campaign) ? $sms_template->campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
+						@include('schedules.fields.type', ['model' => isset($sms_template->campaign) ? $sms_template->campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => false])
 					</td>
 				</tr>
 			</tbody>
@@ -56,7 +56,7 @@
 					<td colspan="2">
 						<div class="btn-group">
 							<a href="{!! route('smishing') !!}" class="btn btn-default"><i class="fa fa-caret-left"></i> Cancel</a>
-							{!! Form::button('<i class="fa fa-paper-plane"></i> Start campaign', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+							{!! Form::button('<i class="fa fa-paper-plane"></i> Schedule campaign', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
 						</div>
 					</td>
 				</tr>

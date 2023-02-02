@@ -289,7 +289,7 @@ class Campaign extends Model{
 
 	/**
 	 * OLD
-	 * Not in use.
+	 * Not used.
 	 * sendToAllRecipients used after campaign created
 	 **/
 	public function sendToNextRecipient(){

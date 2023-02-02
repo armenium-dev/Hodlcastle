@@ -17,7 +17,7 @@
             {!! Form::checkbox('is_short', 1, isset($campaign) ? $campaign->is_short : false, ['id' => 'is_short']) !!} {!! Form::label('is_short', 'Enable URL shortener', ['for' => 'is_short']) !!}
         </div>
         @include('schedules.fields.relation', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
-        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
+        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => true])
         <div id="app"></div>
     </div>
     <div class="col-sm-6">

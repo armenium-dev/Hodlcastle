@@ -9,7 +9,7 @@
             {!! Form::label('sms_template_id', 'SMS Template:') !!}
             {!! Form::select('schedule[sms_template_id]', $smsTemplates, null, ['class' => 'form-control', 'id' => 'sms_template_id']) !!}
         </div>
-        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix])
+        @include('schedules.fields.type', ['model' => isset($campaign) ? $campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => false])
         <div id="app"></div>
     </div>
     <div class="col-sm-6">
