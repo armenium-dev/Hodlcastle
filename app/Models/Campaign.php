@@ -88,7 +88,7 @@ class Campaign extends Model{
 	 * @var array
 	 */
 	public static $rules = [
-		'name'  => 'required',
+		'name'  => 'required_if:schedule.email_template_id,1',
 		//        'company_id' => 'required|numeric',
 		//        'email_template_id' => 'required|numeric',
 		//        'landing_id' => 'required|numeric',

@@ -162,6 +162,10 @@ class CampaignController extends AppBaseController{
 
 		$input = $request->all();
 
+        if (empty($input['name'] ) && !empty($input['template_name'])){
+            $input['name'] = $input['template_name'];
+        }
+
 		if(!$user->company->status){
 			$errors++;
 			$error_mess[] = sprintf('Your company "%s" status not active.', $user->company->name);
@@ -262,7 +266,7 @@ class CampaignController extends AppBaseController{
 			$input['groups']     = [$group->id => $group->id];
 			$input['company_id'] = $group->company_id;
 
-			$campaign = $this->campaignRepository->create($input, $request);
+			$campaign = $this->campaignRepository->create($input);
 
 			if(!is_null($campaign)){
 				if($is_email_campaign){
