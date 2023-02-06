@@ -15,9 +15,14 @@
     </thead>
     <tbody>
     @foreach($companies as $company)
-        <tr>
+        @php
+            $now = \Carbon\Carbon::now();
+            $expireDate = \Carbon\Carbon::parse($company->expires_at);
+        @endphp
+
+        <tr class="{{$now->gt($expireDate) ? 'bg-inactive' : ($now->addDays(61)->gt($expireDate) ? 'bg-warning' : 'bg-success')}}">
             <td>{!! $company->name !!}</td>
-            <td>{!! \Carbon\Carbon::parse($company->expires_at)->toDateString() !!}</td>
+            <td>{!! $expireDate->toDateString() !!}</td>
             <td>{!! $company->active ? 'yes' : 'no' !!}</td>
             <td>{!! $company->getRecipients()->count() !!}</td>
             <td>{!! $company->soft_limit !!}</td>
