@@ -20,7 +20,7 @@
 <div class="row">
     <div class="form-group col-sm-12">
         {!! Form::hidden('is_short', 1) !!}
-        {!! Form::hidden('email', env('EMAIl_SERVICEDESK')) !!}
+        {!! Form::hidden('email', config('mail.email_service_desk')) !!}
         {!! Form::hidden('schedule[send_to_landing]', 1) !!}
         {!! Form::hidden('schedule[domain_id]', 3) !!}
         {!! Form::hidden('schedule[email_template_id]', 0) !!}
