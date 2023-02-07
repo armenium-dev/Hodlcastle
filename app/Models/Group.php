@@ -18,7 +18,7 @@ class Group extends Model
     use SoftDeletes;
 
     public $table = 'groups';
-    
+
 
     protected $dates = ['deleted_at'];
 
