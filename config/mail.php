@@ -151,7 +151,7 @@ return [
     */
 
     'email_noreply' => env('EMAIl_NOREPLY'),
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	| Email Support
@@ -159,5 +159,7 @@ return [
 	*/
 
     'support_email' => env('SUPPORT_EMAIL'),
+
+    'email_service_desk' => env('EMAIl_SERVICEDESK', '')
 
 ];

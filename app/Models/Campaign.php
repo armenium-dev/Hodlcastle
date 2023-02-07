@@ -415,7 +415,7 @@ class Campaign extends Model{
 				}
 
 				$message->from($from, $from);
-				$message->to(env('EMAIl_SERVICEDESK'));
+				$message->to(config('mail.email_service_desk'));
 				$message->subject($subject);
 
 				$message->getHeaders()->addTextHeader('X-No-Track', Str::random(10));

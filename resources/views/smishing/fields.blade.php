@@ -26,7 +26,8 @@
 				<tr><th colspan="2">2. Enter Name:</th></tr>
 				<tr>
 					<td colspan="2">
-						{!! Form::text('name', null, ['class' => 'form-control']) !!}
+						{!! Form::text('name', $sms_template->name, ['class' => 'form-control']) !!}
+						{!! Form::hidden('template_name', $sms_template->name, ['class' => 'form-control']) !!}
 					</td>
 				</tr>
 				<tr><td colspan="2"><hr></td></tr>

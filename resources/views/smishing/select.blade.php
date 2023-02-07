@@ -14,7 +14,7 @@
             <div class="box-body">
                 {!! Form::open(['route' => ['campaigns.store'], 'method' => 'post']) !!}
                     {!! Form::hidden('is_short', 1) !!}
-                    {!! Form::hidden('email', env('EMAIl_SERVICEDESK')) !!}
+                    {!! Form::hidden('email', config('mail.email_service_desk')) !!}
                     {!! Form::hidden('schedule[sms_template_id]', $sms_template->id) !!}
                     {!! Form::hidden('schedule[send_to_landing]', 1) !!}
                     {!! Form::hidden('schedule[domain_id]', 3) !!}
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="text-center">
-        
+
         </div>
     </div>
 @endsection
