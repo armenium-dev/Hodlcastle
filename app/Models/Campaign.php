@@ -265,8 +265,13 @@ class Campaign extends Model{
 						#Log::stack(['custom'])->debug($this->id);
 						#Log::stack(['custom'])->debug($this->schedule->id);
 						#Log::stack(['custom'])->debug($this->schedule->emailTemplate->id);
+                        $recipient->attachToCampaign($this);
 						$this->schedule->emailTemplate->send($recipient, $this);
 					}elseif($this->schedule->sms_template_id){
+					    if (!$recipient->mobile){
+					        continue;
+                        }
+
 						$recipient->attachToCampaign($this);
 						$this->setRecipendCode($recipient, $this->id);
 						$this->schedule->smsTemplate->send($recipient, $this);
