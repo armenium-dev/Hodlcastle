@@ -18,7 +18,7 @@ use Auth;
  * @method Group findWithoutFail($id, $columns = ['*'])
  * @method Group find($id, $columns = ['*'])
  * @method Group first($columns = ['*'])
-*/
+ */
 class GroupRepository extends ParentRepository
 {
     /**
@@ -98,8 +98,13 @@ class GroupRepository extends ParentRepository
 
             $attributes['recipients'] = $ids;
 
-            $model = parent::update($attributes, $id);
-            $model->recipients()->sync($ids);
+            $model = $this->find($id);
+
+            if (isset($attributes['delete_old']) && $attributes['delete_old'] == 'on') {
+                $model->recipients()->sync($ids);
+            } else {
+                $model->recipients()->syncWithoutDetaching($ids);
+            }
 
 //            // delete recipients in Recipient model
 //            $result_ids_diff = array_diff($recipients_ids, $ids);
