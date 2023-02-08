@@ -55,6 +55,7 @@
             footer: false,
             disabledDatesInRange: true,
             tooltipNights: false,
+            disableWeekends: false,
             locale: {
                 buttons: {
                     prev: '&leftarrow;',

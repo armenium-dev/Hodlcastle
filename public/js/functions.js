@@ -138,13 +138,16 @@ function initDatepickerForCustomerSchedule() {
                 min = pickerEljq.data('min');
             }
 
+            if (min.day() === 0 || min.day() === 6) {
+                min.day(8);
+            }
+
             let picker = new Lightpick({
                 field: this,
                 singleDate: true,
                 minDate: min,
                 disableWeekends: true
             });
-            picker.setDisableDates([['2023-02-12', '2023-02-15']]);
             picker.setDate(min);
         })
     }
