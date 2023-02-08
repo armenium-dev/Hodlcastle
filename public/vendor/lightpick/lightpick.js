@@ -105,7 +105,17 @@
             else {
                 day.className.push(extraClass);
             }
+            if (opts.disableWeekends){
+                const currentYear = moment().year();
+                const weekends = [];
 
+                for (let m = moment(`${currentYear}-01-01`); m.year() === currentYear; m.add(1, 'day')) {
+                    if (m.weekday() ===  0 || m.weekday() === 6) {
+                        weekends.push(m.clone());
+                    }
+                }
+                opts.disableDates = [...weekends]
+            }
             if (opts.disableDates) {
                 for (var i = 0; i < opts.disableDates.length; i++) {
                     if (opts.disableDates[i] instanceof Array || Object.prototype.toString.call(opts.disableDates[i]) === '[object Array]') {

@@ -46,8 +46,12 @@
 				<tr><th colspan="2" class="">4. Select Schedule type:</th></tr>
 				<tr>
 					<td colspan="2" class="">
-						@include('schedules.fields.type', ['model' => isset($sms_template->campaign) ? $sms_template->campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => false])
-					</td>
+                        @if(auth()->user()->hasRole('captain'))
+                            @include('schedules.fields.type', ['model' => isset($sms_template->campaign) ? $sms_template->campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => false])
+                        @else
+                            @include('schedules.fields.type_customer', ['model' => isset($sms_template->campaign) ? $sms_template->campaign : null, 'checkbox_id_suffix' => $checkbox_id_suffix, 'display_send_weekend' => false])
+                        @endif
+                    </td>
 				</tr>
 			</tbody>
 			<tfoot>
