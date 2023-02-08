@@ -1,11 +1,13 @@
 <template>
     <div>
-        <label for="filecsv" class="btn btn-primary">Bulk Import</label>
+        <br>
+        <label style="vertical-align: middle" for="filecsv" class="btn btn-primary">Bulk Import</label>
         <input name="file" type="file" id="filecsv" ref="file" @change="handleFileUpload()" class="hide" />
         <br>
+        <label for="delete_old">Delete current recipients before import?</label>
+        <input class="my-5" type="checkbox" name="delete_old" id="delete_old" v-model="delete_old"/>
         <br>
-
-        <div class="repeater-row clearfix cols-7" v-for="recipient, k in recipients">
+        <div class="repeater-row clearfix cols-7" v-for="(recipient, k) in recipients">
 
             <input :name="inputName(k, 'recipients_attrs', 'email')" placeholder="E-mail" :class="{'error-repeater-row': recipient.email_error}" class="form-control" v-model="recipient.email" type="email" required @blur="checkMailAfterEnter(recipient, k)"/>
             <small class="form-text text-muted"
@@ -30,6 +32,7 @@
         data() {
             return {
                 group: {},
+                delete_old: false,
                 recipients: [],
                 file: '',
                 reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
@@ -65,8 +68,9 @@
             submitFile: function () {
                 let self = this;
                 let formData = new FormData();
-
                 formData.append('file', self.file);
+                formData.append('delete_old', self.delete_old);
+                formData.append('id', self.id);
 
                 axios.post( '/import',
                     formData,
@@ -78,17 +82,14 @@
                     }
                 ).then(function(resp){
                     console.log('SUCCESS!!');
-                    console.log('resp', resp)
                     self.recipients = resp.data;
-                    console.log('self.recipients', self.recipients)
-
                     self.recipients.map((item, index) => {
                         return self.checkMailAfterEnter(item, index)
                     });
 
                     clearInputFile(document.getElementById('filecsv'));
                 })
-                .catch(function(){
+                .catch(function(e){
                     console.log('FAILURE!!');
                     clearInputFile(document.getElementById('filecsv'));
                 });
