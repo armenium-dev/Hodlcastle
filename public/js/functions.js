@@ -31,6 +31,7 @@ $(document).ready(function () {
 
     //$('#scheduler').daterangepicker()
     initDatepicker();
+    initDatepickerForCustomerSchedule();
     initTimepicker();
 
 
@@ -122,6 +123,29 @@ function initDatepicker() {
             } else {
                 picker.setDate(pickerEljq.data('val'));
             }
+        })
+    }
+}
+
+function initDatepickerForCustomerSchedule() {
+    let pickerEljqs = $('#date_range_custom');
+    if (pickerEljqs.length) {
+        pickerEljqs.each(function () {
+            let pickerEljq = $(this);
+            let min = moment().add(2, 'days');
+
+            if(pickerEljq.data('min') !== undefined){
+                min = pickerEljq.data('min');
+            }
+
+            let picker = new Lightpick({
+                field: this,
+                singleDate: true,
+                minDate: min,
+                disableWeekends: true
+            });
+            picker.setDisableDates([['2023-02-12', '2023-02-15']]);
+            picker.setDate(min);
         })
     }
 }
