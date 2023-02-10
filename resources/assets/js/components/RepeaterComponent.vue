@@ -8,7 +8,6 @@
         <input class="my-5" type="checkbox" name="delete_old" id="delete_old" v-model="delete_old"/>
         <br>
         <div class="repeater-row clearfix cols-7" v-for="(recipient, k) in recipients">
-
             <input :name="inputName(k, 'recipients_attrs', 'email')" placeholder="E-mail" :class="{'error-repeater-row': recipient.email_error}" class="form-control" v-model="recipient.email" type="email" required @blur="checkMailAfterEnter(recipient, k)"/>
             <small class="form-text text-muted"
                    :class="{ 'error-repeater-message': recipient.email_error }"

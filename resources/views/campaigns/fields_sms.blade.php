@@ -16,7 +16,6 @@
         @include('campaigns.fields.groups_select', ['campaign' => isset($campaign) ? $campaign : null, 'groups' => $groups, 'checkbox_id_suffix' => $checkbox_id_suffix])
     </div>
 </div>
-
 <div class="row">
     <div class="form-group col-sm-12">
         {!! Form::hidden('is_short', 1) !!}

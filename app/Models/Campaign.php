@@ -249,7 +249,6 @@ class Campaign extends Model{
 		return $from;
 	}
 
-
 	public function sendToAllRecipientsByCron(){
 		#Log::stack(['custom'])->debug($this->id);
 		#Log::stack(['custom'])->debug($this->groups);

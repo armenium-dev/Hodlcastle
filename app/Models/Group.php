@@ -13,66 +13,59 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string name
  * @property integer company_id
  */
-class Group extends Model
-{
-    use SoftDeletes;
+class Group extends Model{
 
-    public $table = 'groups';
+	use SoftDeletes;
 
+	public $table = 'groups';
 
-    protected $dates = ['deleted_at'];
+	protected $dates = ['deleted_at'];
 
+	public $fillable = [
+		'name',
+		'company_id'
+	];
 
-    public $fillable = [
-        'name',
-        'company_id'
-    ];
+	/**
+	 * The attributes that should be casted to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'name' => 'string',
+		'company_id' => 'integer'
+	];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'name' => 'string',
-        'company_id' => 'integer'
-    ];
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
+	public static $rules = [
+		'name' => 'required',
+		'company_id' => 'required|numeric'
+	];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required',
-        'company_id' => 'required|numeric'
-    ];
+	public function company(){
+		return $this->belongsTo('App\Models\Company');
+	}
 
-    public function company()
-    {
-        return $this->belongsTo('App\Models\Company');
-    }
+	public function recipients(){
+		return $this->belongsToMany('App\Models\Recipient');
+	}
 
-    public function recipients()
-    {
-        return $this->belongsToMany('App\Models\Recipient');
-    }
+	public function campaigns(){
+		return $this->belongsToMany('App\Models\Campaign');
+	}
 
-    public function campaigns()
-    {
-        return $this->belongsToMany('App\Models\Campaign');
-    }
+	public function trainings(){
+		return $this->belongsToMany('App\Models\Training');
+	}
 
-    public function trainings()
-    {
-        return $this->belongsToMany('App\Models\Training');
-    }
-
-    public function sendToRecipients($campaign, $emailTemplate)
-    {
-        foreach ($this->recipients as $recipient) {
-            $recipient->campaigns()->attach($campaign, ['code' => hash2IntsTime($campaign->id . $recipient->id)]);
-            $emailTemplate->send($recipient, $campaign);
-        }
-    }
+	public function sendToRecipients($campaign, $emailTemplate){
+		foreach($this->recipients as $recipient){
+			$recipient->campaigns()->attach($campaign, ['code' => hash2IntsTime($campaign->id.$recipient->id)]);
+			$emailTemplate->send($recipient, $campaign);
+		}
+	}
 }

@@ -120,7 +120,7 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('campaigns/{id}/export', 'CampaignController@export')->name('campaigns.export');
 
 
-    Route::get('/documentation', 'DocumentationController@index')->name('documentation.index');
+    Route::get('/documentation-d5bb76e0-af37-409d-8ca8-5661fc105835', 'DocumentationController@index')->name('documentation.index');
     Route::get('track/{code}', 'TrackController@index');
     Route::get('tracktest/{id}', 'TrackController@tracktest');
 

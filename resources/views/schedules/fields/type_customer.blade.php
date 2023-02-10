@@ -39,3 +39,4 @@ use Carbon\Carbon;
 		{!! Form::hidden('schedule[send_weekend]', 0) !!}
 	@endif
 </div>
+

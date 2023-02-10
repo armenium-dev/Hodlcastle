@@ -159,7 +159,6 @@ return [
 	*/
 
     'support_email' => env('SUPPORT_EMAIL'),
-
     'email_service_desk' => env('EMAIl_SERVICEDESK', '')
 
 ];

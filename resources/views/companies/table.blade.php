@@ -10,7 +10,7 @@
             <th>Trial Mode</th>
             <th>Profile</th>
             <th>Action</th>
-            <!--<th colspan="3">Action</th>-->
+            <!--<th colspan="3">Action</th>--> 
         </tr>
     </thead>
     <tbody>

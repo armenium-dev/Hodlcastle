@@ -1170,4 +1170,5 @@
     };
 
     return Lightpick;
+    
 }));

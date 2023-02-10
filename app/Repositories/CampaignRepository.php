@@ -155,7 +155,7 @@ class CampaignRepository extends ParentRepository{
 		return $s->format(Schedule::DATE_RANGE_FORMAT) . Schedule::DATE_RANGE_SEPAR . $e->format(Schedule::DATE_RANGE_FORMAT);
 	}
 
-	public function correctSMSDateRange($schedule_str){
+		public function correctSMSDateRange($schedule_str){
 		$user = Auth()->user();
 		#dd($user->company->expires_at);
 

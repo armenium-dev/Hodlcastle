@@ -3225,5 +3225,4 @@ class SmsTemplate extends Model{
 
 		return $folders;
 	}
-
 }
