@@ -125,6 +125,8 @@ Route::group(['middleware' => ['auth', 'is_active', '2fa']], function () {
     Route::get('tracktest/{id}', 'TrackController@tracktest');
 
     Route::get('/profile', 'ProfileController@index')->name('profile.index');
+    Route::get('/profile/activities', 'AccountActivityController@index')->name('profile.activities');
+    Route::get('/profile/activities/ajax', 'AccountActivityController@indexAjax')->name('profile.activities.ajax');
 
     Route::get('/profile/2fa', 'Google2FAController@index')->name('profile.2fa');
     Route::get('/2fa/enable', 'Google2FAController@enableTwoFactor');
