@@ -242,12 +242,12 @@ class GroupController extends AppBaseController
             return 'Not allowed';
 
         $recipients = [];
-	    
+
         if($request->hasFile('file')){
         	$originalName = $request->file('file')->getClientOriginalName();
             $path = $request->file('file')->getRealPath();
             $fileExt = $this->get_file_ext($originalName);
-            
+
             switch($fileExt){
 	            case "csv":
 		            $handle = fopen($path, "r");
@@ -259,6 +259,7 @@ class GroupController extends AppBaseController
 			            }else{
 				            foreach($data as $c => $n){
 					            $recipients[$k][$cols[$c]] = $n;
+                                $recipients[$k]['action'] = 'imported';
 				            }
 			            }
 			            $k++;
@@ -273,7 +274,7 @@ class GroupController extends AppBaseController
 		            $objPHPExcel = $objReader->load($path);
 		            $objPHPExcel->setActiveSheetIndex(0);
 		            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, false, false, true);
-	
+
 		            if(!empty($sheetData)){
 			            $cols = [];
 			            foreach($sheetData as $k => $v){
@@ -282,18 +283,16 @@ class GroupController extends AppBaseController
 				            }else{
 					            foreach($v as $c => $n){
 						            $recipients[$k][$cols[$c]] = $n;
+                                    $recipients[$k]['action'] = 'imported';
 					            }
 				            }
 			            }
 		            }
 	            	break;
             }
-	        
-	        #dd($recipients);
-	
         }
 
-        return response()->json($recipients);
+        return response()->json(array_values($recipients));
     }
 
     public function vue(Request $request)
@@ -303,13 +302,13 @@ class GroupController extends AppBaseController
 
         return response()->json(compact('group'));
     }
-	
+
 	public function get_file_ext($file_path){
 		$base_name = basename($file_path);
 		$a         = explode('.', $base_name);
 		$ext       = end($a);
-		
+
 		return strtolower($ext);
 	}
-	
+
 }
