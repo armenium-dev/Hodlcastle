@@ -250,7 +250,15 @@ class CampaignController extends AppBaseController{
 			#return redirect(route('scenarios.select', $id));
 		}
 
-		#dd($error_mess);
+		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
+		foreach($groups as $group){
+			$recipients_count = $group->recipients()->count();
+			if(!$recipients_count){
+				$errors++;
+				$error_mess[] = sprintf('Group "%s" has no recipients', $group->name);
+			}
+		}
+
 		if($errors > 0){
 			$error_mess = implode('<br>', $error_mess);
 			Flash::error($error_mess);
@@ -258,10 +266,9 @@ class CampaignController extends AppBaseController{
 			return redirect(route('campaigns.create'));
 		}
 
-		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'company_id']);
 
 		$recipients = [];
-
+		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'company_id']);
 		foreach($groups as $group){
 			$input['groups']     = [$group->id => $group->id];
 			$input['company_id'] = $group->company_id;
