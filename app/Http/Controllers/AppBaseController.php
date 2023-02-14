@@ -28,11 +28,13 @@ class AppBaseController extends Controller{
 		#dump($request->path());
 		if(!is_null($request)){
 			if(!$request->ajax()){
-				$path = $request->segment(1);
+				$sg = $request->segments();
+				$path = end($sg);
+				#$path = $request->segment(1);
 				if(is_null($path)){
 					$path = $request->path();
 				}
-				#dump($path);
+				#dump(end($sg));
 
 				if($path == '/'){
 					$path = 'dashboard';
