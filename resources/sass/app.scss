@@ -26,6 +26,11 @@ $break-medium: 768px;
   width: 16%;
   display: inline-block;
 }
+
+.imported .form-control {
+    background-color: #00c0ef1a !important;
+}
+
 .repeater-delete-row {
   padding: 10px 10px;
 }
@@ -71,4 +76,3 @@ input[type="checkbox"], input[type="radio"] {
 .my-leaflet-map-container img {
   max-height: none;
 }
-
