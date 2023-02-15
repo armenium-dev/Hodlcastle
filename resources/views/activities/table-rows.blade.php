@@ -4,6 +4,9 @@
         data-campaign="{!! $item->campaign_id !!}"
         data-recipient="{!! $item->recipient_id !!}">
         <td>{!! $item->action !!}</td>
+        @if(Auth::user()->hasRole('captain'))
+            <td>{!! $item->user->name !!}</td>
+        @endif
         <td>{!! $item->ip_address !!}</td>
         <td>{!! $item->created_at !!}</td>
     </tr>

@@ -4,6 +4,9 @@
 		<thead>
 			<tr>
 				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Action</th>
+                @if(Auth::user()->hasRole('captain'))
+                    <th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Customer</th>
+                @endif
 				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">IP Address</th>
 				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Time</th>
 			</tr>
