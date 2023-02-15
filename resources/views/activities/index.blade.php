@@ -23,16 +23,18 @@
                                 <label>Action</label>
                                 <input type="text" name="action" class="form-control">
                             </div>
-                            <div class="me-10">
-                                <label>Customers</label>
-                                <select name="customer" class="form-control">
-                                    <option value="">Select customer</option>
-                                    @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->name}}</option>
+                            @if(Auth::user()->hasRole('captain'))
+                                <div class="me-10">
+                                    <label>Customers</label>
+                                    <select name="customer" class="form-control">
+                                        <option value="">Select customer</option>
+                                        @foreach($customers as $customer)
+                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
 
-                                    @endforeach
-                                </select>
-                            </div>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
                             <input type="submit" class="btn btn-success me-10" value="Filter">
                             <input type="reset" class="btn btn-default" value="Reset" id="js_form_reset">
                         </div>

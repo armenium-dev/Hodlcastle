@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\AccountActivity;
 use App\Models\Campaign;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AccountActivitiesRepository.
@@ -28,8 +29,8 @@ class AccountActivitiesRepository extends ParentRepository
      */
     public function filter($params)
     {
-
         $query = $this->query();
+        $customerId = null;
 
         if (!empty($params['form_data'])) {
             $form_data = [];
@@ -47,13 +48,6 @@ class AccountActivitiesRepository extends ParentRepository
                 $query->whereBetween('created_at', [$start_date, $end_date]);
             }
 
-            if (!empty($form_data['customer'])) {
-                $customerId = $form_data['customer'];
-                $query->whereHas('user', function ($q) use ($customerId) {
-                    $q->where('id', $customerId);
-                });
-            }
-
             if (!empty($form_data['action'])) {
                 $query->where('action', 'like', $form_data['action'] . "%");
             }
@@ -61,6 +55,21 @@ class AccountActivitiesRepository extends ParentRepository
             if ($params['dir'] != 'reset') {
                 $query->orderBy($params['name'], $params['dir']);
             }
+        }
+
+        if (!Auth::user()->hasRole('captain')) {
+            $customerId = Auth::id();
+        } else {
+            if (!empty($form_data['customer'])) {
+                $customerId = $form_data['customer'];
+            }
+            $query->with('user');
+        }
+
+        if (!empty($customerId)) {
+            $query->whereHas('user', function ($q) use ($customerId) {
+                $q->where('id', $customerId);
+            });
         }
 
         return $query->get();
