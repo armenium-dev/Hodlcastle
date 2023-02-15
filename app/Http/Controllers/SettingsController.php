@@ -210,6 +210,7 @@ class SettingsController extends AppBaseController {
 					unset($model);
 				}
 			}
+			CompanyProfileRules::where('active', 0)->delete();
 		}
 
 		Flash::success('Rules saved successfully.');
