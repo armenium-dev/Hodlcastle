@@ -3,12 +3,12 @@
 	<table id="js_table" class="ajaxdata table">
 		<thead>
 			<tr>
-				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Action</th>
+				<th class="js_sorting sort-reset" data-field="action" sorted="0" order="">Action</th>
                 @if(Auth::user()->hasRole('captain'))
-                    <th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Customer</th>
+                    <th class="js_sorting sort-reset" data-field="name" sorted="0" order="">Customer</th>
                 @endif
-				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">IP Address</th>
-				<th class="js_sorting sort-desc" data-field="action" sorted="1" order="desc">Time</th>
+				<th class="js_sorting sort-reset" data-field="ip_address" sorted="0" order="">IP Address</th>
+				<th class="js_sorting sort-desc" data-field="created_at" sorted="0" order="desc">Time</th>
 			</tr>
 		</thead>
 		<tbody>
