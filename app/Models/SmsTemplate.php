@@ -2935,8 +2935,6 @@ class SmsTemplate extends Model{
         $content = $content_data['content'];
         $tracker = $content_data['tracker'];
 
-        dd($content);
-
 
 //        process this for testing to log only countries where is working hours at the moment
 //        foreach (self::ALL_COUNTRIES_LIST as $item) {
