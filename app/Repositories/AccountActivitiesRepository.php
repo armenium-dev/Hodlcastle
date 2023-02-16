@@ -33,7 +33,13 @@ class AccountActivitiesRepository extends ParentRepository
         $query->join('users', 'users.id', '=', 'account_activities.user_id');
         $customerId = null;
 
-        if (!empty($params['form_data'])) {
+		if(!isset($params['name']) && !isset($params['dir'])){
+			$params['name'] = 'created_at';
+			$params['dir'] = 'desc';
+			$query->orderBy($params['name'], $params['dir']);
+		}
+
+		if (!empty($params['form_data'])) {
             $form_data = [];
             parse_str($params['form_data'], $form_data);
 
