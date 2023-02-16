@@ -2935,6 +2935,8 @@ class SmsTemplate extends Model{
         $content = $content_data['content'];
         $tracker = $content_data['tracker'];
 
+        dd($content);
+
 
 //        process this for testing to log only countries where is working hours at the moment
 //        foreach (self::ALL_COUNTRIES_LIST as $item) {
@@ -3044,7 +3046,6 @@ class SmsTemplate extends Model{
 		];
 
 		$login_variables = $this->getLoginVariables();
-
 		foreach($login_variables as $login_variable){
 			$with['.'.$login_variable['variable']] = $this->makeFakeLoginPageUrl($recipient, $campaign, $login_variable['path']);
 		}
@@ -3053,9 +3054,6 @@ class SmsTemplate extends Model{
 		foreach($with as $k => $v){
 			$content = str_replace('{{'.$k.'}}', $v, $content);
 		}
-
-		#dd($with);
-
 
 		return [
 			'tracker' => $data['tracker'],
@@ -3131,7 +3129,6 @@ class SmsTemplate extends Model{
 
 		if($logging)
 			Log::stack(['custom'])->debug($src_url);
-
 		$url = parse_url($src_url);
 		$code = ShortLink::generate($src_url);
 		$dst_url = $url['scheme'] . '://' . env('SHORT_URL_DOMAIN') . '/short/' . $code->code;
@@ -3177,7 +3174,7 @@ class SmsTemplate extends Model{
 			$tracking_url = $redirect_url;
 		}
 
-		return $tracking_url;
+		return $this->generateShortUrl($tracking_url, true);
 	}
 
 	public function getLoginVariables(){
