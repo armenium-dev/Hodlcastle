@@ -19,16 +19,16 @@ use Illuminate\Support\Facades\Log;
  * @property string tags
  */
 class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
-	
+
 	use SoftDeletes;
-	
+
 	const TYPE_PLAIN = 0;
 	const TYPE_HTML = 1;
-	
+
 	public $table = 'email_templates';
-	
+
 	protected $dates = ['deleted_at'];
-	
+
 	/**
 	 * The attributes that could be used in mass assignment.
 	 * @var array
@@ -47,7 +47,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		'company_id',
 		'type_text',
 	];
-	
+
 	/**
 	 * The attributes that should be casted to native types.
 	 * @var array
@@ -62,7 +62,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		'tags'        => 'string',
 		//'link_name' => 'string',
 	];
-	
+
 	/**
 	 * Validation rules
 	 * @var array
@@ -78,37 +78,37 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		//        'tags' => 'string',
 		//'email_template_id' => 'required',
 	];
-	
+
 	public function image(){
 		return $this->morphOne('App\Models\Image', 'imageable');
 	}
-	
+
 	public function company(){
 		return $this->belongsTo('App\Models\Company');
 	}
-	
+
 	public function campaigns(){
 		return $this->hasMany('App\Models\Campaign');
 	}
-	
+
 	public function language(){
 		return $this->belongsTo('App\Models\Language');
 	}
-	
+
 	public static function boot(){
 		self::creating(function($model){
 			if(!$model->tags){
 				$model->tags = '';
 			}
 		});
-		
+
 		self::updating(function($model){
 			if(!$model->tags){
 				$model->tags = '';
 			}
 		});
 	}
-	
+
 	/**
 	 * Adapter method to connect jdtsoftware package to the project
 	 * @return mixed
@@ -116,15 +116,15 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 	public function getContentAttribute(){
 		return $this->html;
 	}
-	
+
 	public function getIsHtmlAttribute(){
 		return is_null($this->type_text) || $this->type_text == self::TYPE_HTML;
 	}
-	
+
 	public function getIsPlainAttribute(){
 		return $this->type_text == self::TYPE_PLAIN;
 	}
-	
+
 	/**
 	 * Send email based on current template. Including data required for tracking
 	 *
@@ -141,9 +141,9 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 
 		$mailTemplate = $this->buildMailTemplate($recipient, $campaign, $test, $training);
 		$build        = $mailTemplate->build();
-		
+
 		$content = $this->is_html ? $build['html'] : $build['text'];
-		
+
 		Mail::send('emails.send', ['title' => 'title', 'content' => $content], function($message) use ($recipient, $campaign, $test){
 			if($test){
 				$from = config('mail.test_email');
@@ -152,11 +152,11 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 			}else{
 				$from = config('mail.email_noreply');
 			}
-			
+
 			$message->from($from, $from);
 			$message->to($recipient->email);
 			$message->subject($this->subject);
-			
+
 			if($campaign){
 				$company = Auth::check() && Auth::user()->hasRole('customer') ? Auth::user()->company : $this->company;
 				$message->getHeaders()->addTextHeader('X-Campaign-ID', $campaign ? $campaign->id : 0);
@@ -165,7 +165,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		});
 
 		#Log::stack(['custom'])->debug($build);
-		
+
 		if($campaign){
 			URL::forceRootUrl(env('APP_URL'));
 		}
@@ -174,9 +174,9 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 	public function buildMailTemplate(Recipient $recipient, $campaign = null, $test = false, $training = null){
 		$this->text = $this->text ? $this->text : '';
 		$this->html = $this->html ? $this->html : '';
-		
+
 		$mail = new TemplateMailable($this);
-		
+
 		if($test){
 			$from = config('mail.test_email');
 		}elseif($campaign){
@@ -184,7 +184,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		}else{
 			$from = config('mail.email_noreply');
 		}
-		
+
 		$mail_with = [
 			'.FirstName'  => $recipient->first_name,
 			'.LastName'   => $recipient->last_name,
@@ -197,7 +197,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 			'.DAY'        => date('d'),
 			'.URL'        => $this->makeTrackingUrl($recipient, $campaign, $test),
 		];
-		
+
 		$login_variables = $this->getLoginVariables();
 		#Log::stack(['custom'])->debug($login_variables);
 
@@ -208,24 +208,24 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 
 			$mail_with['.'.$login_variable['variable']] = $url;
 		}
-		
+
 		$mail->with($mail_with);
-		
-		
+
+
 		return $mail;
 	}
-	
+
 	public function makeTrackingUrl(Recipient $recipient, $campaign = null, $test = false){
 		//$tracking_url = '';
 		$campaignWithPivot = null;
-		
+
 		if($campaign){
 			$campaignWithPivot = $recipient->campaigns()->find($campaign->id);
 		}
-		
+
 		if($campaignWithPivot){
 			$href = $campaignWithPivot->schedule->domain->url.'?rid='.$campaignWithPivot->pivot->code;
-			
+
 			if(!$campaignWithPivot->schedule){
 				throw new \Exception('Campaign got no schedule');
 			}
@@ -233,7 +233,7 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 				throw new \Exception('Campaign got no domain');
 			}
 		}
-		
+
 		if($test){
 			if(!$campaignWithPivot && $campaign){
 				if(!$campaign->schedule){
@@ -245,9 +245,9 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 				$href = $campaign->schedule->domain->url.'?rid='.md5(time());
 			}
 		}
-		
+
 		$tracking_url = env('PHISHING_MANAGER_LANDING_PAGE_URL', config('app.url').'/landingpage/');
-		
+
 		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
 			$tracking_url = 'http://'.$tracking_url;
 		}
@@ -265,16 +265,16 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 		if($user->send_to_landing == 0 && !empty($user->redirect_url)){
 			$tracking_url = $user->redirect_url;
 		}*/
-		
+
 		#dd($tracking_url);
-		
+
 		return $tracking_url;
 	}
-	
+
 	public function makeFakeLoginPageUrl(Recipient $recipient, $campaign = null, $login_page = ''){
 		//$tracking_url = '';
 		$campaignWithPivot = null;
-		
+
 		if($campaign){
 			$campaignWithPivot = $recipient->campaigns()->find($campaign->id);
 			#Log::stack(['custom'])->debug($campaignWithPivot);
@@ -298,9 +298,9 @@ class EmailTemplate extends \JDT\LaravelEmailTemplates\Entities\EmailTemplate {
 
 		$params = $recipient->email.','.$campaign->id;
 		$params = base64_encode($params);
-		
+
 		$tracking_url = env('PHISHING_MANAGER_LOGIN_PAGE_URL', config('app.url').'/account/'.$login_page.'?id='.$params);
-		
+
 		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
 			$tracking_url = 'http://'.$tracking_url;
 		}
