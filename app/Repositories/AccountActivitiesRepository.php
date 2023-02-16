@@ -76,7 +76,6 @@ class AccountActivitiesRepository extends ParentRepository
             $query->where('user_id', $customerId);
         }
 
-//dd($query->get());
         return $query->get();
     }
 }

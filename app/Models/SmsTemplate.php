@@ -2925,16 +2925,10 @@ class SmsTemplate extends Model{
      */
     public function send(Recipient $recipient, $campaign = null){
         Log::stack(['custom'])->debug(__METHOD__);
-        #dd($recipient->mobile);
-        #dd($this->content);
-
         $sendSms = false;
-
         $content_data = $this->buildContent($recipient, $campaign);
-
         $content = $content_data['content'];
         $tracker = $content_data['tracker'];
-
 
 //        process this for testing to log only countries where is working hours at the moment
 //        foreach (self::ALL_COUNTRIES_LIST as $item) {
@@ -3091,27 +3085,7 @@ class SmsTemplate extends Model{
 			$tracking_url = $redirect_url;
 		}
 
-		#dd($tracking_url);
-
-		do{
-			$hash = Str::random(32);
-			$used = SentSms::where('hash', $hash)->count();
-		}while($used > 0);
-
-		$tracking_url = str_replace('&amp;', '&', $tracking_url);
-		$url = str_replace("/", "$", base64_encode($tracking_url));
-		$url .= '/'.$hash;
-		$tracking_url = str_replace('landingpage3', 'sms/l/', $tracking_url).$url;
-
-		$tracker = SentSms::create([
-			'hash' => $hash,
-			'url' => $tracking_url,
-			'recipient' => $recipient->first_name,
-			'phone' => $recipient->mobile,
-			'campaign_id' => $campaign->id,
-		]);
-
-		#dd($tracking_url);
+        $tracker = $this->hashUrlAndCreateSentSms($tracking_url, 'landingpage3', $recipient, $campaign);
 
 		return [
 			'tracker' => $tracker,
@@ -3119,14 +3093,33 @@ class SmsTemplate extends Model{
 		];
 	}
 
-	protected function createTrackers($message){
+    public function hashUrlAndCreateSentSms($url, $searchReplace, $recipient, $campaign)
+    {
+        do{
+            $hash = Str::random(32);
+            $used = SentSms::where('hash', $hash)->count();
+        }while($used > 0);
 
+        $tracking_url = str_replace('&amp;', '&', $url);
+        $url = str_replace("/", "$", base64_encode($tracking_url));
+        $url .= '/'.$hash;
+        $tracking_url = str_replace($searchReplace, 'sms/l/', $tracking_url).$url;
+
+        return SentSms::create([
+            'hash' => $hash,
+            'url' => $tracking_url,
+            'recipient' => $recipient->first_name,
+            'phone' => $recipient->mobile,
+            'campaign_id' => $campaign->id,
+        ]);
 	}
 
 	public function generateShortUrl($src_url, $logging = false){
 
-		if($logging)
-			Log::stack(['custom'])->debug($src_url);
+		if($logging){
+            Log::stack(['custom'])->debug($src_url);
+        }
+
 		$url = parse_url($src_url);
 		$code = ShortLink::generate($src_url);
 		$dst_url = $url['scheme'] . '://' . env('SHORT_URL_DOMAIN') . '/short/' . $code->code;
@@ -3158,21 +3151,23 @@ class SmsTemplate extends Model{
 
 		$params = $recipient->email.','.$campaign->id;
 		$params = base64_encode($params);
+		$uri = 'account/'.$login_page.'?id='.$params;
 
-		$tracking_url = env('PHISHING_MANAGER_LOGIN_PAGE_URL', config('app.url').'/account/'.$login_page.'?id='.$params);
+		$loginUrl = env('PHISHING_MANAGER_LOGIN_PAGE_URL', config('app.url') . '/' . $uri);
 
-		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
-			$tracking_url = 'http://'.$tracking_url;
+		if(strpos($loginUrl, 'http://') !== 0 && strpos($loginUrl, 'https://') !== 0){
+            $loginUrl = 'http://'.$loginUrl;
 		}
 
 		$send_to_landing = $campaignWithPivot->schedule->send_to_landing;
 		$redirect_url    = $campaignWithPivot->schedule->redirect_url;
 
 		if(intval($send_to_landing) == 0 && !empty($redirect_url)){
-			$tracking_url = $redirect_url;
+            $loginUrl = $redirect_url;
 		}
 
-		return $this->generateShortUrl($tracking_url, true);
+        $tracker =  $this->hashUrlAndCreateSentSms($loginUrl, $uri, $recipient, $campaign);
+        return $this->generateShortUrl($tracker->url, true);
 	}
 
 	public function getLoginVariables(){
