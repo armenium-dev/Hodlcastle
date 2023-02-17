@@ -16,6 +16,8 @@ class AccountActivity extends Model
 
     protected $table = 'account_activities';
 
+    const ACTION_LOGIN = 'Login';
+
     public function user()
     {
         return $this->belongsTo(User::class);

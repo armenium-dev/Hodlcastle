@@ -105,6 +105,10 @@ return [
 	        'level' => 'debug',
         ],
 
+        'email' => [
+	        'driver' => 'email',
+	        'path' => storage_path('logs/email.log'),
+	        'level' => 'debug',
+        ],
     ],
-
 ];

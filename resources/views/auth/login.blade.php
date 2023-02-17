@@ -71,6 +71,13 @@
                     </span>
                 </div>
             @endif
+            @if ($errors->has('attempts_login'))
+                <div class="form-group has-error">
+                    <span class="help-block">
+                        <strong>Too many failed login attempts. Your account has been locked.</strong>
+                    </span>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">

@@ -14,13 +14,15 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
 
+    const MAX_FAILED_ATTEMPT_LOGIN = 3;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'company_id', 'is_active', 'send_to_landing', 'redirect_url',
+        'name', 'email', 'password', 'company_id', 'is_active', 'send_to_landing', 'redirect_url', 'attempts_login'
     ];
 
     public static $rules = [
