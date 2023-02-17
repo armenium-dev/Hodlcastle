@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\AccountActivity;
 use App\User;
+use Dompdf\Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Cache;
 use Illuminate\Http\Request;
@@ -66,6 +67,8 @@ class LoginController extends Controller
 
             return redirect()->intended('/');
         }
+
+        return redirect()->back()->withErrors(['msg' => 'Oppes! You have entered invalid credentials']);
     }
 
 

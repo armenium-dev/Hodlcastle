@@ -38,12 +38,11 @@
         <a href="{{ url('/home') }}"><b>Demo</b></a>
     </div>
 
-    @include('flash::message')
+@include('flash::message')
 
-    <!-- /.login-logo -->
+<!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
-
         <form method="post" action="{{ url('/login') }}">
             {!! csrf_field() !!}
             <div class="form-group has-feedback {{ $errors->has('email') ? ' has-error' : '' }}">
@@ -62,10 +61,16 @@
                 @if ($errors->has('password'))
                     <span class="help-block">
                     <strong>{{ $errors->first('password') }}</strong>
-                </span>
+                    </span>
                 @endif
-
             </div>
+            @if ($errors->has('msg'))
+                <div class="form-group has-error">
+                    <span class="help-block">
+                        <strong>{{ $errors->first('msg') }}</strong>
+                    </span>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">
