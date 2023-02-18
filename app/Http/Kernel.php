@@ -82,5 +82,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         '2fa' => \App\Http\Middleware\TwoFactorMiddleware::class,
         'is_active' => \App\Http\Middleware\IsActiveMiddleware::class,
+        'is_blocked' => \App\Http\Middleware\BlockedUserMiddleware::class,
     ];
 }

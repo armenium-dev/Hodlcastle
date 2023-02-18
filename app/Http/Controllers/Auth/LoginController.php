@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\AccountActivity;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Cache;
@@ -43,31 +42,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function login(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            AccountActivity::create([
-                'action' => 'Login',
-                'user_id' => auth()->id(),
-                'ip_address' => $request->ip()
-            ]);
-
-            return redirect()->intended('/');
-        }
-    }
-
 
     /**
      * Send the post-authentication response.
