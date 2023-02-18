@@ -149,7 +149,7 @@ class CampaignController extends AppBaseController{
      *
      * @param CreateCampaignRequest $request
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
 	public function store(CreateCampaignRequest $request){
@@ -250,6 +250,7 @@ class CampaignController extends AppBaseController{
 			#return redirect(route('scenarios.select', $id));
 		}
 
+        $recipientsCount = 0;
 		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
 		foreach($groups as $group){
 			$recipients_count = $group->recipients()->count();
@@ -257,22 +258,28 @@ class CampaignController extends AppBaseController{
 				$errors++;
 				$error_mess[] = sprintf('Group "%s" has no recipients', $group->name);
 			}
+            $recipientsCount += $recipients_count;
 		}
+
+        $company = auth()->user()->company;
+        if($is_sms_campaign && $recipientsCount > $company->sms_credits){
+            $errors++;
+            $error_mess[] = "Insufficient SMS credits";
+        }
 
 		if($errors > 0){
 			$error_mess = implode('<br>', $error_mess);
 			Flash::error($error_mess);
-
-			return redirect(route('campaigns.create'));
+			return redirect()->back();
 		}
 
+        if ($is_sms_campaign){
+            $company->decrement('sms_credits', $recipientsCount);
+        }
 
-		$recipients = [];
-		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'company_id']);
 		foreach($groups as $group){
 			$input['groups']     = [$group->id => $group->id];
 			$input['company_id'] = $group->company_id;
-
 			$campaign = $this->campaignRepository->create($input);
 
 			if(!is_null($campaign)){
@@ -285,7 +292,6 @@ class CampaignController extends AppBaseController{
 					$campaign->sendToCapitanAboutSmishingCampaign(true);
 				}
 			}
-
 		}
 
 		$type = $request->post('type') ?: 'email';
