@@ -106,7 +106,7 @@ return [
         ],
 
         'email' => [
-	        'driver' => 'email',
+	        'driver' => 'single',
 	        'path' => storage_path('logs/email.log'),
 	        'level' => 'debug',
         ],

@@ -7,10 +7,11 @@
             <th>Recipients number</th>
             <th>Soft limit</th>
             <th>Max Recipients</th>
+            <th>SMS Credits</th>
             <th>Trial Mode</th>
             <th>Profile</th>
             <th>Action</th>
-            <!--<th colspan="3">Action</th>--> 
+            <!--<th colspan="3">Action</th>-->
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
             <td>{!! $company->getRecipients()->count() !!}</td>
             <td>{!! $company->soft_limit !!}</td>
             <td>{!! $company->max_recipients !!}</td>
+            <td>{!! $company->sms_credits !!}</td>
             <td>{!! $company->is_trial ? 'yes' : 'no' !!}</td>
             <td>{!! $company->profile->name !!}</td>
             <td>

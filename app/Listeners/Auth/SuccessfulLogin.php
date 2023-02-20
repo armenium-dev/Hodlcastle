@@ -27,7 +27,10 @@ class SuccessfulLogin
         AccountActivity::create([
             'action' => AccountActivity::ACTION_LOGIN,
             'user_id' => $event->user->id,
+            'company_id' => $event->user->company_id,
             'ip_address' => request()->ip()
         ]);
+
+        $event->user->update(['attempts_login' => 0]);
     }
 }

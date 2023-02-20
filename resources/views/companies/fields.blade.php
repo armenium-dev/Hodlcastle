@@ -28,14 +28,22 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-6">
+                    {!! Form::label('profile_id', 'Profile') !!}
+                    {!! Form::select('profile_id', $profiles, isset($company) ? $company->profile_id : null, ['class' => 'form-control']) !!}
+                </div>
+                <div class="col-sm-6">
+                    {!! Form::label('sms_credits', 'SMS Credits') !!}
+                    {!! Form::number('sms_credits', null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12">
                     @if(Auth::user()->can('company.set_trial'))
                         {!! Form::checkbox('is_trial', 1, isset($company) ? $company->is_trial : false, ['id' => 'is_trial']) !!}
                         {!! Form::label('is_trial', 'Trial Mode') !!}
                     @endif
-                </div>
-                <div class="col-sm-6">
-                    {!! Form::label('profile_id', 'Profile') !!}
-                    {!! Form::select('profile_id', $profiles, isset($company) ? $company->profile_id : null, ['class' => 'form-control']) !!}
                 </div>
             </div>
         </div>
