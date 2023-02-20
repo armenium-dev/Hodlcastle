@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Criteria\CampaignsFilteringCriteria;
 use App\Http\Requests\CreateCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
+use App\Models\AccountActivity;
 use App\Models\Campaign;
+use App\Models\CompanyProfiles;
 use App\Models\Recipient;
 use App\Models\Schedule;
 use App\Repositories\CampaignRepository;
@@ -261,7 +263,13 @@ class CampaignController extends AppBaseController{
             $recipientsCount += $recipients_count;
 		}
 
-        $company = auth()->user()->company;
+        $company = $user->company;
+		// Check customer's company allowed smishing
+        if (!$company->profile_id || $company->profile_id == CompanyProfiles::PHISHING){
+            $errors++;
+            $error_mess[] = "Company is not Smishing";
+        }
+
         if($is_sms_campaign && $recipientsCount > $company->sms_credits){
             $errors++;
             $error_mess[] = "Insufficient SMS credits";
@@ -273,14 +281,21 @@ class CampaignController extends AppBaseController{
 			return redirect()->back();
 		}
 
-        if ($is_sms_campaign){
-            $company->decrement('sms_credits', $recipientsCount);
-        }
-
-		foreach($groups as $group){
+        $company->decrement('sms_credits', $recipientsCount);
+        foreach($groups as $group){
 			$input['groups']     = [$group->id => $group->id];
 			$input['company_id'] = $group->company_id;
 			$campaign = $this->campaignRepository->create($input);
+
+            if ($is_sms_campaign){
+                $user->accountActivities()->create([
+                    'action' => AccountActivity::ACTION_SMS_CREDIT,
+                    'ip_address' => $request->ip(),
+                    'company_id' => $company->id,
+                    'campaign_id' => $campaign->id,
+                    'sms_credit' => $group->recipients()->count(),
+                ]);
+            }
 
 			if(!is_null($campaign)){
 				if($is_email_campaign){

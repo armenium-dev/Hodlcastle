@@ -29,7 +29,8 @@ class AccountActivitiesRepository extends ParentRepository
      */
     public function filter($params)
     {
-        $query = $this->select('account_activities.id', 'user_id', 'action', 'ip_address', 'account_activities.created_at', 'users.name');
+        $query = $this->select('account_activities.id', 'user_id', 'action', 'ip_address',
+            'account_activities.created_at', 'users.name', 'campaign_id', 'sms_credit');
         $query->join('users', 'users.id', '=', 'account_activities.user_id');
         $customerId = null;
 
@@ -64,16 +65,20 @@ class AccountActivitiesRepository extends ParentRepository
             }
         }
 
-//        if (!Auth::user()->hasRole('captain')) {
-//            $customerId = Auth::id();
-//        } else {
-//            if (!empty($form_data['customer'])) {
-//                $customerId = $form_data['customer'];
-//            }
-//        }
+        if (!Auth::user()->hasRole('captain')) {
+            $companyId = Auth::user()->company->id;
+        } else {
+            if (!empty($form_data['customer'])) {
+                $customerId = $form_data['customer'];
+            }
+        }
 
         if (!empty($customerId)) {
             $query->where('user_id', $customerId);
+        }
+
+        if (!empty($companyId)) {
+            $query->where('account_activities.company_id', $companyId);
         }
 
         return $query->get();

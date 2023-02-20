@@ -26,7 +26,13 @@ class CompanyProfiles extends Model{
 		'name' => 'required',
 	];
 
-	public function rules(){
+
+	//Profile types
+	const PHISHING = 1;
+	const PHISHING_SMISHING = 2;
+	const SMISHING = 3;
+
+    public function rules(){
 		return $this->hasMany('App\Models\CompanyProfileRules');
 	}
 
