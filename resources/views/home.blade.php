@@ -12,7 +12,8 @@
                             <h3 class="box-title">Welcome</h3>
                         </div>
                         <div class="box-body">
-                            Welcome to Phishmanager. Your Dashboard will get populated over time with campaigns and statistics. Visit our Documentation page for more information on how to get started.
+                            Welcome to Phishmanager. Your Dashboard will get populated over time with campaigns and
+                            statistics. Visit our Documentation page for more information on how to get started.
                         </div>
                     </div>
                 </div>
@@ -62,11 +63,22 @@
                     </div>
                 </div>
                 {{--@endif--}}
-
+                @if(Auth::user()->hasRole('captain'))
+                    <section class="content-header">
+                        <h1>Smishing Per Location</h1>
+                    </section>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="form-group col-sm-11">
+                            <div class="chart">
+                                <canvas id="chartSmishingPerLocation" style="height:400px" data-recipients="{{ json_encode($smishingPerLocation) }}"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <div class="content">
                     @include('campaigns.table', ['show_status' => 1])
                 </div>
-
             </div>
         </div>
     </div>
