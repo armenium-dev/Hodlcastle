@@ -44,7 +44,7 @@ return [
         ],
 
         'single' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
@@ -94,20 +94,26 @@ return [
         ],
 
         'custom' => [
-	        'driver' => 'single',
+	        'driver' => 'daily',
 	        'path' => storage_path('logs/custom.log'),
 	        'level' => 'debug',
         ],
 
         'cron' => [
-	        'driver' => 'single',
+	        'driver' => 'daily',
 	        'path' => storage_path('logs/cron.log'),
 	        'level' => 'debug',
         ],
 
         'email' => [
-	        'driver' => 'single',
+	        'driver' => 'daily',
 	        'path' => storage_path('logs/email.log'),
+	        'level' => 'debug',
+        ],
+
+        'sms' => [
+	        'driver' => 'daily',
+	        'path' => storage_path('logs/sms.log'),
 	        'level' => 'debug',
         ],
     ],
