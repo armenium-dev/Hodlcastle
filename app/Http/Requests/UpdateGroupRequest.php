@@ -25,6 +25,6 @@ class UpdateGroupRequest extends FormRequest
      */
     public function rules()
     {
-        return [];Group::$rules;
+        return Group::$rules;
     }
 }
