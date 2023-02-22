@@ -43,7 +43,7 @@ class Group extends Model{
 	 */
 	public static $rules = [
 		'name' => 'required',
-		'company_id' => 'required|numeric'
+//		'company_id' => 'required|numeric'
 	];
 
 	public function company(){

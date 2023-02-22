@@ -6,8 +6,10 @@
         <br>
         <label for="delete_old">Delete current recipients before import?</label>
         <input class="my-5" type="checkbox" name="delete_old" id="delete_old" v-model="delete_old"/>
+        <input type="hidden" name="removed_recipients_ids" :value="removedRecipientsIds">
         <br>
         <div :class="'repeater-row clearfix cols-7 ' + (recipient.action ? recipient.action : '')  " v-for="(recipient, k) in recipients">
+            <input type="hidden" :name="inputName(k, 'recipients_attrs', 'id')" :value="recipient.id"/>
             <input :name="inputName(k, 'recipients_attrs', 'email')" placeholder="E-mail" :class="{'error-repeater-row': recipient.email_error}" class="form-control" v-model="recipient.email" type="email" required @blur="checkMailAfterEnter(recipient, k)"/>
             <small class="form-text text-muted"
                    :class="{ 'error-repeater-message': recipient.email_error }"
@@ -19,7 +21,7 @@
             <input :name="inputName(k, 'recipients_attrs', 'location')" placeholder="Location" class="form-control" v-model="recipient.location"/>
             <input :name="inputName(k, 'recipients_attrs', 'mobile')" placeholder="Mobile" class="form-control" v-model="recipient.mobile" pattern="\+[0-9]{1,20}" />
             <input :name="inputName(k, 'recipients_attrs', 'comment')" placeholder="Comment" class="form-control" v-model="recipient.comment"/>
-            <i class="fa fa-times repeater-delete-row" @click="removeRow(recipient)"></i>
+            <i class="fa fa-times repeater-delete-row" @click="removeRow(k, recipient.id)"></i>
         </div>
 
         <input data-repeater-create type="button" value="Add" @click="addRow()" class="btn btn-success"/>
@@ -33,6 +35,7 @@
                 group: {},
                 delete_old: false,
                 recipients: [],
+                removedRecipientsIds: [],
                 file: '',
                 reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
             };
@@ -49,16 +52,9 @@
                     mobile: '',
                 });
             },
-            removeRow: function (recipient) {
-                let recipients_new = [];
-
-                for (let i = 0; i < this.recipients.length; i++) {
-                    let _recipient = this.recipients[i];
-                    if (_recipient.email != recipient.email)
-                        recipients_new.push(_recipient);
-                }
-
-                this.recipients = recipients_new;
+            removeRow: function (index, recipient_id) {
+                this.removedRecipientsIds.push(recipient_id);
+                this.recipients.splice(index, 1);
             },
             handleFileUpload: function() {
                 this.file = this.$refs.file.files[0];
@@ -80,23 +76,32 @@
                         }
                     }
                 ).then(function(resp){
+                    let importRecipientsData = [];
                     for (let i = 0; i < resp.data.length; i++) {
                         let resItem = resp.data[i];
                         let found = self.recipients.findIndex((item) => item.email === resItem.email);
                         if (found === -1){
+                            resItem.action = 'imported';
                             self.recipients.push(resItem);
                         }else{
-                            resItem.action = 'updated'
-                            self.recipients[found] = resItem;
+                            let hasUpdate = false;
+                            if (self.recipients[found].first_name !== resItem.first_name ||
+                                self.recipients[found].last_name !== resItem.last_name ||
+                                self.recipients[found].mobile !== resItem.mobile ||
+                                self.recipients[found].department !== resItem.department ||
+                                self.recipients[found].comment !== resItem.comment){
+                                hasUpdate = true;
+                            }
+
+                            if (hasUpdate){
+                                resItem.action = 'updated';
+                            }
+                            Vue.set(self.recipients, found,  resItem);
                         }
                     }
                     self.recipients.map((item, index) => {
                         return self.checkMailAfterEnter(item, index)
                     });
-
-                    // return self.checkMailAfterEnter(item, index)
-                    // self.recipients[index] = {...self.recipients[index], ...resItem, action: 'updated'}
-
 
                     clearInputFile(document.getElementById('filecsv'));
                 })
@@ -126,7 +131,7 @@
                 let self = this;
 
                 const new_mail = recipient.email;
-                if (new_mail == "" || this.reg.test(new_mail)) {
+                if (new_mail === "" || this.reg.test(new_mail)) {
                     Vue.set(this.recipients[k], 'email_error', null);
 
                     const new_domain = new_mail.split('@')[1];

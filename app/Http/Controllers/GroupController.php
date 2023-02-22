@@ -258,8 +258,7 @@ class GroupController extends AppBaseController
 				            $cols = $data;
 			            }else{
 				            foreach($data as $c => $n){
-					            $recipients[$k][$cols[$c]] = $n;
-                                $recipients[$k]['action'] = 'imported';
+					            $recipients[$k][$cols[$c]] = $n ? $n : null;
 				            }
 			            }
 			            $k++;
@@ -282,8 +281,7 @@ class GroupController extends AppBaseController
 					            $cols = $v;
 				            }else{
 					            foreach($v as $c => $n){
-						            $recipients[$k][$cols[$c]] = $n;
-                                    $recipients[$k]['action'] = 'imported';
+						            $recipients[$k][$cols[$c]] = $n ? $n : null;
 					            }
 				            }
 			            }

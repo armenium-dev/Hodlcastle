@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Criteria\BelongsToCompanyCriteria;
 use App\Models\Group;
 use App\Models\Recipient;
-use InfyOm\Generator\Common\BaseRepository;
 use Exception;
 use Flash;
 use Auth;
@@ -43,13 +42,19 @@ class GroupRepository extends ParentRepository
 
         try {
             if (isset($attributes['recipients_attrs'])) {
-                foreach ($attributes['recipients_attrs'] as $recipient) {
-                    if (self::recipientsMailsValidations($recipient['email'])) {
+                foreach ($attributes['recipients_attrs'] as $attrs) {
+                    if (self::recipientsMailsValidations($attrs['email'])) {
                         continue;
                     }
 
-                    $recipientModel = Recipient::create($recipient);
-                    $ids[] = $recipientModel->id;
+                    $recipient = Recipient::where('email', $attrs['email'])->first();
+                    if ($recipient) {
+                        $recipient->fill($attrs);
+                        $recipient->save();
+                    } else {
+                        $recipient = Recipient::create($attrs);
+                    }
+                    $ids[] = $recipient->id;
                 }
             }
 
@@ -69,22 +74,20 @@ class GroupRepository extends ParentRepository
     public function update(array $attributes, $id)
     {
         $ids = [];
-
-//        // get all recipients in group
-//        $recipients_ids = [];
-//        foreach ($this->findWithoutFail($id)->recipients as $rec){
-//            $recipients_ids[] = $rec->id;
-//        }
-
+        $model = $this->find($id);
         try {
             if (isset($attributes['recipients_attrs'])) {
-                foreach ($attributes['recipients_attrs'] as $attrs) {
+                if (isset($attributes['delete_old']) && $attributes['delete_old'] == 'on') {
+                    $model->recipients()->detach();
+                    $attributes['recipients_attrs'] = array_filter($attributes['recipients_attrs'], function ($item) {
+                        return $item['id'] == null;
+                    });
+                }
 
+                foreach ($attributes['recipients_attrs'] as $attrs) {
                     if (self::recipientsMailsValidations($attrs['email'])) {
                         continue;
                     }
-
-                    $attrs['group_id'] = $id;
                     $recipient = Recipient::where('email', $attrs['email'])->first();
                     if ($recipient) {
                         $recipient->fill($attrs);
@@ -92,33 +95,21 @@ class GroupRepository extends ParentRepository
                     } else {
                         $recipient = Recipient::create($attrs);
                     }
+
                     $ids[] = $recipient->id;
                 }
             }
 
-            $attributes['recipients'] = $ids;
+            $model->recipients()->syncWithoutDetaching($ids);
 
-            $model = $this->find($id);
-
-            if (isset($attributes['delete_old']) && $attributes['delete_old'] == 'on') {
-                $model->recipients()->sync($ids);
-            } else {
-                $model->recipients()->syncWithoutDetaching($ids);
+            if (!empty($attributes['removed_recipients_ids'])) {
+                $removedRecipientsIds = explode(',', $attributes['removed_recipients_ids']);
+                $model->recipients()->detach($removedRecipientsIds);
             }
-
-//            // delete recipients in Recipient model
-//            $result_ids_diff = array_diff($recipients_ids, $ids);
-//            if (!empty($result_ids_diff)) {
-//                foreach ($result_ids_diff as $item) {
-//                    $rec = Recipient::find($item);
-//                    $rec->delete();
-//                }
-//            }
 
             return $model;
         } catch (Exception $e) {
             Flash::error($e->getMessage());
-
             return null;
         }
     }
