@@ -132,24 +132,15 @@ function initDatepickerForCustomerSchedule() {
     let pickerEljqs = $('#date_range_custom');
     if (pickerEljqs.length) {
         pickerEljqs.each(function () {
-            let pickerEljq = $(this);
-            let min = moment().add(2, 'days');
-
-            if(pickerEljq.data('min') !== undefined){
-                min = pickerEljq.data('min');
-            }
-
-            if (min.day() === 0 || min.day() === 6) {
-                min.day(8);
-            }
-
+            let pickerEl = $(this);
+            let min = moment();
             let picker = new Lightpick({
                 field: this,
                 singleDate: true,
                 minDate: min,
                 disableWeekends: true
             });
-            picker.setDate(min);
+            picker.setDate(pickerEl.data('val'));
         })
     }
 }

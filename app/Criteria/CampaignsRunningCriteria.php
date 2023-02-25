@@ -32,12 +32,11 @@ class CampaignsRunningCriteria implements CriteriaInterface{
 			$now = Carbon::now();
 			$q->whereDate('schedule_start', '<=', $now);
 			$q->whereDate('schedule_end', '>', $now);
+            $q->where('time_start', '<=', $now->format('H:i:s'));
+            $q->where('time_end', '>', $now->format('H:i:s'));
 
 			if($this->type == 'email'){
 				$q->where('email_template_id', '>', 0);
-				$q->where('time_start', '<=', $now->format('H:i:s'));
-				$q->where('time_end', '>', $now->format('H:i:s'));
-
 				if(Carbon::now()->isWeekend()){
 					$q->where('send_weekend', 1);
 				}

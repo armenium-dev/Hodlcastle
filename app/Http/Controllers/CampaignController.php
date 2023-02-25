@@ -155,172 +155,223 @@ class CampaignController extends AppBaseController{
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
 	public function store(CreateCampaignRequest $request){
-		$user = Auth()->user();
-		$errors     = 0;
-		$error_mess = [];
-
+        $input = $request->all();
+        $error_mess = [];
 		$is_email_campaign = false;
-		$is_sms_campaign   = false;
-
-		$input = $request->all();
+		$is_sms_campaign = false;
 
         if (empty($input['name'] ) && !empty($input['template_name'])){
             $input['name'] = $input['template_name'];
         }
 
-		if(!$user->company->status){
-			$errors++;
-			$error_mess[] = sprintf('Your company "%s" status not active.', $user->company->name);
-		}
-
 		$input['is_email_campaign'] = $is_email_campaign;
 		$input['is_sms_campaign'] = $is_sms_campaign;
 
 		if(!isset($input['groups'])){
-			$errors++;
 			$error_mess[] = 'Groups not selected';
 		}else{
 			$groups_ids = [];
-			$groups     = $this->groupRepository->listForCompany()->keys();
+			$groups = $this->groupRepository->listForCompany()->keys();
 			foreach($groups as $group){
 				$groups_ids[] = $group;
 			}
 			$diff = array_diff($input['groups'], $groups_ids);
 			if(!empty($diff)){
-				$errors++;
 				$error_mess[] = 'Invalid Groups selected';
 			}
-			#dd(['groups diff' => $diff, 'input groups' => $input['groups'], 'groups_ids' => $groups_ids]);
 		}
 
-		#$this->emailTemplateRepository->pushCriteria(new RequestCriteria($request))->pushCriteria(BelongsToCompanyCriteria::class);
-		#$emailTemplate = $this->emailTemplateRepository->findWithoutFail($input['schedule']['email_template_id']);
-		#dd($emailTemplate);
+		if (count($error_mess)){
+            $error_mess = implode('<br>', $error_mess);
+            Flash::error($error_mess);
+            return redirect()->back();
+        }
 
 		if(!empty($input['schedule']['email_template_id'])){
-			$this->emailTemplateRepository->resetCriteria();
-			$emailTemplate        = $this->emailTemplateRepository->findWithoutFail($input['schedule']['email_template_id']);
-			$input['with_attach'] = $emailTemplate->with_attach;
-			#dd($emailTemplate);
-
-			if(!is_null($emailTemplate->deleted_at)){
-				$errors++;
-				$error_mess[] = 'Email template is deleted. Choose another template.';
-			}elseif(!empty($emailTemplate) && $emailTemplate->is_public == 0){
-				#$errors++;
-				#$error_mess[] = 'Email template is not public';
-				$is_email_campaign = true;
-				$input['is_email_campaign'] = $is_email_campaign;
-			}elseif(empty($emailTemplate)){
-				$errors++;
-				$error_mess[] = 'Email template not found';
-			}else{
-				$is_email_campaign = true;
-				$input['is_email_campaign'] = $is_email_campaign;
-			}
+            $result = $this->processPishingCampaign($input);
+            if (!$result['success']){
+                $error_mess = array_merge($error_mess, $result['errors']);
+            }
 		}
 
-		if(!empty($input['schedule']['sms_template_id'])){
-			$this->smsTemplateRepository->resetCriteria();
-			$smsTemplate          = $this->smsTemplateRepository->findWithoutFail($input['schedule']['sms_template_id']);
-			$input['with_attach'] = 0;
-			#dd($emailTemplate);
+        if(!empty($input['schedule']['sms_template_id'])){
+            $result = $this->processSmishingCampaign($input);
+            if (!$result['success']){
+                $error_mess = array_merge($error_mess, $result['errors']);
+            }
+        }
 
-			if(!is_null($smsTemplate->deleted_at)){
-				$errors++;
-				$error_mess[] = 'SMS template is deleted. Choose another template.';
-			}elseif(!empty($smsTemplate) && $smsTemplate->is_public == 0){
-				#$errors++;
-				#$error_mess[] = 'SMS template is not public';
-				$is_sms_campaign = true;
-				$input['is_sms_campaign'] = $is_sms_campaign;
-			}elseif(empty($smsTemplate)){
-				$errors++;
-				$error_mess[] = 'SMS template not found';
-			}else{
-				$is_sms_campaign = true;
-				$input['is_sms_campaign'] = $is_sms_campaign;
-			}
-		}
+        if(empty($input['schedule']['email_template_id']) && empty($input['schedule']['sms_template_id'])){
+            $error_mess[] = 'Email template not found';
+            $error_mess[] = 'SMS template not found';
+        }
 
-		if(empty($input['schedule']['email_template_id']) && empty($input['schedule']['sms_template_id'])){
-			$errors++;
-			$error_mess[] = 'Email template not found';
-			$errors++;
-			$error_mess[] = 'SMS template not found';
-			#Flash::error('Email template not found');
-			#return redirect(route('scenarios.select', $id));
-		}
+        if (count($error_mess)){
+            $error_mess = implode('<br>', $error_mess);
+            Flash::error($error_mess);
+            return redirect()->back();
+        }
 
+        $type = $request->post('type') ?: 'email';
+
+        if($type == 'sms'){
+            $redirect_route = 'campaigns.smishing';
+        }else{
+            $redirect_route = 'campaigns.index';
+        }
+
+        Flash::success('Campaign started successfully.');
+        return redirect(route($redirect_route));
+	}
+
+    /**
+     * @param $input
+     * @return array
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
+     */
+    public function processPishingCampaign($input)
+    {
+        $errors = [];
         $recipientsCount = 0;
-		$groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
-		foreach($groups as $group){
-			$recipients_count = $group->recipients()->count();
-			if(!$recipients_count){
-				$errors++;
-				$error_mess[] = sprintf('Group "%s" has no recipients', $group->name);
-			}
-            $recipientsCount += $recipients_count;
-		}
+        $groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
 
-        $company = $user->company;
-		// Check customer's company allowed smishing
-        if (!$company->profile_id || $company->profile_id == CompanyProfiles::PHISHING){
-            $errors++;
-            $error_mess[] = "Company is not Smishing";
-        }
-
-        if($is_sms_campaign && $recipientsCount > $company->sms_credits){
-            $errors++;
-            $error_mess[] = "Insufficient SMS credits";
-        }
-
-		if($errors > 0){
-			$error_mess = implode('<br>', $error_mess);
-			Flash::error($error_mess);
-			return redirect()->back();
-		}
-
-        $company->decrement('sms_credits', $recipientsCount);
         foreach($groups as $group){
-			$input['groups']     = [$group->id => $group->id];
-			$input['company_id'] = $group->company_id;
-			$campaign = $this->campaignRepository->create($input);
+            $company = $group->company;
+            $recipients_count = $group->recipients()->count();
 
-            if ($is_sms_campaign){
-                $user->accountActivities()->create([
-                    'action' => AccountActivity::ACTION_SMS_CREDIT,
-                    'ip_address' => $request->ip(),
-                    'company_id' => $company->id,
-                    'campaign_id' => $campaign->id,
-                    'sms_credit' => $group->recipients()->count(),
-                ]);
+            if(!$recipients_count){
+                $errors[] = sprintf('Group "%s" has no recipients', $group->name);
             }
 
-			if(!is_null($campaign)){
-				if($is_email_campaign){
-					$campaign->sendToAllRecipients();
-				}elseif($is_sms_campaign){
-					if($user->hasRole('captain')){
-						$campaign->sendSMSToAllRecipients();
-					}
-					$campaign->sendToCapitanAboutSmishingCampaign(true);
-				}
-			}
-		}
+            if (!$company->profile_id || $company->profile_id == CompanyProfiles::PHISHING){
+                $errors[] = sprintf('Company for Group "%s"  is not Smishing', $group->name);
+            }
+            $recipientsCount += $recipients_count;
+        }
 
-		$type = $request->post('type') ?: 'email';
+        $this->emailTemplateRepository->resetCriteria();
+        $emailTemplate = $this->emailTemplateRepository->findWithoutFail($input['schedule']['email_template_id']);
+        $input['with_attach'] = $emailTemplate->with_attach;
 
-		if($type == 'sms'){
-			$redirect_route = 'campaigns.smishing';
-		}else{
-			$redirect_route = 'campaigns.index';
-		}
+        if (empty($emailTemplate)){
+            $errors[] = 'Email template not found';
+        } else if(!empty($emailTemplate->deleted_at)){
+            $errors[] = 'Email template is deleted. Choose another template.';
+        } else {
+            $input['is_email_campaign'] = true;
+        }
 
-		Flash::success('Campaign started successfully.');
+        if(count($errors)){
+            return [
+                'success' => 0,
+                'errors' => $errors
+            ];
+        }
 
-		return redirect(route($redirect_route));
+        foreach($groups as $group){
+            $input['groups'] = [$group->id => $group->id];
+            $input['company_id'] = $group->company_id;
+            $campaign = $this->campaignRepository->create($input);
+
+            if(!is_null($campaign)){
+                if (!$input['scheduled_type']){
+                    $campaign->sendToAllRecipients();
+                }
+            }
+        }
+
+        return [
+            'success' => 1,
+            'errors' => []
+        ];
 	}
+
+    /**
+     * @param $input
+     * @return array
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
+     */
+    public function processSmishingCampaign($input)
+    {
+        $isCaptain = auth()->user()->hasRole('captain');
+        $errors = [];
+        $recipientsCount = 0;
+        $groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
+
+        foreach($groups as $group){
+            $company = $group->company;
+            $count = $group->recipients()->whereNotNull('mobile')->count();
+
+            if(!$company->status){
+                $errors[] = sprintf('Group company "%s" status not active.', $company->name);
+            }
+            if(!$count){
+                $errors[] = sprintf('Group "%s" has no recipients', $group->name);
+            }
+            if (!$company->profile_id || $company->profile_id == CompanyProfiles::PHISHING){
+                $errors[] = sprintf('Group "%s" Company is not Smishing', $group->name);
+            }
+
+            if (!$isCaptain || $company->id != auth()->user()->company->id){
+                if($count > $company->sms_credits){
+                    $errors[] = sprintf('Group "%s" Company Insufficient SMS credits', $group->name) ;
+                }
+            }
+
+            $recipientsCount += $count;
+        }
+
+        $this->smsTemplateRepository->resetCriteria();
+        $smsTemplate = $this->smsTemplateRepository->findWithoutFail($input['schedule']['sms_template_id']);
+        $input['with_attach'] = 0;
+
+        if (empty($smsTemplate)){
+            $errors[] = 'SMS template not found';
+        } else if(!empty($smsTemplate->deleted_at)){
+            $errors[] = 'SMS template is deleted. Choose another template.';
+        } else {
+            $input['is_sms_campaign'] = true;
+        }
+
+        if(count($errors)){
+            return [
+                'success' => 0,
+                'errors' => $errors
+            ];
+        }
+
+        $user = Auth()->user();
+        foreach($groups as $group){
+            $company = $group->company;
+            $input['groups'] = [$group->id => $group->id];
+            $input['company_id'] = $group->company_id;
+            $campaign = $this->campaignRepository->create($input);
+
+            if(!is_null($campaign)){
+                if (!$input['scheduled_type']){
+                    $user->accountActivities()->create([
+                        'action' => AccountActivity::ACTION_SMS_CREDIT,
+                        'ip_address' => request()->ip(),
+                        'company_id' => $input['company_id'],
+                        'campaign_id' => $campaign->id,
+                        'sms_credit' => $recipientsCount,
+                    ]);
+
+                    if (!$isCaptain || $company->id != auth()->user()->company->id){
+                        $company->decrement('sms_credits', $recipientsCount);
+                    }
+
+                    $campaign->sendSMSToAllRecipients();
+                }
+                $campaign->sendToCapitanAboutSmishingCampaign(true);
+            }
+        }
+
+        return [
+            'success' => 1,
+            'errors' => []
+        ];
+    }
 
     /**
      * Display the specified Campaign.

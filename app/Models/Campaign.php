@@ -250,41 +250,42 @@ class Campaign extends Model{
 	}
 
 	public function sendToAllRecipientsByCron(){
-		#Log::stack(['custom'])->debug($this->id);
-		#Log::stack(['custom'])->debug($this->groups);
 
 		foreach($this->groups as $group){
-			$recipients = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'))->get();
-			#Log::stack(['custom'])->debug($group->id);
-			#Log::stack(['custom'])->debug($recipients);
+            $query = $group->recipients()->whereNotIn('id', $this->recipients->pluck('id'));
+            if ($this->schedule->sms_template_id) {
+                $query->whereNotNull('mobile');
+            }
+            $recipients = $query->get();
+			$recipientsCount = count($recipients);
+
+            if (!$recipientsCount){
+                Log::stack(['custom'])->debug('no recipient to send - proceed to next group');
+                return false;
+            }
+
+            if ($this->schedule->sms_template_id) {
+                $company = $group->company;
+                if($recipientsCount > $company->sms_credits){
+                    Log::stack(['custom'])->debug("Group {$group->name} Company Insufficient SMS credits");
+                    return false;
+                }
+
+                $company->decrement('sms_credits', $recipientsCount);
+            }
 
 			foreach($recipients as $recipient){
-				if($recipient){
-					if($this->schedule->email_template_id){
-						#Log::stack(['custom'])->debug($this->id);
-						#Log::stack(['custom'])->debug($this->schedule->id);
-						#Log::stack(['custom'])->debug($this->schedule->emailTemplate->id);
-                        $recipient->attachToCampaign($this);
-						$this->schedule->emailTemplate->send($recipient, $this);
-					}elseif($this->schedule->sms_template_id){
-					    if (!$recipient->mobile){
-					        continue;
-                        }
+                $recipient->attachToCampaign($this);
+                if($this->schedule->email_template_id){
+                    $this->schedule->emailTemplate->send($recipient, $this);
+                }
+                else if($this->schedule->sms_template_id){
+                    $this->setRecipendCode($recipient, $this->id);
+                    $this->schedule->smsTemplate->send($recipient, $this);
+                }
 
-						$recipient->attachToCampaign($this);
-						$this->setRecipendCode($recipient, $this->id);
-						$this->schedule->smsTemplate->send($recipient, $this);
-					}
-
-					$recipient->setIsSentToCampaign($this);
-
-					return true;
-				}else{
-					// if no recipient to send - proceed to next group
-					Log::stack(['custom'])->debug('no recipient to send - proceed to next group');
-
-					return false;
-				}
+                $recipient->setIsSentToCampaign($this);
+                return true;
 			}
 		}
 
