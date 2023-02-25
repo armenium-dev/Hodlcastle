@@ -25,7 +25,7 @@
         <div class="col-xs-6">
             {!! Form::label('time_range', 'Start Time:') !!}
             <input type="text" name="schedule[time_start]" class="form-control time_start"
-                   value="{{ isset($model->schedule) ? Carbon::parse($model->schedule->time_start)->format('H:i') : Carbon::now()->startOfDay()->format('H:i') }}"/>
+                   value="{{ isset($model->schedule) ? Carbon::parse($model->schedule->time_start)->format('H:i') : '' }}"/>
         </div>
     </div>
 </div>
