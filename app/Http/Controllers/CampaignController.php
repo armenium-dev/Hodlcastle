@@ -295,17 +295,16 @@ class CampaignController extends AppBaseController{
     {
         $isCaptain = auth()->user()->hasRole('captain');
         $errors = [];
-        $recipientsCount = 0;
         $groups = $this->groupRepository->findWithoutFail($input['groups'], ['id', 'name', 'company_id']);
 
         foreach($groups as $group){
             $company = $group->company;
-            $count = $group->recipients()->whereNotNull('mobile')->count();
+            $recipientsCount = $group->recipients()->whereNotNull('mobile')->count();
 
             if(!$company->status){
                 $errors[] = sprintf('Group company "%s" status not active.', $company->name);
             }
-            if(!$count){
+            if(!$recipientsCount){
                 $errors[] = sprintf('Group "%s" has no recipients', $group->name);
             }
             if (!$company->profile_id || $company->profile_id == CompanyProfiles::PHISHING){
@@ -313,12 +312,10 @@ class CampaignController extends AppBaseController{
             }
 
             if (!$isCaptain || $company->id != auth()->user()->company->id){
-                if($count > $company->sms_credits){
-                    $errors[] = sprintf('Group "%s" Company Insufficient SMS credits', $group->name) ;
+                if($recipientsCount > $company->sms_credits){
+                    $errors[] = sprintf('Insufficient SMS credits for "%s" Group', $group->name) ;
                 }
             }
-
-            $recipientsCount += $count;
         }
 
         $this->smsTemplateRepository->resetCriteria();
@@ -343,6 +340,7 @@ class CampaignController extends AppBaseController{
         $user = Auth()->user();
         foreach($groups as $group){
             $company = $group->company;
+            $recipientsCount = $group->recipients()->whereNotNull('mobile')->count();
             $input['groups'] = [$group->id => $group->id];
             $input['company_id'] = $group->company_id;
             $campaign = $this->campaignRepository->create($input);
