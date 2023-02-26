@@ -267,11 +267,11 @@ class Campaign extends Model{
             if ($this->schedule->sms_template_id) {
                 $company = $group->company;
                 if($recipientsCount > $company->sms_credits){
-                    Log::stack(['custom'])->debug("Group {$group->name} Company Insufficient SMS credits");
+                    Log::stack(['custom'])->debug("Insufficient SMS credits for {$group->name} Group");
                     return false;
                 }
 
-                $company->decrement('sms_credits', $recipientsCount);
+                $company->decrement('sms_credits', 1);
             }
 
 			foreach($recipients as $recipient){
