@@ -24,7 +24,6 @@ $(document).ready(function () {
     initChartBrowsers();
     initChartClicks();
     initChartHome();
-    initChartSmishingPerLocation();
 
     initSidebarToggle();
 
@@ -616,50 +615,6 @@ function initChartHome() {
     lineChart.Line(lineData, options);
 
 }
-
-function initChartSmishingPerLocation() {
-    let elem = $('#chartSmishingPerLocation')
-    if (elem.length == 0){
-        return;
-    }
-
-    let recipients= elem.data('recipients');
-
-    let labels = [];
-    let dataSet = [];
-    console.log(recipients);
-    recipients.map((recipient) => {
-        labels.push(recipient.location);
-        dataSet.push(recipient.results_count)
-    })
-
-    var barChartCanvas = elem.get(0).getContext('2d');
-    var barChart       = new Chart(barChartCanvas);
-    var barData        = {
-        tooltip_labels: labels,
-        labels :    labels,
-        datasets :  [
-            {
-                label : "Smish",
-                fillColor : "rgba(1,191,238,0.2)",
-                strokeColor : "rgba(1,191,238,1)",
-                pointColor : "rgba(1,191,238,1)",
-                pointStrokeColor : "#fff",
-                pointHighlightFill : "#fff",
-                pointHighlightStroke : "rgba(1,191,238,1)",
-                data: dataSet
-            }
-        ]
-    };
-
-    var options = {
-        showTooltips: true,
-        multiTooltipTemplate: "<%= value %>% - <%= datasetLabel %>",
-    };
-
-    barChart.Bar(barData, options);
-}
-
 
 function initChartClicks() {
     if ($('#barChart').length == 0)

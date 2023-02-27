@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Criteria\BelongsToCompanyCriteria;
+use App\Models\Recipient;
+use App\Models\Result;
 use App\Repositories\CampaignRepository;
 use App\Repositories\CompanyRepository;
 use App\Repositories\DomainRepository;
@@ -37,9 +39,54 @@ class StatisticController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $campaigns = $this->campaignRepository->pushCriteria(BelongsToCompanyCriteria::class)->all()->sortByDesc('created_at');
+        $campaigns->each(function ($campaign) {
+
+            $sent = $campaign->countResults('sent');
+            $fake_auth = $campaign->countResults('fake_auth');
+            $open = $campaign->countResults('open');
+            $click = $campaign->countResults('click');
+            $report = $campaign->countResults('report');
+            $attachment = $campaign->countResults('attachment');
+            $smish = $campaign->countResults('smish');
+
+            if ($sent) {
+                $campaign->sentsCount = 100;
+                $campaign->opensCount = $open * 100 / $sent;
+                $campaign->fake_auth = $fake_auth * 100 / $sent;
+                $campaign->clicksCount = $click * 100 / $sent;
+                $campaign->reportsCount = $report * 100 / $sent;
+                $campaign->attachmentsCount = $attachment * 100 / $sent;
+                $campaign->smishsCount = $smish * 100 / $sent;
+            } else {
+                $campaign->sentsCount = 0;
+                $campaign->opensCount = 0;
+                $campaign->fake_auth = 0;
+                $campaign->clicksCount = 0;
+                $campaign->reportsCount = 0;
+                $campaign->attachmentsCount = 0;
+                $campaign->smishsCount = 0;
+            }
+
+        });
+
+        $campaigns_for_table = $campaigns->take(12);
+
+        $labels = $campaigns_for_table->sortBy('created_at')->pluck('name');
+        $len = 15;
+        foreach ($labels as $k => $label) {
+            $label = str_replace(['(PUBLIC)', 'Scenario:'], '', $label);
+            $label = trim($label);
+            if (strlen($label) > $len) {
+                $label = substr($label, 0, $len);
+            }
+            $labels[$k] = trim($label);
+        }
+        $company_id = Auth::user()->company->id;
+        $baseline = $this->campaignRepository->getKickoffBaseline($company_id);
         $companies = $this->companyRepository->all();
         $report = $this->getReportData();
-        return view('statistics.index', compact('companies', 'report'));
+        return view('statistics.index', compact('companies', 'report', 'campaigns_for_table', 'baseline', 'labels'));
     }
 
     /**
@@ -165,12 +212,29 @@ class StatisticController extends AppBaseController
             $smishingLabels[$k] = trim($label);
         }
 
+        $smishingPerLocation = $this->getSuccessfulSmishingPerLocation();
+
         return [
             'campaigns' => $campaigns,
             'campaigns_for_table' => $campaigns_for_table,
             'smishing_campaigns_for_table' => $smishing_campaigns_for_table,
             'labels' => $labels,
-            'smishingLabels' => $smishingLabels
+            'smishingLabels' => $smishingLabels,
+            'smishingPerLocation' => $smishingPerLocation
         ];
+    }
+
+
+    public function getSuccessfulSmishingPerLocation()
+    {
+        return Recipient::select('id', 'location')
+            ->whereNotNull('location')
+            ->withCount([
+                'results' => function ($query) {
+                    $query->where('type_id', Result::TYPE_SMISH);
+                }
+            ])
+            ->groupBy('location')
+            ->get();
     }
 }
