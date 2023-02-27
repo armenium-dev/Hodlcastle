@@ -4,7 +4,37 @@
     <div class="nav-tabs-custom layout">
         @include('main.tabs', ['active' => 'statistics'])
         <div class="tab-content pr">
-            <section class="section-statistics" style="padding: 30px;">
+            <section class="section-statistics" style="padding: 30px 5px;">
+                <div class="chart-container" style="position: relative">
+                    <div class="form-group col-sm-11 p-0" style="padding: 0">
+                        <div class="chart">
+                            <canvas id="chartHome" style="height:400px"
+                                    data-labels="{{ $campaigns_for_table->sortBy('created_at')->pluck('name')->implode(",") }}"
+                                    data-short-labels="{{ $labels->implode(",") }}"
+                                    data-data-sents="[{{ $campaigns_for_table->sortBy('created_at')->pluck('sentsCount')->implode(",") }}]"
+                                    data-data-opens="[{{ $campaigns_for_table->sortBy('created_at')->pluck('opensCount')->implode(",") }}]"
+                                    data-data-fakeauth="[{{ $campaigns_for_table->sortBy('created_at')->pluck('fake_auth')->implode(",") }}]"
+                                    data-data-clicks="[{{ $campaigns_for_table->sortBy('created_at')->pluck('clicksCount')->implode(",") }}]"
+                                    data-data-reports="[{{ $campaigns_for_table->sortBy('created_at')->pluck('reportsCount')->implode(",") }}]"
+                                    data-data-attachments="[{{ $campaigns_for_table->sortBy('created_at')->pluck('attachmentsCount')->implode(",") }}]"
+                                    data-data-smishs="[{{ $campaigns_for_table->sortBy('created_at')->pluck('smishsCount')->implode(",") }}]"
+                            >
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-1 p-0">
+                        <div class="row">
+                            <h4>Baseline:</h4>
+                        </div>
+                        <div class="row">
+                            @if($baseline || $baseline === 0)
+                                <h1>{{ $baseline }} %</h1>
+                            @else
+                                <h1>-</h1>
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="chart-container" style="position: relative">
                     <canvas id="chart1"
                             data-short-labels="{{ $report['labels'] }}"
@@ -27,7 +57,8 @@
                             <section class="d-flex" style="margin-top: 30px; width: 30%; flex-wrap: wrap">
                                 <div class="desc" style="width: 50%">
                                     <h4 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h4>
-                                    <p style="margin: 0">{{$campaign->clicksCount}} of {{$campaign->recipients_count}} found Susceptible</p>
+                                    <p style="margin: 0">{{$campaign->clicksCount}} of {{$campaign->recipients_count}}
+                                        found Susceptible</p>
                                     <p style="margin: 0">Unique Recipients: {{$campaign->recipients_count}}</p>
                                     <p style="margin: 0">Clicks: {{$campaign->clicksCount}}</p>
                                     <p style="margin: 0">Reported Only Link: {{$campaign->reportOnlyCount}}</p>
@@ -55,6 +86,15 @@
                             data-data-smishs="[{{ $report['smishing_campaigns_for_table']->sortBy('created_at')->pluck('smishsPercent')->implode(",") }}]">
                     </canvas>
                 </div>
+                @if(Auth::user()->hasRole('captain'))
+                    <div class="chart-container" style="position: relative">
+                        <canvas
+                            id="chartSmishingPerLocation"
+                            style="height:400px"
+                            data-recipients="{{ $report['smishingPerLocation'] }}">
+                        </canvas>
+                    </div>
+                @endif
                 <div class="chart-container" style="position: relative;">
                     <h2 style="font-weight: bold;">Smishing results per campaign</h2>
                     <div class="pie-charts d-flex" style="flex-wrap: wrap">
@@ -63,7 +103,8 @@
                             <section class="d-flex" style="margin-top: 30px; width: 30%; flex-wrap: wrap">
                                 <div class="desc" style="width: 50%">
                                     <h4 style="font-weight: bold;">Results of campaign: {{$campaign->name}}</h4>
-                                    <p style="margin: 0">{{$campaign->smishsCount}} of {{$campaign->recipients_count}} found Susceptible</p>
+                                    <p style="margin: 0">{{$campaign->smishsCount}} of {{$campaign->recipients_count}}
+                                        found Susceptible</p>
                                     <p style="margin: 0">Unique Recipients: {{$campaign->recipients_count}}</p>
                                     <p style="margin: 0">Smished: {{$campaign->smishsCount}}</p>
                                 </div>

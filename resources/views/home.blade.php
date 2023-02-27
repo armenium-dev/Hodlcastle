@@ -32,50 +32,36 @@
                 <div class="clearfix"></div>
 
                 {{--@if(Auth::user()->hasRole('captain'))--}}
-                <div class="row">
-                    <div class="form-group col-sm-11">
-                        <div class="chart">
-                            <canvas id="chartHome" style="height:400px"
-                                    data-labels="{{ $campaigns_for_table->sortBy('created_at')->pluck('name')->implode(",") }}"
-                                    data-short-labels="{{ $labels->implode(",") }}"
-                                    data-data-sents="[{{ $campaigns_for_table->sortBy('created_at')->pluck('sentsCount')->implode(",") }}]"
-                                    data-data-opens="[{{ $campaigns_for_table->sortBy('created_at')->pluck('opensCount')->implode(",") }}]"
-                                    data-data-fakeauth="[{{ $campaigns_for_table->sortBy('created_at')->pluck('fake_auth')->implode(",") }}]"
-                                    data-data-clicks="[{{ $campaigns_for_table->sortBy('created_at')->pluck('clicksCount')->implode(",") }}]"
-                                    data-data-reports="[{{ $campaigns_for_table->sortBy('created_at')->pluck('reportsCount')->implode(",") }}]"
-                                    data-data-attachments="[{{ $campaigns_for_table->sortBy('created_at')->pluck('attachmentsCount')->implode(",") }}]"
-                                    data-data-smishs="[{{ $campaigns_for_table->sortBy('created_at')->pluck('smishsCount')->implode(",") }}]"
-                            >
-                            </canvas>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-1">
-                        <div class="row">
-                            <h4>Baseline:</h4>
-                        </div>
-                        <div class="row">
-                            @if($baseline || $baseline === 0)
-                                <h1>{{ $baseline }} %</h1>
-                            @else
-                                <h1>-</h1>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                {{--@endif--}}
-                @if(Auth::user()->hasRole('captain'))
-                    <section class="content-header">
-                        <h1>Smishing Per Location</h1>
-                    </section>
-                    <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="form-group col-sm-11">
-                            <div class="chart">
-                                <canvas id="chartSmishingPerLocation" style="height:400px" data-recipients="{{ json_encode($smishingPerLocation) }}"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+{{--                <div class="row">--}}
+{{--                    <div class="form-group col-sm-11">--}}
+{{--                        <div class="chart">--}}
+{{--                            <canvas id="chartHome" style="height:400px"--}}
+{{--                                    data-labels="{{ $campaigns_for_table->sortBy('created_at')->pluck('name')->implode(",") }}"--}}
+{{--                                    data-short-labels="{{ $labels->implode(",") }}"--}}
+{{--                                    data-data-sents="[{{ $campaigns_for_table->sortBy('created_at')->pluck('sentsCount')->implode(",") }}]"--}}
+{{--                                    data-data-opens="[{{ $campaigns_for_table->sortBy('created_at')->pluck('opensCount')->implode(",") }}]"--}}
+{{--                                    data-data-fakeauth="[{{ $campaigns_for_table->sortBy('created_at')->pluck('fake_auth')->implode(",") }}]"--}}
+{{--                                    data-data-clicks="[{{ $campaigns_for_table->sortBy('created_at')->pluck('clicksCount')->implode(",") }}]"--}}
+{{--                                    data-data-reports="[{{ $campaigns_for_table->sortBy('created_at')->pluck('reportsCount')->implode(",") }}]"--}}
+{{--                                    data-data-attachments="[{{ $campaigns_for_table->sortBy('created_at')->pluck('attachmentsCount')->implode(",") }}]"--}}
+{{--                                    data-data-smishs="[{{ $campaigns_for_table->sortBy('created_at')->pluck('smishsCount')->implode(",") }}]"--}}
+{{--                            >--}}
+{{--                            </canvas>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="form-group col-sm-1">--}}
+{{--                        <div class="row">--}}
+{{--                            <h4>Baseline:</h4>--}}
+{{--                        </div>--}}
+{{--                        <div class="row">--}}
+{{--                            @if($baseline || $baseline === 0)--}}
+{{--                                <h1>{{ $baseline }} %</h1>--}}
+{{--                            @else--}}
+{{--                                <h1>-</h1>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="content">
                     @include('campaigns.table', ['show_status' => 1])
                 </div>
