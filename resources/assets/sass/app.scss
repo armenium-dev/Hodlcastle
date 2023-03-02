@@ -59,6 +59,9 @@ body {font-family: 'Open sans', 'Source Sans Pro','Helvetica Neue',Helvetica,Ari
 .w-full {width: 100%;}
 .h-full {height: 100%;}
 
+.w-24 {width: 24px;}
+.h-24 {height: 24px;}
+
 .min-w-100 {min-width: 100px;}
 .min-w-130 {min-width: 130px;}
 .min-w-150 {min-width: 150px;}
@@ -377,3 +380,8 @@ body.training-body .site-wrapper .site-wrapper-inner .cover-container .inner.cov
 .repeater-row.imported .form-control{
     background-color: rgba(40, 167, 69, 0.1);
 }
+
+.panel-title:not(.collapsed) .bottom {display: none;}
+.panel-title:not(.collapsed) .top {display: block;}
+.panel-title.collapsed .bottom {display: block;}
+.panel-title.collapsed .top {display: none;}

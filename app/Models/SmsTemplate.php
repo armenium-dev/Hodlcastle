@@ -2940,7 +2940,7 @@ class SmsTemplate extends Model{
         if (!empty($recipient->mobile)) {
             try {
                 if ($this->checkIfBusinessHoursForRecipient($recipient->mobile)) {
-                    $sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
+                    #$sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
                     Log::stack(['custom'])->debug($recipient->mobile . ' Sent');
                 } else {
                     Log::stack(['custom'])->debug($recipient->mobile . ' Outside working hours');
