@@ -56,6 +56,33 @@
                 </td>
             </tr>
             <tr>
+                <th colspan="2">Domain:</th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        {!! Form::select('schedule[domain_id]', $domains, null, ['class' => 'form-control', 'id' => 'domain_id']) !!}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">Sender Number:</th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <select name="sms_from" class="form-control">
+                        <option value="">Select number</option>
+                        @foreach($numbers as $key => $group)
+                            <optgroup label="{{$key}}">
+                                @foreach($group as $number)
+                                    <option value="{{$number}}">{{$number}}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2" class="">
                     <hr>
                 </td>

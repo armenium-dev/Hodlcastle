@@ -19,6 +19,7 @@ use App\Repositories\DomainRepository;
 use App\Repositories\GroupRepository;
 use App\Repositories\RecipientRepository;
 use App\Http\Controllers\AppBaseController;
+use Armenium\LaraTwilioMulti\Facades\LaraTwilioMulti;
 use Illuminate\Http\Request;
 use Flash;
 use Exception;
@@ -338,6 +339,7 @@ class CampaignController extends AppBaseController{
         }
 
         $user = Auth()->user();
+        LaraTwilioMulti::smsFrom($input['sms_from']);
         foreach($groups as $group){
             $company = $group->company;
             $recipientsCount = $group->recipients()->whereNotNull('mobile')->count();

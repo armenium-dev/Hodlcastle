@@ -17,7 +17,6 @@
                     {!! Form::hidden('email', config('mail.email_service_desk')) !!}
                     {!! Form::hidden('schedule[sms_template_id]', $sms_template->id) !!}
                     {!! Form::hidden('schedule[send_to_landing]', 1) !!}
-                    {!! Form::hidden('schedule[domain_id]', 3) !!}
                     {!! Form::hidden('schedule[email_template_id]', 0) !!}
                     {!! Form::hidden('type', 'sms') !!}
                     @include('smishing.fields')
