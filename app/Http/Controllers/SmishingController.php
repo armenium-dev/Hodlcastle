@@ -11,6 +11,7 @@ use App\Repositories\EmailTemplateRepository;
 use App\Repositories\GroupRepository;
 use App\Repositories\LanguageRepository;
 use App\Repositories\ScenarioRepository;
+use Armenium\LaraTwilioMulti\Facades\LaraTwilioMulti;
 use Illuminate\Http\Request;
 use Flash;
 use Illuminate\Support\Facades\Auth;
@@ -78,10 +79,25 @@ class SmishingController extends AppBaseController {
 	public function select($id){
 		$sms_template = SmsTemplate::findOrFail($id);
 		$groups = $this->groupRepository->listForCompany();
+        $domains = $this->domainRepository->listForCompany();
+		$twilioAccount = LaraTwilioMulti::getInstance()->accounts;
+        $params = array_values($twilioAccount)[0]['params'];
+        $numbers = $this->groupBy($params, 'country');
 		#dd($sms_template->company->logo);
 
-		return view('smishing.select', compact('sms_template', 'groups'));
+		return view('smishing.select', compact('sms_template', 'groups', 'numbers', 'domains'));
 	}
 
+    function groupBy(array $array, $key) {
+        return array_reduce($array, function ($result, $item) use ($key) {
+            $groupKey = $item[$key];
+            if (!array_key_exists($groupKey, $result)) {
+                $result[$groupKey] = [];
+            }
+
+            $result[$groupKey][] = $item['sms_from'];
+            return $result;
+        }, []);
+    }
 
 }

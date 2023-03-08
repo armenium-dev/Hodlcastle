@@ -2884,6 +2884,8 @@ class SmsTemplate extends Model{
         ]
     ];
 
+    public $selectedDomainUrl = null;
+
 	public function image(){
 		return $this->morphOne('App\Models\Image', 'imageable')->latest();
 	}
@@ -2926,6 +2928,7 @@ class SmsTemplate extends Model{
     public function send(Recipient $recipient, $campaign = null){
         Log::stack(['custom'])->debug(__METHOD__);
         $sendSms = false;
+        $this->selectedDomainUrl = 'https://'.$campaign->schedule->domain->domain;
         $content_data = $this->buildContent($recipient, $campaign);
         $content = $content_data['content'];
         $tracker = $content_data['tracker'];
@@ -2938,9 +2941,11 @@ class SmsTemplate extends Model{
 //        }
 
         if (!empty($recipient->mobile)) {
+            $sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
+            dd($sendSms);
             try {
                 if ($this->checkIfBusinessHoursForRecipient($recipient->mobile)) {
-                    $sendSms = LaraTwilioMulti::notify($recipient->mobile, $content);
+                    $sendSms = LaraTwilioMulti::smsFrom(1231313131)->notify($recipient->mobile, $content);
                     Log::stack(['custom'])->debug($recipient->mobile . ' Sent');
                 } else {
                     Log::stack(['custom'])->debug($recipient->mobile . ' Outside working hours');
@@ -2955,7 +2960,6 @@ class SmsTemplate extends Model{
 		if($sendSms){
 			Event::dispatch(new SmsSentEvent($tracker));
         }
-
         return $sendSms;
     }
 
@@ -3071,9 +3075,7 @@ class SmsTemplate extends Model{
 				throw new \Exception('Campaign got no schedule');
 			}
 		}
-
-		$tracking_url = env('PHISHING_MANAGER_LANDING_PAGE_SMS_URL', config('app.url').'/landingpage3');
-
+		$tracking_url = $this->selectedDomainUrl ? "$this->selectedDomainUrl/landingpage3" : config('app.url').'/landingpage3';
 		if(strpos($tracking_url, 'http://') !== 0 && strpos($tracking_url, 'https://') !== 0){
 			$tracking_url = 'http://'.$tracking_url;
 		}
@@ -3120,9 +3122,8 @@ class SmsTemplate extends Model{
             Log::stack(['custom'])->debug($src_url);
         }
 
-		$url = parse_url($src_url);
 		$code = ShortLink::generate($src_url);
-		$dst_url = $url['scheme'] . '://' . env('SHORT_URL_DOMAIN') . '/short/' . $code->code;
+		$dst_url = $this->selectedDomainUrl . '/short/' . $code->code;
 
 		if($logging)
 			Log::stack(['custom'])->debug($dst_url);
