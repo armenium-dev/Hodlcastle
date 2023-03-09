@@ -28,7 +28,7 @@ class IsActiveMiddleware{
 				#dd('Customer');
 				Auth::logout();
 				
-				Flash::error('Your access is closed.<br>Please contact your captain.');
+				Flash::error('Your access is closed.<br>Please contact support.');
 				
 				return Redirect::to('login');
 			}elseif(Auth::user()->hasRole('captain')){
