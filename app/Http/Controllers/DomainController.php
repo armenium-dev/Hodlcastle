@@ -17,186 +17,187 @@ use App\Mail\CampaignSending;
 use App\Models\Recipient;
 use App\Helpers\PermissionHelper;
 
-class DomainController extends AppBaseController{
-	/** @var  DomainRepository */
-	private $domainRepository;
-	private $companyRepository;
+class DomainController extends AppBaseController
+{
+    /** @var  DomainRepository */
+    private $domainRepository;
+    private $companyRepository;
 
-	public function __construct(Request $request, DomainRepository $domainRepo, CompanyRepository $companyRepo){
-		parent::__construct($request);
+    public function __construct(Request $request, DomainRepository $domainRepo, CompanyRepository $companyRepo)
+    {
+        parent::__construct($request);
 
-		$this->domainRepository = $domainRepo;
-		$this->companyRepository = $companyRepo;
-	}
+        $this->domainRepository = $domainRepo;
+        $this->companyRepository = $companyRepo;
+    }
 
-	/**
-	 * Display a listing of the Domain.
-	 *
-	 * @param Request $request
-	 * @return Response
-	 */
-	public function index(Request $request){
-		$domainsPublic = $this->domainRepository->findByField('is_public', 1);
-		$domainsPublic = $this->sortDomains($domainsPublic);
+    /**
+     * Display a listing of the Domain.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        $domainsPublic = $this->domainRepository->findByField('is_public', 1);
+        $domainsPublic = $this->domainRepository->sortDomains($domainsPublic);
 
-		$this->domainRepository
-			->pushCriteria(new RequestCriteria($request))
-			->pushCriteria(new BelongsToCompanyCriteria);
-		$domains = $this->domainRepository->all();
-		$domains = $this->sortDomains($domains);
+        $this->domainRepository
+            ->pushCriteria(new RequestCriteria($request))
+            ->pushCriteria(new BelongsToCompanyCriteria);
+        $domains = $this->domainRepository->all();
+        $domains = $this->domainRepository->sortDomains($domains);
 
-		return view('domains.index')
-			->with(compact('domains', 'domainsPublic'));
-	}
+        return view('domains.index')
+            ->with(compact('domains', 'domainsPublic'));
+    }
 
-	/**
-	 * Show the form for creating a new Domain.
-	 *
-	 * @return Response
-	 */
-	public function create(Request $request){
-		$this->companyRepository->pushCriteria(new RequestCriteria($request));
-		$companies = $this->companyRepository->pluck('name', 'id');
+    /**
+     * Show the form for creating a new Domain.
+     *
+     * @return Response
+     */
+    public function create(Request $request)
+    {
+        $this->companyRepository->pushCriteria(new RequestCriteria($request));
+        $companies = $this->companyRepository->pluck('name', 'id');
 
-		return view('domains.create')->with('companies', $companies);
-	}
+        return view('domains.create')->with('companies', $companies);
+    }
 
-	/**
-	 * Store a newly created Domain in storage.
-	 *
-	 * @param CreateDomainRequest $request
-	 *
-	 * @return Response
-	 */
-	public function store(CreateDomainRequest $request){
-		$input = $request->all();
+    /**
+     * Store a newly created Domain in storage.
+     *
+     * @param CreateDomainRequest $request
+     *
+     * @return Response
+     */
+    public function store(CreateDomainRequest $request)
+    {
+        $input = $request->all();
 
-		$domain = $this->domainRepository->create($input);
+        $domain = $this->domainRepository->create($input);
 
-		Flash::success('Domain saved successfully.');
+        Flash::success('Domain saved successfully.');
 
-		return redirect(route('domains.index'));
-	}
+        return redirect(route('domains.index'));
+    }
 
-	/**
-	 * Display the specified Domain.
-	 *
-	 * @param int $id
-	 *
-	 * @return Response
-	 */
-	public function show($id, Request $request){
-		if($this->domainRepository->findWithoutFail($id)->is_public != 1){
-			$this->domainRepository->pushCriteria(new RequestCriteria($request))
-				->pushCriteria(BelongsToCompanyCriteria::class);
-		}
+    /**
+     * Display the specified Domain.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function show($id, Request $request)
+    {
+        if ($this->domainRepository->findWithoutFail($id)->is_public != 1) {
+            $this->domainRepository->pushCriteria(new RequestCriteria($request))
+                ->pushCriteria(BelongsToCompanyCriteria::class);
+        }
 
-		$domain = $this->domainRepository->findWithoutFail($id);
+        $domain = $this->domainRepository->findWithoutFail($id);
 
-		if(empty($domain)){
-			Flash::error('Domain not found');
+        if (empty($domain)) {
+            Flash::error('Domain not found');
 
-			return redirect(route('domains.index'));
-		}
+            return redirect(route('domains.index'));
+        }
 
-		return view('domains.show')->with('domain', $domain);
-	}
+        return view('domains.show')->with('domain', $domain);
+    }
 
-	/**
-	 * Show the form for editing the specified Domain.
-	 *
-	 * @param int $id
-	 *
-	 * @return Response
-	 */
-	public function edit($id, Request $request){
-		$domain = $this->domainRepository->findWithoutFail($id);
+    /**
+     * Show the form for editing the specified Domain.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function edit($id, Request $request)
+    {
+        $domain = $this->domainRepository->findWithoutFail($id);
 
-		if(empty($domain)){
-			Flash::error('Domain not found');
+        if (empty($domain)) {
+            Flash::error('Domain not found');
 
-			return redirect(route('domains.index'));
-		}
-		if(empty($domain) || !PermissionHelper::authUserEditDomain($domain)){
-			Flash::error('Page not found');
+            return redirect(route('domains.index'));
+        }
+        if (empty($domain) || !PermissionHelper::authUserEditDomain($domain)) {
+            Flash::error('Page not found');
 
-			return redirect(route('domains.index'));
-		}
-		$this->companyRepository->pushCriteria(new RequestCriteria($request));
-		$companies = $this->companyRepository->pluck('name', 'id');
+            return redirect(route('domains.index'));
+        }
+        $this->companyRepository->pushCriteria(new RequestCriteria($request));
+        $companies = $this->companyRepository->pluck('name', 'id');
 
-		return view('domains.edit')->with('domain', $domain)->with('companies', $companies);
-	}
+        return view('domains.edit')->with('domain', $domain)->with('companies', $companies);
+    }
 
-	/**
-	 * Update the specified Domain in storage.
-	 *
-	 * @param int $id
-	 * @param UpdateDomainRequest $request
-	 *
-	 * @return Response
-	 */
-	public function update($id, UpdateDomainRequest $request){
-		$domain = $this->domainRepository->findWithoutFail($id);
+    /**
+     * Update the specified Domain in storage.
+     *
+     * @param int $id
+     * @param UpdateDomainRequest $request
+     *
+     * @return Response
+     */
+    public function update($id, UpdateDomainRequest $request)
+    {
+        $domain = $this->domainRepository->findWithoutFail($id);
 
-		if(empty($domain)){
-			Flash::error('Domain not found');
+        if (empty($domain)) {
+            Flash::error('Domain not found');
 
-			return redirect(route('domains.index'));
-		}
-		if(empty($domain) || !PermissionHelper::authUserEditDomain($domain)){
-			Flash::error('Page not found');
+            return redirect(route('domains.index'));
+        }
+        if (empty($domain) || !PermissionHelper::authUserEditDomain($domain)) {
+            Flash::error('Page not found');
 
-			return redirect(route('domains.index'));
-		}
+            return redirect(route('domains.index'));
+        }
 
-		$domain = $this->domainRepository->update($request->all(), $id);
+        $domain = $this->domainRepository->update($request->all(), $id);
 
-		Flash::success('Domain updated successfully.');
+        Flash::success('Domain updated successfully.');
 
-		return redirect(route('domains.index'));
-	}
+        return redirect(route('domains.index'));
+    }
 
-	/**
-	 * Remove the specified Domain from storage.
-	 *
-	 * @param int $id
-	 *
-	 * @return Response
-	 */
-	public function destroy($id){
-		$domain = $this->domainRepository->findWithoutFail($id);
+    /**
+     * Remove the specified Domain from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $domain = $this->domainRepository->findWithoutFail($id);
 
-		if(empty($domain)){
-			Flash::error('Domain not found');
+        if (empty($domain)) {
+            Flash::error('Domain not found');
 
-			return redirect(route('domains.index'));
-		}
+            return redirect(route('domains.index'));
+        }
 
-		$this->domainRepository->delete($id);
+        $this->domainRepository->delete($id);
 
-		Flash::success('Domain deleted successfully.');
+        Flash::success('Domain deleted successfully.');
 
-		return redirect(route('domains.index'));
-	}
+        return redirect(route('domains.index'));
+    }
 
-	public function send(Request $request){
-		$domain = $this->domainRepository->findWithoutFail($request->get('domain_id'));
+    public function send(Request $request)
+    {
+        $domain = $this->domainRepository->findWithoutFail($request->get('domain_id'));
 
-		foreach(Recipient::get() as $recipient){
-			Mail::to($recipient->email)
-				->send(new CampaignSending($domain));
-		}
+        foreach (Recipient::get() as $recipient) {
+            Mail::to($recipient->email)
+                ->send(new CampaignSending($domain));
+        }
 
-		return redirect(route('home'));
-	}
-
-	private function sortDomains($domains){
-		if(!$domains->count()) return $domains;
-
-		foreach($domains as $domain){
-
-		}
-
-	}
+        return redirect(route('home'));
+    }
 }

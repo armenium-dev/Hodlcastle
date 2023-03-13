@@ -69,9 +69,9 @@ class DomainRepository extends ParentRepository
     {
         $models = $this
             ->pushCriteria(new BelongsToCompanyCriteria(true))
-            ->get()
-        ;
+            ->get();
 
+        $models = $this->sortDomains($models);
         $out = [];
 
         foreach ($models as $model) {
@@ -79,5 +79,14 @@ class DomainRepository extends ParentRepository
         }
 
         return $out;
+    }
+
+    public function sortDomains($domains)
+    {
+        if (!$domains->count()) return $domains;
+
+        return $domains->sortBy(function ($item) {
+            return strrev($item['domain']);
+        });
     }
 }
