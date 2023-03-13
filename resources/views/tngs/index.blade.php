@@ -12,29 +12,21 @@
     </div>
 
     <div class="inner cover">
-        <div class="well">
+        <div class="well intro">
             <div class="clearfix"></div>
 
             @include('flash::message')
 
             <div class="clearfix"></div>
 
-            <div class="row">
+            <h4>{{ $module->name }}</h4>
 
-                {{--@include('results.table')--}}
-
-                <div class="form-group col-sm-12">
-                    <h4>{{ $module->name }}</h4>
-                </div>
-
-                @foreach ($courses as $course)
-                    <div class="form-group col-sm-12">
-                        <a class="btn btn-sm btn-warning" href="{!! route('tng.get', ['code' => $code, 'courses' => $course->id, 'page' => 1]) !!}">
-                            <img src="/img/pmflags/{{ $course->language->code }}.png" /> {{ $course->name }}
-                        </a>
-                    </div>
-                @endforeach
-
+            <div class="buttons">
+            @foreach ($courses as $course)
+                    <a class="btn btn-warning" href="{!! route('tng.get', ['code' => $code, 'courses' => $course->id, 'page' => 1]) !!}">
+                        <img src="/img/pmflags/{{ $course->language->code }}.png" /> {{ $course->name }}
+                    </a>
+            @endforeach
             </div>
         </div>
     </div>

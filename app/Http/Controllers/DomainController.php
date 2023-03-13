@@ -37,10 +37,13 @@ class DomainController extends AppBaseController{
 	 */
 	public function index(Request $request){
 		$domainsPublic = $this->domainRepository->findByField('is_public', 1);
+		$domainsPublic = $this->sortDomains($domainsPublic);
+
 		$this->domainRepository
 			->pushCriteria(new RequestCriteria($request))
 			->pushCriteria(new BelongsToCompanyCriteria);
 		$domains = $this->domainRepository->all();
+		$domains = $this->sortDomains($domains);
 
 		return view('domains.index')
 			->with(compact('domains', 'domainsPublic'));
@@ -186,5 +189,14 @@ class DomainController extends AppBaseController{
 		}
 
 		return redirect(route('home'));
+	}
+
+	private function sortDomains($domains){
+		if(!$domains->count()) return $domains;
+
+		foreach($domains as $domain){
+
+		}
+
 	}
 }
